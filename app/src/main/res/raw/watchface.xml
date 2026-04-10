@@ -51,7 +51,6 @@
     </UserConfigurations>
 
     <Scene backgroundColor="#ff000000">
-        <Group>
 
             <!-- ============================================================ -->
             <!-- ARC TRACKS — Decorative background arcs for the 4 arc slots  -->
@@ -580,6 +579,5 @@
                 </Complication>
             </ComplicationSlot>
 
-        </Group>
     </Scene>
 </WatchFace>

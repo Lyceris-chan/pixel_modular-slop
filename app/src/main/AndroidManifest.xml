@@ -23,6 +23,14 @@
             android:name="com.google.wear.watchface.format.version"
             android:value="4" />
 
+        <meta-data
+            android:name="com.google.android.wearable.watchface.preview"
+            android:resource="@drawable/preview_image" />
+
+        <meta-data
+            android:name="com.google.android.wearable.watchface.preview_circular"
+            android:resource="@drawable/preview_image" />
+
     </application>
 
 </manifest>

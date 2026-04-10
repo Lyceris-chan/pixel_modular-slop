@@ -1,0 +1,585 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Pixel Modular Watch Face — WFF v4 (Wear OS 6)
+    A faithful recreation of the Google Pixel "Modular" watch face
+    using the declarative Watch Face Format.
+
+    Layout: "default_arcs" style
+      - Digital clock centered
+      - Day & date widget above clock
+      - 3 circular "bulb" complications (bottom row)
+      - 4 arc complications (top-left, top-right, bottom-left, bottom-right)
+-->
+<WatchFace width="450" height="450" resourceVersion="4">
+
+    <!-- Required metadata for the watch face picker and system. -->
+    <Metadata key="CLOCK_TYPE" value="DIGITAL" />
+    <Metadata key="PREVIEW_TIME" value="10:08:32" />
+
+    <!-- Color theme configuration matching official Pixel palettes.
+         Each ColorOption provides 4 colors:
+           [0] = accent (color-c), [1] = dark fill (color-d),
+           [2] = arc track, [3] = bright text accent -->
+    <UserConfigurations>
+        <ColorConfiguration id="themeColor" defaultValue="0"
+            displayName="color_selector_display_name">
+            <ColorOption id="0"  displayName="color_theme_0"
+                colors="#FFCAB4F0 #FF37333F #FF2B2A2D #FFEADFFF" />
+            <ColorOption id="1"  displayName="color_theme_1"
+                colors="#FFE3E293 #FF3F3F2D #FF2D2D29 #FFFFFED2" />
+            <ColorOption id="2"  displayName="color_theme_2"
+                colors="#FFA5AD84 #FF3D3F33 #FF2D2D2A #FFCACFB7" />
+            <ColorOption id="3"  displayName="color_theme_3"
+                colors="#FFE2E2E2 #FF3F3F3F #FF2D2D2D #FFFFFFFF" />
+            <ColorOption id="4"  displayName="color_theme_4"
+                colors="#FFF1ECE6 #FF3F3E3D #FF2D2D2D #FFFFFCF9" />
+            <ColorOption id="5"  displayName="color_theme_5"
+                colors="#FF9EF3C8 #FF2D3F36 #FF292D2B #FFD2FFE8" />
+            <ColorOption id="6"  displayName="color_theme_6"
+                colors="#FFF98C7F #FF3F2926 #FF2D2727 #FFFFC7C0" />
+            <ColorOption id="7"  displayName="color_theme_7"
+                colors="#FF84D1C3 #FF2C3F3C #FF282D2C #FFCCFAF2" />
+            <ColorOption id="8"  displayName="color_theme_8"
+                colors="#FFD9D9E0 #FF3E3E3F #FF2D2D2D #FFFBFBFF" />
+            <ColorOption id="9"  displayName="color_theme_9"
+                colors="#FFEFEAE5 #FF3F3E3D #FF2D2D2D #FFFFFCF9" />
+            <ColorOption id="10" displayName="color_theme_10"
+                colors="#FFA7E0FE #FF2E393F #FF292C2D #FFD3EFFF" />
+            <ColorOption id="11" displayName="color_theme_11"
+                colors="#FFF1B4BE #FF3F3234 #FF2D2A2A #FFFFDEE4" />
+        </ColorConfiguration>
+    </UserConfigurations>
+
+    <Scene backgroundColor="#ff000000">
+        <Group>
+
+            <!-- ============================================================ -->
+            <!-- ARC TRACKS — Decorative background arcs for the 4 arc slots  -->
+            <!-- Ref: base_0.apk default_arcs layout, ComplicationArc arcs    -->
+            <!-- ============================================================ -->
+            <PartDraw x="0" y="0" width="450" height="450">
+                <Variant mode="AMBIENT" target="alpha" value="0" duration="0.0" />
+                <!-- Top-left arc track -->
+                <Arc centerX="225" centerY="225" width="450" height="450"
+                     startAngle="145" endAngle="215" direction="CLOCKWISE">
+                    <Stroke color="[CONFIGURATION.themeColor.2]"
+                            thickness="8" cap="ROUND" />
+                </Arc>
+                <!-- Top-right arc track -->
+                <Arc centerX="225" centerY="225" width="450" height="450"
+                     startAngle="325" endAngle="35" direction="CLOCKWISE">
+                    <Stroke color="[CONFIGURATION.themeColor.2]"
+                            thickness="8" cap="ROUND" />
+                </Arc>
+                <!-- Bottom-right arc track -->
+                <Arc centerX="225" centerY="225" width="450" height="450"
+                     startAngle="55" endAngle="125" direction="CLOCKWISE">
+                    <Stroke color="[CONFIGURATION.themeColor.2]"
+                            thickness="8" cap="ROUND" />
+                </Arc>
+                <!-- Bottom-left arc track -->
+                <Arc centerX="225" centerY="225" width="450" height="450"
+                     startAngle="235" endAngle="305" direction="CLOCKWISE">
+                    <Stroke color="[CONFIGURATION.themeColor.2]"
+                            thickness="8" cap="ROUND" />
+                </Arc>
+            </PartDraw>
+
+            <!-- ============================================================ -->
+            <!-- DAY & DATE WIDGET                                            -->
+            <!-- Ref: base_0.apk — date at (200,56) size (140,40)            -->
+            <!--   Day text right-aligned, date in a filled rounded rect      -->
+            <!-- ============================================================ -->
+
+            <!-- Day & Date Widget: Interactive Mode -->
+            <PartText x="130" y="48" width="80" height="40" alpha="255">
+                <Variant mode="AMBIENT" target="alpha" value="0" duration="0.0" />
+                <Text align="END">
+                    <Font family="google_sans_flex_600" size="24"
+                          color="[CONFIGURATION.themeColor.0]">
+                        <Template><![CDATA[%s]]>
+                            <Parameter expression="[DAY_OF_WEEK_S]" />
+                        </Template>
+                    </Font>
+                </Text>
+            </PartText>
+
+            <!-- Day & Date Widget: Ambient Mode -->
+            <PartText x="130" y="48" width="80" height="40" alpha="0">
+                <Variant mode="AMBIENT" target="alpha" value="255" duration="0.0" />
+                <Text align="END">
+                    <Font family="google_sans_flex_date_aod" size="24"
+                          color="#ffffffff">
+                        <Template><![CDATA[%s]]>
+                            <Parameter expression="[DAY_OF_WEEK_S]" />
+                        </Template>
+                    </Font>
+                </Text>
+            </PartText>
+
+            <!-- Date number badge background -->
+            <PartDraw x="218" y="48" width="44" height="34" alpha="255">
+                <Variant mode="AMBIENT" target="alpha" value="0" duration="0.0" />
+                <RoundRectangle x="0" y="0" width="44" height="34"
+                                cornerRadiusX="8" cornerRadiusY="8">
+                    <Fill color="[CONFIGURATION.themeColor.1]" />
+                </RoundRectangle>
+            </PartDraw>
+
+            <!-- Date number text: Interactive -->
+            <PartText x="218" y="48" width="44" height="34" alpha="255">
+                <Variant mode="AMBIENT" target="alpha" value="0" duration="0.0" />
+                <Text align="CENTER">
+                    <Font family="google_sans_flex_600" size="22"
+                          color="[CONFIGURATION.themeColor.3]">
+                        <Template><![CDATA[%d]]>
+                            <Parameter expression="[DAY]" />
+                        </Template>
+                    </Font>
+                </Text>
+            </PartText>
+
+            <!-- Date number text: Ambient -->
+            <PartText x="218" y="48" width="44" height="34" alpha="0">
+                <Variant mode="AMBIENT" target="alpha" value="255" duration="0.0" />
+                <Text align="CENTER">
+                    <Font family="google_sans_flex_date_aod" size="22"
+                          color="#ffffffff">
+                        <Template><![CDATA[%d]]>
+                            <Parameter expression="[DAY]" />
+                        </Template>
+                    </Font>
+                </Text>
+            </PartText>
+
+            <!-- ============================================================ -->
+            <!-- DIGITAL CLOCK -->
+            <DigitalClock x="0" y="100" width="450" height="150">
+                <!-- Interactive Mode -->
+                <TimeText x="0" y="0" width="450" height="150"
+                          format="hh:mm" hourFormat="SYNC_TO_DEVICE"
+                          align="CENTER" alpha="255">
+                    <Variant mode="AMBIENT" target="alpha" value="0" duration="0.0" />
+                    <Font family="google_sans_flex_450" size="130"
+                          color="#ffffffff" />
+                </TimeText>
+                <!-- Ambient Mode (AOD) -->
+                <TimeText x="0" y="0" width="450" height="150"
+                          format="hh:mm" hourFormat="SYNC_TO_DEVICE"
+                          align="CENTER" alpha="0">
+                    <Variant mode="AMBIENT" target="alpha" value="255" duration="0.0" />
+                    <Font family="google_sans_flex_clock_aod" size="130"
+                          color="#ffffffff" />
+                </TimeText>
+            </DigitalClock>
+
+            <!-- ============================================================ -->
+            <!-- COMPLICATION SLOTS                                           -->
+            <!-- ============================================================ -->
+
+            <!-- Slot 0: Top-left arc — Steps
+                 Ref: ComplicationArc class q1, startAngle≈145, sweepAngle≈70 -->
+            <ComplicationSlot slotId="0" x="0" y="0" width="450" height="450"
+                              supportedTypes="RANGED_VALUE SHORT_TEXT"
+                              displayName="top_left_complication">
+                <DefaultProviderPolicy
+                    defaultSystemProvider="STEP_COUNT"
+                    defaultSystemProviderType="RANGED_VALUE" />
+                <BoundingArc centerX="225" centerY="225"
+                             width="450" height="450"
+                             startAngle="145" endAngle="215"
+                             thickness="30" />
+
+                <Complication type="SHORT_TEXT">
+                    <Group alpha="255">
+                        <Variant mode="AMBIENT" target="alpha" value="0" duration="0.0" />
+                        <PartText x="0" y="0" width="450" height="450">
+                            <TextCircular centerX="225" centerY="225"
+                                          width="410" height="410"
+                                          startAngle="160" endAngle="215"
+                                          direction="CLOCKWISE" align="START">
+                                <Font family="google_sans_flex_700" size="20"
+                                      color="#ffffffff">
+                                    <Template><![CDATA[%s]]>
+                                        <Parameter expression="[COMPLICATION.TEXT]" />
+                                    </Template>
+                                </Font>
+                            </TextCircular>
+                        </PartText>
+                        <PartImage x="45" y="125" width="22" height="22">
+                            <Image resource="[COMPLICATION.ICON]"
+                                   tintColor="[CONFIGURATION.themeColor.0]" />
+                        </PartImage>
+                    </Group>
+                </Complication>
+
+                <Complication type="RANGED_VALUE">
+                    <Group alpha="255">
+                        <Variant mode="AMBIENT" target="alpha" value="0" duration="0.0" />
+                        <PartText x="0" y="0" width="450" height="450">
+                            <TextCircular centerX="225" centerY="225"
+                                          width="410" height="410"
+                                          startAngle="160" endAngle="215"
+                                          direction="CLOCKWISE" align="START">
+                                <Font family="google_sans_flex_700" size="20"
+                                      color="#ffffffff">
+                                    <Template><![CDATA[%s]]>
+                                        <Parameter expression="[COMPLICATION.TEXT]" />
+                                    </Template>
+                                </Font>
+                            </TextCircular>
+                        </PartText>
+                        <PartDraw x="0" y="0" width="450" height="450">
+                            <Arc centerX="225" centerY="225"
+                                 width="450" height="450"
+                                 startAngle="145" endAngle="145"
+                                 direction="CLOCKWISE">
+                                <Transform target="endAngle"
+                                    value="[COMPLICATION.RANGED_VALUE_MAX] &gt; 0 ? (145 + 70 * ([COMPLICATION.RANGED_VALUE_VALUE] / [COMPLICATION.RANGED_VALUE_MAX])) : 145" />
+                                <Stroke color="[CONFIGURATION.themeColor.0]"
+                                        thickness="8" cap="ROUND" />
+                            </Arc>
+                        </PartDraw>
+                        <PartImage x="45" y="125" width="22" height="22">
+                            <Image resource="[COMPLICATION.ICON]"
+                                   tintColor="[CONFIGURATION.themeColor.0]" />
+                        </PartImage>
+                    </Group>
+                </Complication>
+            </ComplicationSlot>
+
+            <!-- Slot 1: Top-right arc — Activity
+                 Ref: ComplicationArc class q2, startAngle≈325, sweepAngle≈70 -->
+            <ComplicationSlot slotId="1" x="0" y="0" width="450" height="450"
+                              supportedTypes="RANGED_VALUE SHORT_TEXT"
+                              displayName="top_right_complication">
+                <BoundingArc centerX="225" centerY="225"
+                             width="450" height="450"
+                             startAngle="325" endAngle="35"
+                             thickness="30" />
+
+                <Complication type="SHORT_TEXT">
+                    <Group alpha="255">
+                        <Variant mode="AMBIENT" target="alpha" value="0" duration="0.0" />
+                        <PartText x="0" y="0" width="450" height="450">
+                            <TextCircular centerX="225" centerY="225"
+                                          width="410" height="410"
+                                          startAngle="340" endAngle="35"
+                                          direction="CLOCKWISE" align="START">
+                                <Font family="google_sans_flex_700" size="20"
+                                      color="#ffffffff">
+                                    <Template><![CDATA[%s]]>
+                                        <Parameter expression="[COMPLICATION.TEXT]" />
+                                    </Template>
+                                </Font>
+                            </TextCircular>
+                        </PartText>
+                        <PartImage x="385" y="125" width="22" height="22">
+                            <Image resource="[COMPLICATION.ICON]"
+                                   tintColor="[CONFIGURATION.themeColor.0]" />
+                        </PartImage>
+                    </Group>
+                </Complication>
+
+                <Complication type="RANGED_VALUE">
+                    <Group alpha="255">
+                        <Variant mode="AMBIENT" target="alpha" value="0" duration="0.0" />
+                        <PartText x="0" y="0" width="450" height="450">
+                            <TextCircular centerX="225" centerY="225"
+                                          width="410" height="410"
+                                          startAngle="340" endAngle="35"
+                                          direction="CLOCKWISE" align="START">
+                                <Font family="google_sans_flex_700" size="20"
+                                      color="#ffffffff">
+                                    <Template><![CDATA[%s]]>
+                                        <Parameter expression="[COMPLICATION.TEXT]" />
+                                    </Template>
+                                </Font>
+                            </TextCircular>
+                        </PartText>
+                        <PartDraw x="0" y="0" width="450" height="450">
+                            <Arc centerX="225" centerY="225"
+                                 width="450" height="450"
+                                 startAngle="325" endAngle="325"
+                                 direction="CLOCKWISE">
+                                <Transform target="endAngle"
+                                    value="[COMPLICATION.RANGED_VALUE_MAX] &gt; 0 ? (325 + 70 * ([COMPLICATION.RANGED_VALUE_VALUE] / [COMPLICATION.RANGED_VALUE_MAX])) : 325" />
+                                <Stroke color="#ffffffff"
+                                        thickness="8" cap="ROUND" />
+                            </Arc>
+                        </PartDraw>
+                        <PartImage x="385" y="125" width="22" height="22">
+                            <Image resource="[COMPLICATION.ICON]"
+                                   tintColor="[CONFIGURATION.themeColor.0]" />
+                        </PartImage>
+                    </Group>
+                </Complication>
+            </ComplicationSlot>
+
+            <!-- Slot 2: Bottom-left circular bulb — Weather/Sunset
+                 Ref: ComplicationBulb complication-7, (68,261) 100×100
+                 Scaled 480→450: approx (64,245) 94×94 -->
+            <ComplicationSlot slotId="2" x="64" y="245" width="94" height="94"
+                              supportedTypes="SHORT_TEXT RANGED_VALUE"
+                              displayName="bottom_left_complication">
+                <DefaultProviderPolicy
+                    defaultSystemProvider="SUNRISE_SUNSET"
+                    defaultSystemProviderType="SHORT_TEXT" />
+                <BoundingOval x="0" y="0" width="94" height="94"
+                              outlinePadding="2" />
+
+                <Complication type="SHORT_TEXT">
+                    <Group alpha="255">
+                        <Variant mode="AMBIENT" target="alpha" value="0" duration="0.0" />
+                        <!-- Arc track background (30% opacity) -->
+                        <PartDraw x="0" y="0" width="94" height="94">
+                            <Arc centerX="47" centerY="47"
+                                 width="88" height="88"
+                                 startAngle="140" endAngle="400"
+                                 direction="CLOCKWISE">
+                                <Stroke color="[CONFIGURATION.themeColor.2]"
+                                        thickness="7" cap="ROUND" />
+                            </Arc>
+                        </PartDraw>
+                        <!-- Text value centered -->
+                        <PartText x="0" y="18" width="94" height="55">
+                            <Text align="CENTER">
+                                <Font family="google_sans_flex_700" size="28"
+                                      color="#ffffffff">
+                                    <Template><![CDATA[%s]]>
+                                        <Parameter expression="[COMPLICATION.TEXT]" />
+                                    </Template>
+                                </Font>
+                            </Text>
+                        </PartText>
+                        <!-- Icon below text -->
+                        <PartImage x="35" y="68" width="24" height="24">
+                            <Image resource="[COMPLICATION.ICON]"
+                                   tintColor="[CONFIGURATION.themeColor.0]" />
+                        </PartImage>
+                    </Group>
+                </Complication>
+
+                <Complication type="RANGED_VALUE">
+                    <Group alpha="255">
+                        <Variant mode="AMBIENT" target="alpha" value="0" duration="0.0" />
+                        <!-- Background arc (track) -->
+                        <PartDraw x="0" y="0" width="94" height="94">
+                            <Arc centerX="47" centerY="47"
+                                 width="88" height="88"
+                                 startAngle="140" endAngle="400"
+                                 direction="CLOCKWISE">
+                                <Stroke color="[CONFIGURATION.themeColor.2]"
+                                        thickness="7" cap="ROUND" />
+                            </Arc>
+                            <!-- Progress arc -->
+                            <Arc centerX="47" centerY="47"
+                                 width="88" height="88"
+                                 startAngle="140" endAngle="140"
+                                 direction="CLOCKWISE">
+                                <Transform target="endAngle"
+                                    value="[COMPLICATION.RANGED_VALUE_MAX] &gt; 0 ? (140 + 260 * ([COMPLICATION.RANGED_VALUE_VALUE] / [COMPLICATION.RANGED_VALUE_MAX])) : 140" />
+                                <Stroke color="[CONFIGURATION.themeColor.0]"
+                                        thickness="7" cap="ROUND" />
+                            </Arc>
+                        </PartDraw>
+                        <PartText x="0" y="18" width="94" height="55">
+                            <Text align="CENTER">
+                                <Font family="google_sans_flex_700" size="28"
+                                      color="#ffffffff">
+                                    <Template><![CDATA[%s]]>
+                                        <Parameter expression="[COMPLICATION.TEXT]" />
+                                    </Template>
+                                </Font>
+                            </Text>
+                        </PartText>
+                        <PartImage x="35" y="68" width="24" height="24">
+                            <Image resource="[COMPLICATION.ICON]"
+                                   tintColor="[CONFIGURATION.themeColor.0]" />
+                        </PartImage>
+                    </Group>
+                </Complication>
+            </ComplicationSlot>
+
+            <!-- Slot 3: Bottom-right circular bulb — Heart Rate
+                 Ref: ComplicationBulb complication-9, (313,261) 100×100
+                 Scaled 480→450: approx (293,245) 94×94 -->
+            <ComplicationSlot slotId="3" x="293" y="245" width="94" height="94"
+                              supportedTypes="SHORT_TEXT RANGED_VALUE"
+                              displayName="bottom_right_complication">
+                <DefaultProviderPolicy
+                    defaultSystemProvider="HEART_RATE"
+                    defaultSystemProviderType="SHORT_TEXT" />
+                <BoundingOval x="0" y="0" width="94" height="94"
+                              outlinePadding="2" />
+
+                <Complication type="SHORT_TEXT">
+                    <Group alpha="255">
+                        <Variant mode="AMBIENT" target="alpha" value="0" duration="0.0" />
+                        <PartDraw x="0" y="0" width="94" height="94">
+                            <Arc centerX="47" centerY="47"
+                                 width="88" height="88"
+                                 startAngle="140" endAngle="400"
+                                 direction="CLOCKWISE">
+                                <Stroke color="[CONFIGURATION.themeColor.2]"
+                                        thickness="7" cap="ROUND" />
+                            </Arc>
+                        </PartDraw>
+                        <PartText x="0" y="18" width="94" height="55">
+                            <Text align="CENTER">
+                                <Font family="google_sans_flex_700" size="28"
+                                      color="#ffffffff">
+                                    <Template><![CDATA[%s]]>
+                                        <Parameter expression="[COMPLICATION.TEXT]" />
+                                    </Template>
+                                </Font>
+                            </Text>
+                        </PartText>
+                        <PartImage x="35" y="68" width="24" height="24">
+                            <Image resource="[COMPLICATION.ICON]"
+                                   tintColor="[CONFIGURATION.themeColor.0]" />
+                        </PartImage>
+                    </Group>
+                </Complication>
+
+                <Complication type="RANGED_VALUE">
+                    <Group alpha="255">
+                        <Variant mode="AMBIENT" target="alpha" value="0" duration="0.0" />
+                        <PartDraw x="0" y="0" width="94" height="94">
+                            <Arc centerX="47" centerY="47"
+                                 width="88" height="88"
+                                 startAngle="140" endAngle="400"
+                                 direction="CLOCKWISE">
+                                <Stroke color="[CONFIGURATION.themeColor.2]"
+                                        thickness="7" cap="ROUND" />
+                            </Arc>
+                            <Arc centerX="47" centerY="47"
+                                 width="88" height="88"
+                                 startAngle="140" endAngle="140"
+                                 direction="CLOCKWISE">
+                                <Transform target="endAngle"
+                                    value="[COMPLICATION.RANGED_VALUE_MAX] &gt; 0 ? (140 + 260 * ([COMPLICATION.RANGED_VALUE_VALUE] / [COMPLICATION.RANGED_VALUE_MAX])) : 140" />
+                                <Stroke color="[CONFIGURATION.themeColor.0]"
+                                        thickness="7" cap="ROUND" />
+                            </Arc>
+                        </PartDraw>
+                        <PartText x="0" y="18" width="94" height="55">
+                            <Text align="CENTER">
+                                <Font family="google_sans_flex_700" size="28"
+                                      color="#ffffffff">
+                                    <Template><![CDATA[%s]]>
+                                        <Parameter expression="[COMPLICATION.TEXT]" />
+                                    </Template>
+                                </Font>
+                            </Text>
+                        </PartText>
+                        <PartImage x="35" y="68" width="24" height="24">
+                            <Image resource="[COMPLICATION.ICON]"
+                                   tintColor="[CONFIGURATION.themeColor.0]" />
+                        </PartImage>
+                    </Group>
+                </Complication>
+            </ComplicationSlot>
+
+            <!-- Slot 4: Bottom-center app shortcut
+                 Ref: ComplicationBulb complication-8, (190,320) 100×100
+                 Scaled 480→450: approx (178,300) 94×94 -->
+            <ComplicationSlot slotId="4" x="178" y="300" width="94" height="94"
+                              supportedTypes="SMALL_IMAGE"
+                              displayName="bottom_center_shortcut">
+                <DefaultProviderPolicy
+                    defaultSystemProvider="APP_SHORTCUT"
+                    defaultSystemProviderType="SMALL_IMAGE" />
+                <BoundingOval x="0" y="0" width="94" height="94"
+                              outlinePadding="2" />
+
+                <Complication type="SMALL_IMAGE">
+                    <Group alpha="255">
+                        <Variant mode="AMBIENT" target="alpha" value="0" duration="0.0" />
+                        <PartDraw x="0" y="0" width="94" height="94">
+                            <RoundRectangle x="0" y="0" width="94" height="94"
+                                            cornerRadiusX="47"
+                                            cornerRadiusY="47">
+                                <Fill color="[CONFIGURATION.themeColor.1]" />
+                            </RoundRectangle>
+                        </PartDraw>
+                        <PartImage x="27" y="27" width="40" height="40">
+                            <Image resource="[COMPLICATION.SMALL_IMAGE]" />
+                        </PartImage>
+                    </Group>
+                </Complication>
+            </ComplicationSlot>
+
+            <!-- Slot 5: Bottom-right arc — Calories
+                 Ref: ComplicationArc class q3, bottom-right quadrant -->
+            <ComplicationSlot slotId="5" x="0" y="0" width="450" height="450"
+                              supportedTypes="SHORT_TEXT"
+                              displayName="arc_bottom_right">
+                <BoundingArc centerX="225" centerY="225"
+                             width="450" height="450"
+                             startAngle="55" endAngle="125"
+                             thickness="30" />
+
+                <Complication type="SHORT_TEXT">
+                    <Group alpha="255">
+                        <Variant mode="AMBIENT" target="alpha" value="0" duration="0.0" />
+                        <PartText x="0" y="0" width="450" height="450">
+                            <TextCircular centerX="225" centerY="225"
+                                          width="410" height="410"
+                                          startAngle="110" endAngle="55"
+                                          direction="COUNTER_CLOCKWISE"
+                                          align="START">
+                                <Font family="google_sans_flex_700" size="20"
+                                      color="#ffffffff">
+                                    <Template><![CDATA[%s]]>
+                                        <Parameter expression="[COMPLICATION.TEXT]" />
+                                    </Template>
+                                </Font>
+                            </TextCircular>
+                        </PartText>
+                        <PartImage x="160" y="405" width="22" height="22">
+                            <Image resource="[COMPLICATION.ICON]"
+                                   tintColor="[CONFIGURATION.themeColor.0]" />
+                        </PartImage>
+                    </Group>
+                </Complication>
+            </ComplicationSlot>
+
+            <!-- Slot 6: Bottom-left arc — Distance
+                 Ref: ComplicationArc class q4, bottom-left quadrant -->
+            <ComplicationSlot slotId="6" x="0" y="0" width="450" height="450"
+                              supportedTypes="SHORT_TEXT"
+                              displayName="arc_bottom_left">
+                <BoundingArc centerX="225" centerY="225"
+                             width="450" height="450"
+                             startAngle="235" endAngle="305"
+                             thickness="30" />
+
+                <Complication type="SHORT_TEXT">
+                    <Group alpha="255">
+                        <Variant mode="AMBIENT" target="alpha" value="0" duration="0.0" />
+                        <PartText x="0" y="0" width="450" height="450">
+                            <TextCircular centerX="225" centerY="225"
+                                          width="410" height="410"
+                                          startAngle="290" endAngle="235"
+                                          direction="COUNTER_CLOCKWISE"
+                                          align="START">
+                                <Font family="google_sans_flex_700" size="20"
+                                      color="#ffffffff">
+                                    <Template><![CDATA[%s]]>
+                                        <Parameter expression="[COMPLICATION.TEXT]" />
+                                    </Template>
+                                </Font>
+                            </TextCircular>
+                        </PartText>
+                        <PartImage x="268" y="405" width="22" height="22">
+                            <Image resource="[COMPLICATION.ICON]"
+                                   tintColor="[CONFIGURATION.themeColor.0]" />
+                        </PartImage>
+                    </Group>
+                </Complication>
+            </ComplicationSlot>
+
+        </Group>
+    </Scene>
+</WatchFace>

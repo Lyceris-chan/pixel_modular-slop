@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- System metadata for the watch face picker on Wear OS. -->
+<WatchFaceInfo>
+    <Preview value="@drawable/ic_star" />
+    <Category value="CATEGORY_EMPTY" />
+    <AvailableInRetail value="true" />
+    <MultipleInstancesAllowed value="true" />
+    <Editable value="true" />
+</WatchFaceInfo>

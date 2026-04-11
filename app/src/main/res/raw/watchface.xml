@@ -204,11 +204,17 @@
                                     </Template>
                                 </Font>
                             </TextCircular>
-                        </PartText>
-                        <PartImage x="45" y="125" width="22" height="22">
-                            <Image resource="[COMPLICATION.MONOCHROMATIC_IMAGE]"
+                        </PartText><Condition>
+                            <Expressions>
+                                <Expression name="has_img"><![CDATA[[COMPLICATION.ICON] != null]]></Expression>
+                            </Expressions>
+                            <Compare expression="has_img">
+                                <PartImage x="45" y="125" width="22" height="22">
+                            <Image resource="[COMPLICATION.ICON]"
                                    tintColor="[CONFIGURATION.themeColor.0]" />
                         </PartImage>
+                            </Compare>
+                        </Condition>
                     </Group>
                 </Complication>
 
@@ -238,11 +244,17 @@
                                 <Stroke color="[CONFIGURATION.themeColor.0]"
                                         thickness="8" cap="ROUND" />
                             </Arc>
-                        </PartDraw>
-                        <PartImage x="45" y="125" width="22" height="22">
-                            <Image resource="[COMPLICATION.MONOCHROMATIC_IMAGE]"
+                        </PartDraw><Condition>
+                            <Expressions>
+                                <Expression name="has_img"><![CDATA[[COMPLICATION.ICON] != null]]></Expression>
+                            </Expressions>
+                            <Compare expression="has_img">
+                                <PartImage x="45" y="125" width="22" height="22">
+                            <Image resource="[COMPLICATION.ICON]"
                                    tintColor="[CONFIGURATION.themeColor.0]" />
                         </PartImage>
+                            </Compare>
+                        </Condition>
                     </Group>
                 </Complication>
             </ComplicationSlot>
@@ -275,11 +287,17 @@
                                     </Template>
                                 </Font>
                             </TextCircular>
-                        </PartText>
-                        <PartImage x="385" y="125" width="22" height="22">
-                            <Image resource="[COMPLICATION.MONOCHROMATIC_IMAGE]"
+                        </PartText><Condition>
+                            <Expressions>
+                                <Expression name="has_img"><![CDATA[[COMPLICATION.ICON] != null]]></Expression>
+                            </Expressions>
+                            <Compare expression="has_img">
+                                <PartImage x="385" y="125" width="22" height="22">
+                            <Image resource="[COMPLICATION.ICON]"
                                    tintColor="[CONFIGURATION.themeColor.0]" />
                         </PartImage>
+                            </Compare>
+                        </Condition>
                     </Group>
                 </Complication>
 
@@ -309,11 +327,17 @@
                                 <Stroke color="#ffffffff"
                                         thickness="8" cap="ROUND" />
                             </Arc>
-                        </PartDraw>
-                        <PartImage x="385" y="125" width="22" height="22">
-                            <Image resource="[COMPLICATION.MONOCHROMATIC_IMAGE]"
+                        </PartDraw><Condition>
+                            <Expressions>
+                                <Expression name="has_img"><![CDATA[[COMPLICATION.ICON] != null]]></Expression>
+                            </Expressions>
+                            <Compare expression="has_img">
+                                <PartImage x="385" y="125" width="22" height="22">
+                            <Image resource="[COMPLICATION.ICON]"
                                    tintColor="[CONFIGURATION.themeColor.0]" />
                         </PartImage>
+                            </Compare>
+                        </Condition>
                     </Group>
                 </Complication>
             </ComplicationSlot>
@@ -354,11 +378,17 @@
                                 </Font>
                             </Text>
                         </PartText>
-                        <!-- Icon below text -->
-                        <PartImage x="35" y="68" width="24" height="24">
-                            <Image resource="[COMPLICATION.MONOCHROMATIC_IMAGE]"
+                        <!-- Icon below text --><Condition>
+                            <Expressions>
+                                <Expression name="has_img"><![CDATA[[COMPLICATION.ICON] != null]]></Expression>
+                            </Expressions>
+                            <Compare expression="has_img">
+                                <PartImage x="35" y="68" width="24" height="24">
+                            <Image resource="[COMPLICATION.ICON]"
                                    tintColor="[CONFIGURATION.themeColor.0]" />
                         </PartImage>
+                            </Compare>
+                        </Condition>
                     </Group>
                 </Complication>
 
@@ -394,11 +424,17 @@
                                     </Template>
                                 </Font>
                             </Text>
-                        </PartText>
-                        <PartImage x="35" y="68" width="24" height="24">
-                            <Image resource="[COMPLICATION.MONOCHROMATIC_IMAGE]"
+                        </PartText><Condition>
+                            <Expressions>
+                                <Expression name="has_img"><![CDATA[[COMPLICATION.ICON] != null]]></Expression>
+                            </Expressions>
+                            <Compare expression="has_img">
+                                <PartImage x="35" y="68" width="24" height="24">
+                            <Image resource="[COMPLICATION.ICON]"
                                    tintColor="[CONFIGURATION.themeColor.0]" />
                         </PartImage>
+                            </Compare>
+                        </Condition>
                     </Group>
                 </Complication>
             </ComplicationSlot>
@@ -436,11 +472,17 @@
                                     </Template>
                                 </Font>
                             </Text>
-                        </PartText>
-                        <PartImage x="35" y="68" width="24" height="24">
-                            <Image resource="[COMPLICATION.MONOCHROMATIC_IMAGE]"
+                        </PartText><Condition>
+                            <Expressions>
+                                <Expression name="has_img"><![CDATA[[COMPLICATION.ICON] != null]]></Expression>
+                            </Expressions>
+                            <Compare expression="has_img">
+                                <PartImage x="35" y="68" width="24" height="24">
+                            <Image resource="[COMPLICATION.ICON]"
                                    tintColor="[CONFIGURATION.themeColor.0]" />
                         </PartImage>
+                            </Compare>
+                        </Condition>
                     </Group>
                 </Complication>
 
@@ -474,11 +516,17 @@
                                     </Template>
                                 </Font>
                             </Text>
-                        </PartText>
-                        <PartImage x="35" y="68" width="24" height="24">
-                            <Image resource="[COMPLICATION.MONOCHROMATIC_IMAGE]"
+                        </PartText><Condition>
+                            <Expressions>
+                                <Expression name="has_img"><![CDATA[[COMPLICATION.ICON] != null]]></Expression>
+                            </Expressions>
+                            <Compare expression="has_img">
+                                <PartImage x="35" y="68" width="24" height="24">
+                            <Image resource="[COMPLICATION.ICON]"
                                    tintColor="[CONFIGURATION.themeColor.0]" />
                         </PartImage>
+                            </Compare>
+                        </Condition>
                     </Group>
                 </Complication>
             </ComplicationSlot>
@@ -504,10 +552,16 @@
                                             cornerRadiusY="47">
                                 <Fill color="[CONFIGURATION.themeColor.1]" />
                             </RoundRectangle>
-                        </PartDraw>
-                        <PartImage x="27" y="27" width="40" height="40">
+                        </PartDraw><Condition>
+                            <Expressions>
+                                <Expression name="has_img"><![CDATA[[COMPLICATION.SMALL_IMAGE] != null]]></Expression>
+                            </Expressions>
+                            <Compare expression="has_img">
+                                <PartImage x="27" y="27" width="40" height="40">
                             <Image resource="[COMPLICATION.SMALL_IMAGE]" />
                         </PartImage>
+                            </Compare>
+                        </Condition>
                     </Group>
                 </Complication>
             </ComplicationSlot>
@@ -541,11 +595,17 @@
                                     </Template>
                                 </Font>
                             </TextCircular>
-                        </PartText>
-                        <PartImage x="160" y="405" width="22" height="22">
-                            <Image resource="[COMPLICATION.MONOCHROMATIC_IMAGE]"
+                        </PartText><Condition>
+                            <Expressions>
+                                <Expression name="has_img"><![CDATA[[COMPLICATION.ICON] != null]]></Expression>
+                            </Expressions>
+                            <Compare expression="has_img">
+                                <PartImage x="160" y="405" width="22" height="22">
+                            <Image resource="[COMPLICATION.ICON]"
                                    tintColor="[CONFIGURATION.themeColor.0]" />
                         </PartImage>
+                            </Compare>
+                        </Condition>
                     </Group>
                 </Complication>
             </ComplicationSlot>
@@ -579,11 +639,17 @@
                                     </Template>
                                 </Font>
                             </TextCircular>
-                        </PartText>
-                        <PartImage x="268" y="405" width="22" height="22">
-                            <Image resource="[COMPLICATION.MONOCHROMATIC_IMAGE]"
+                        </PartText><Condition>
+                            <Expressions>
+                                <Expression name="has_img"><![CDATA[[COMPLICATION.ICON] != null]]></Expression>
+                            </Expressions>
+                            <Compare expression="has_img">
+                                <PartImage x="268" y="405" width="22" height="22">
+                            <Image resource="[COMPLICATION.ICON]"
                                    tintColor="[CONFIGURATION.themeColor.0]" />
                         </PartImage>
+                            </Compare>
+                        </Condition>
                     </Group>
                 </Complication>
             </ComplicationSlot>

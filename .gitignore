@@ -3,3 +3,5 @@
 build/
 app/build/
 .gradle/
+tmp_apk/
+base_apk_decompiled/

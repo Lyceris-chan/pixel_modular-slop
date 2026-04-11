@@ -92,7 +92,7 @@
                 </Arc>
                 <!-- Top-right arc track -->
                 <Arc centerX="225" centerY="225" width="450" height="450"
-                     startAngle="325" endAngle="35" direction="CLOCKWISE">
+                     startAngle="325" endAngle="395" direction="CLOCKWISE">
                     <Stroke color="[CONFIGURATION.themeColor.2]"
                             thickness="8" cap="ROUND" />
                 </Arc>
@@ -210,7 +210,7 @@
                 <DefaultProviderPolicy
                     defaultSystemProvider="STEP_COUNT"
                     defaultSystemProviderType="RANGED_VALUE" />
-                <BoundingOval x="0" y="0" width="225" height="225" />
+                <BoundingArc centerX="225" centerY="225" width="450" height="450" thickness="30" startAngle="145" endAngle="215" />
 
                 <Complication type="SHORT_TEXT">
                     <Group alpha="255">
@@ -290,7 +290,7 @@
                 <DefaultProviderPolicy
                     defaultSystemProvider="WATCH_BATTERY"
                     defaultSystemProviderType="RANGED_VALUE" />
-                <BoundingOval x="225" y="0" width="225" height="225" />
+                <BoundingArc centerX="225" centerY="225" width="450" height="450" thickness="30" startAngle="325" endAngle="395" />
 
                 <Complication type="SHORT_TEXT">
                     <Group alpha="255">
@@ -298,7 +298,7 @@
                         <PartText x="0" y="0" width="450" height="450">
                             <TextCircular centerX="225" centerY="225"
                                           width="410" height="410"
-                                          startAngle="340" endAngle="35"
+                                          startAngle="340" endAngle="395"
                                           direction="CLOCKWISE" align="START">
                                 <Font family="google_sans_flex_700" size="20"
                                       color="#ffffffff">
@@ -327,7 +327,7 @@
                         <PartText x="0" y="0" width="450" height="450">
                             <TextCircular centerX="225" centerY="225"
                                           width="410" height="410"
-                                          startAngle="340" endAngle="35"
+                                          startAngle="340" endAngle="395"
                                           direction="CLOCKWISE" align="START">
                                 <Font family="google_sans_flex_700" size="20"
                                       color="#ffffffff">
@@ -589,12 +589,12 @@
             <!-- Slot 5: Bottom-right arc — Calories
                  Ref: ComplicationArc class q3, bottom-right quadrant -->
             <ComplicationSlot slotId="5" x="0" y="0" width="[CONFIGURATION.layoutStyle] == 1 || [CONFIGURATION.layoutStyle] == 3 ? 450 : 0" height="[CONFIGURATION.layoutStyle] == 1 || [CONFIGURATION.layoutStyle] == 3 ? 450 : 0"
-                              supportedTypes="SHORT_TEXT EMPTY"
+                              supportedTypes="RANGED_VALUE SHORT_TEXT EMPTY"
                               displayName="@string/arc_bottom_right">
                 <DefaultProviderPolicy
                     defaultSystemProvider="NEXT_EVENT"
                     defaultSystemProviderType="SHORT_TEXT" />
-                <BoundingOval x="225" y="225" width="225" height="225" />
+                <BoundingArc centerX="225" centerY="225" width="450" height="450" thickness="30" startAngle="55" endAngle="125" />
 
                 <Complication type="SHORT_TEXT">
                     <Group alpha="255">
@@ -625,17 +625,57 @@
                         </Condition>
                     </Group>
                 </Complication>
+                <Complication type="RANGED_VALUE">
+                    <Group alpha="255">
+                        <Variant mode="AMBIENT" target="alpha" value="0" duration="0.0" />
+                        <PartText x="0" y="0" width="450" height="450">
+                            <TextCircular centerX="225" centerY="225"
+                                          width="410" height="410"
+                                          startAngle="110" endAngle="55"
+                                          direction="COUNTER_CLOCKWISE"
+                                          align="START">
+                                <Font family="google_sans_flex_700" size="20"
+                                      color="#ffffffff">
+                                    <Template><![CDATA[%s]]>
+                                        <Parameter expression="[COMPLICATION.TEXT]" />
+                                    </Template>
+                                </Font>
+                            </TextCircular>
+                        </PartText>
+                        <PartDraw x="0" y="0" width="450" height="450">
+                            <Arc centerX="225" centerY="225"
+                                 width="450" height="450"
+                                 startAngle="125" endAngle="125"
+                                 direction="COUNTER_CLOCKWISE">
+                                <Transform target="endAngle"
+                                    value="[COMPLICATION.RANGED_VALUE_MAX] &gt; 0 ? (125 - 70 * ([COMPLICATION.RANGED_VALUE_VALUE] / [COMPLICATION.RANGED_VALUE_MAX])) : 125" />
+                                <Stroke color="#ffffffff"
+                                        thickness="8" cap="ROUND" />
+                            </Arc>
+                        </PartDraw><Condition>
+                            <Expressions>
+                                <Expression name="has_img"><![CDATA[[COMPLICATION.ICON] != null]]></Expression>
+                            </Expressions>
+                            <Compare expression="has_img">
+                                <PartImage x="160" y="405" width="22" height="22">
+                            <Image resource="[COMPLICATION.ICON]"
+                                   tintColor="[CONFIGURATION.themeColor.0]" />
+                        </PartImage>
+                            </Compare>
+                        </Condition>
+                    </Group>
+                </Complication>
             </ComplicationSlot>
 
             <!-- Slot 6: Bottom-left arc — Distance
                  Ref: ComplicationArc class q4, bottom-left quadrant -->
             <ComplicationSlot slotId="6" x="0" y="0" width="[CONFIGURATION.layoutStyle] == 1 || [CONFIGURATION.layoutStyle] == 3 ? 450 : 0" height="[CONFIGURATION.layoutStyle] == 1 || [CONFIGURATION.layoutStyle] == 3 ? 450 : 0"
-                              supportedTypes="SHORT_TEXT EMPTY"
+                              supportedTypes="RANGED_VALUE SHORT_TEXT EMPTY"
                               displayName="@string/arc_bottom_left">
                 <DefaultProviderPolicy
                     defaultSystemProvider="DAY_AND_DATE"
                     defaultSystemProviderType="SHORT_TEXT" />
-                <BoundingOval x="0" y="225" width="225" height="225" />
+                <BoundingArc centerX="225" centerY="225" width="450" height="450" thickness="30" startAngle="235" endAngle="305" />
 
                 <Complication type="SHORT_TEXT">
                     <Group alpha="255">
@@ -666,9 +706,48 @@
                         </Condition>
                     </Group>
                 </Complication>
+                <Complication type="RANGED_VALUE">
+                    <Group alpha="255">
+                        <Variant mode="AMBIENT" target="alpha" value="0" duration="0.0" />
+                        <PartText x="0" y="0" width="450" height="450">
+                            <TextCircular centerX="225" centerY="225"
+                                          width="410" height="410"
+                                          startAngle="290" endAngle="235"
+                                          direction="COUNTER_CLOCKWISE"
+                                          align="START">
+                                <Font family="google_sans_flex_700" size="20"
+                                      color="#ffffffff">
+                                    <Template><![CDATA[%s]]>
+                                        <Parameter expression="[COMPLICATION.TEXT]" />
+                                    </Template>
+                                </Font>
+                            </TextCircular>
+                        </PartText>
+                        <PartDraw x="0" y="0" width="450" height="450">
+                            <Arc centerX="225" centerY="225"
+                                 width="450" height="450"
+                                 startAngle="305" endAngle="305"
+                                 direction="COUNTER_CLOCKWISE">
+                                <Transform target="endAngle"
+                                    value="[COMPLICATION.RANGED_VALUE_MAX] &gt; 0 ? (305 - 70 * ([COMPLICATION.RANGED_VALUE_VALUE] / [COMPLICATION.RANGED_VALUE_MAX])) : 305" />
+                                <Stroke color="#ffffffff"
+                                        thickness="8" cap="ROUND" />
+                            </Arc>
+                        </PartDraw><Condition>
+                            <Expressions>
+                                <Expression name="has_img"><![CDATA[[COMPLICATION.ICON] != null]]></Expression>
+                            </Expressions>
+                            <Compare expression="has_img">
+                                <PartImage x="268" y="405" width="22" height="22">
+                            <Image resource="[COMPLICATION.ICON]"
+                                   tintColor="[CONFIGURATION.themeColor.0]" />
+                        </PartImage>
+                            </Compare>
+                        </Condition>
+                    </Group>
+                </Complication>
             </ComplicationSlot>
 
-    
             <!-- Slot 7: First Linear -->
             <ComplicationSlot slotId="7" x="190" y="112"
                               width="[CONFIGURATION.layoutStyle] == 2 || [CONFIGURATION.layoutStyle] == 3 ? 240 : 0"

@@ -6,4 +6,5 @@
     <AvailableInRetail value="true" />
     <MultipleInstancesAllowed value="true" />
     <Editable value="true" />
+    <FlavorsSupported value="true" />
 </WatchFaceInfo>

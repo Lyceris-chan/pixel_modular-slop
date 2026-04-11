@@ -14,4 +14,11 @@
     <string name="color_theme_9">Porcelain</string>
     <string name="color_theme_10">Sky</string>
     <string name="color_theme_11">Rose</string>
+    <string name="top_left_complication">Top Left Arc</string>
+    <string name="top_right_complication">Top Right Arc</string>
+    <string name="bottom_left_complication">Bottom Left Arc</string>
+    <string name="bottom_right_complication">Bottom Right Flat</string>
+    <string name="bottom_center_shortcut">Bottom Center</string>
+    <string name="arc_bottom_right">Bottom Right Arc</string>
+    <string name="arc_bottom_left">Bottom Left Arc</string>
 </resources>

@@ -22,30 +22,30 @@
            [2] = arc track, [3] = bright text accent -->
     <UserConfigurations>
         <ColorConfiguration id="themeColor" defaultValue="0"
-            displayName="color_selector_display_name">
-            <ColorOption id="0"  displayName="color_theme_0"
+            displayName="@string/color_selector_display_name">
+            <ColorOption id="0"  displayName="@string/color_theme_0"
                 colors="#FFCAB4F0 #FF37333F #FF2B2A2D #FFEADFFF" />
-            <ColorOption id="1"  displayName="color_theme_1"
+            <ColorOption id="1"  displayName="@string/color_theme_1"
                 colors="#FFE3E293 #FF3F3F2D #FF2D2D29 #FFFFFED2" />
-            <ColorOption id="2"  displayName="color_theme_2"
+            <ColorOption id="2"  displayName="@string/color_theme_2"
                 colors="#FFA5AD84 #FF3D3F33 #FF2D2D2A #FFCACFB7" />
-            <ColorOption id="3"  displayName="color_theme_3"
+            <ColorOption id="3"  displayName="@string/color_theme_3"
                 colors="#FFE2E2E2 #FF3F3F3F #FF2D2D2D #FFFFFFFF" />
-            <ColorOption id="4"  displayName="color_theme_4"
+            <ColorOption id="4"  displayName="@string/color_theme_4"
                 colors="#FFF1ECE6 #FF3F3E3D #FF2D2D2D #FFFFFCF9" />
-            <ColorOption id="5"  displayName="color_theme_5"
+            <ColorOption id="5"  displayName="@string/color_theme_5"
                 colors="#FF9EF3C8 #FF2D3F36 #FF292D2B #FFD2FFE8" />
-            <ColorOption id="6"  displayName="color_theme_6"
+            <ColorOption id="6"  displayName="@string/color_theme_6"
                 colors="#FFF98C7F #FF3F2926 #FF2D2727 #FFFFC7C0" />
-            <ColorOption id="7"  displayName="color_theme_7"
+            <ColorOption id="7"  displayName="@string/color_theme_7"
                 colors="#FF84D1C3 #FF2C3F3C #FF282D2C #FFCCFAF2" />
-            <ColorOption id="8"  displayName="color_theme_8"
+            <ColorOption id="8"  displayName="@string/color_theme_8"
                 colors="#FFD9D9E0 #FF3E3E3F #FF2D2D2D #FFFBFBFF" />
-            <ColorOption id="9"  displayName="color_theme_9"
+            <ColorOption id="9"  displayName="@string/color_theme_9"
                 colors="#FFEFEAE5 #FF3F3E3D #FF2D2D2D #FFFFFCF9" />
-            <ColorOption id="10" displayName="color_theme_10"
+            <ColorOption id="10" displayName="@string/color_theme_10"
                 colors="#FFA7E0FE #FF2E393F #FF292C2D #FFD3EFFF" />
-            <ColorOption id="11" displayName="color_theme_11"
+            <ColorOption id="11" displayName="@string/color_theme_11"
                 colors="#FFF1B4BE #FF3F3234 #FF2D2A2A #FFFFDEE4" />
         </ColorConfiguration>
     </UserConfigurations>
@@ -179,8 +179,8 @@
             <!-- Slot 0: Top-left arc — Steps
                  Ref: ComplicationArc class q1, startAngle≈145, sweepAngle≈70 -->
             <ComplicationSlot slotId="0" x="0" y="0" width="450" height="450"
-                              supportedTypes="RANGED_VALUE SHORT_TEXT"
-                              displayName="top_left_complication">
+                              supportedTypes="RANGED_VALUE SHORT_TEXT EMPTY"
+                              displayName="@string/top_left_complication">
                 <DefaultProviderPolicy
                     defaultSystemProvider="STEP_COUNT"
                     defaultSystemProviderType="RANGED_VALUE" />
@@ -250,8 +250,8 @@
             <!-- Slot 1: Top-right arc — Activity
                  Ref: ComplicationArc class q2, startAngle≈325, sweepAngle≈70 -->
             <ComplicationSlot slotId="1" x="0" y="0" width="450" height="450"
-                              supportedTypes="RANGED_VALUE SHORT_TEXT"
-                              displayName="top_right_complication">
+                              supportedTypes="RANGED_VALUE SHORT_TEXT EMPTY"
+                              displayName="@string/top_right_complication">
                 <BoundingArc centerX="225" centerY="225"
                              width="450" height="450"
                              startAngle="325" endAngle="35"
@@ -319,8 +319,8 @@
                  Ref: ComplicationBulb complication-7, (68,261) 100×100
                  Scaled 480→450: approx (64,245) 94×94 -->
             <ComplicationSlot slotId="2" x="64" y="245" width="94" height="94"
-                              supportedTypes="SHORT_TEXT RANGED_VALUE"
-                              displayName="bottom_left_complication">
+                              supportedTypes="SHORT_TEXT RANGED_VALUE EMPTY"
+                              displayName="@string/bottom_left_complication">
                 <DefaultProviderPolicy
                     defaultSystemProvider="SUNRISE_SUNSET"
                     defaultSystemProviderType="SHORT_TEXT" />
@@ -404,8 +404,8 @@
                  Ref: ComplicationBulb complication-9, (313,261) 100×100
                  Scaled 480→450: approx (293,245) 94×94 -->
             <ComplicationSlot slotId="3" x="293" y="245" width="94" height="94"
-                              supportedTypes="SHORT_TEXT RANGED_VALUE"
-                              displayName="bottom_right_complication">
+                              supportedTypes="SHORT_TEXT RANGED_VALUE EMPTY"
+                              displayName="@string/bottom_right_complication">
                 <DefaultProviderPolicy
                     defaultSystemProvider="HEART_RATE"
                     defaultSystemProviderType="SHORT_TEXT" />
@@ -484,8 +484,8 @@
                  Ref: ComplicationBulb complication-8, (190,320) 100×100
                  Scaled 480→450: approx (178,300) 94×94 -->
             <ComplicationSlot slotId="4" x="178" y="300" width="94" height="94"
-                              supportedTypes="SMALL_IMAGE"
-                              displayName="bottom_center_shortcut">
+                              supportedTypes="SMALL_IMAGE EMPTY"
+                              displayName="@string/bottom_center_shortcut">
                 <DefaultProviderPolicy
                     defaultSystemProvider="APP_SHORTCUT"
                     defaultSystemProviderType="SMALL_IMAGE" />
@@ -512,8 +512,8 @@
             <!-- Slot 5: Bottom-right arc — Calories
                  Ref: ComplicationArc class q3, bottom-right quadrant -->
             <ComplicationSlot slotId="5" x="0" y="0" width="450" height="450"
-                              supportedTypes="SHORT_TEXT"
-                              displayName="arc_bottom_right">
+                              supportedTypes="SHORT_TEXT EMPTY"
+                              displayName="@string/arc_bottom_right">
                 <BoundingArc centerX="225" centerY="225"
                              width="450" height="450"
                              startAngle="55" endAngle="125"
@@ -547,8 +547,8 @@
             <!-- Slot 6: Bottom-left arc — Distance
                  Ref: ComplicationArc class q4, bottom-left quadrant -->
             <ComplicationSlot slotId="6" x="0" y="0" width="450" height="450"
-                              supportedTypes="SHORT_TEXT"
-                              displayName="arc_bottom_left">
+                              supportedTypes="SHORT_TEXT EMPTY"
+                              displayName="@string/arc_bottom_left">
                 <BoundingArc centerX="225" centerY="225"
                              width="450" height="450"
                              startAngle="235" endAngle="305"

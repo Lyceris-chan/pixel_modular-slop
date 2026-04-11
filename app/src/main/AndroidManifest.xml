@@ -23,8 +23,14 @@
             android:name="com.google.wear.watchface.format.version"
             android:value="4" />
 
+        <!-- Tells the system to use the declarative WFF configuration -->
         <meta-data
-            android:name="com.google.wear.watchface.info"
+            android:name="com.google.android.wearable.watchface.wearableConfigurationAction"
+            android:value="com.google.android.wearable.watchface.CONFIG_WFF" />
+
+        <!-- Links to the preview and category metadata -->
+        <meta-data
+            android:name="com.google.android.wearable.watchface.format"
             android:resource="@xml/watch_face_info" />
 
         <meta-data

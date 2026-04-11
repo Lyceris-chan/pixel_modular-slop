@@ -48,7 +48,33 @@
             <ColorOption id="11" displayName="@string/color_theme_11"
                 colors="#FFF1B4BE #FF3F3234 #FF2D2A2A #FFFFDEE4" />
         </ColorConfiguration>
+        <ListConfiguration id="layoutStyle" defaultValue="1" displayName="Layout">
+            <ListOption id="0" displayName="Default" />
+            <ListOption id="1" displayName="Default Arcs" />
+            <ListOption id="2" displayName="Linear" />
+            <ListOption id="3" displayName="Linear Arcs" />
+        </ListConfiguration>
+
     </UserConfigurations>
+    <Flavors>
+        <Flavor id="flavor_sunbeam_default_arcs" displayName="Sunbeam Default Arcs">
+            <Configuration id="themeColor" optionId="0" />
+            <Configuration id="layoutStyle" optionId="1" />
+        </Flavor>
+        <Flavor id="flavor_moonstone_default" displayName="Moonstone Default">
+            <Configuration id="themeColor" optionId="1" />
+            <Configuration id="layoutStyle" optionId="0" />
+        </Flavor>
+        <Flavor id="flavor_celadon_linear" displayName="Celadon Linear">
+            <Configuration id="themeColor" optionId="2" />
+            <Configuration id="layoutStyle" optionId="2" />
+        </Flavor>
+        <Flavor id="flavor_jade_linear_arcs" displayName="Jade Linear Arcs">
+            <Configuration id="themeColor" optionId="5" />
+            <Configuration id="layoutStyle" optionId="3" />
+        </Flavor>
+    </Flavors>
+
 
     <Scene backgroundColor="#ff000000">
 
@@ -56,7 +82,7 @@
             <!-- ARC TRACKS — Decorative background arcs for the 4 arc slots  -->
             <!-- Ref: base_0.apk default_arcs layout, ComplicationArc arcs    -->
             <!-- ============================================================ -->
-            <PartDraw x="0" y="0" width="450" height="450">
+            <PartDraw x="0" y="0" width="450" height="450" alpha="[CONFIGURATION.layoutStyle] == 1 || [CONFIGURATION.layoutStyle] == 3 ? 255 : 0">
                 <Variant mode="AMBIENT" target="alpha" value="0" duration="0.0" />
                 <!-- Top-left arc track -->
                 <Arc centerX="225" centerY="225" width="450" height="450"
@@ -91,7 +117,7 @@
             <!-- ============================================================ -->
 
             <!-- Day & Date Widget: Interactive Mode -->
-            <PartText x="130" y="48" width="80" height="40" alpha="255">
+            <PartText x="[CONFIGURATION.layoutStyle] == 2 || [CONFIGURATION.layoutStyle] == 3 ? 20 : 130" y="48" width="80" height="40" alpha="255">
                 <Variant mode="AMBIENT" target="alpha" value="0" duration="0.0" />
                 <Text align="END">
                     <Font family="google_sans_flex_600" size="24"
@@ -104,7 +130,7 @@
             </PartText>
 
             <!-- Day & Date Widget: Ambient Mode -->
-            <PartText x="130" y="48" width="80" height="40" alpha="0">
+            <PartText x="[CONFIGURATION.layoutStyle] == 2 || [CONFIGURATION.layoutStyle] == 3 ? 20 : 130" y="48" width="80" height="40" alpha="0">
                 <Variant mode="AMBIENT" target="alpha" value="255" duration="0.0" />
                 <Text align="END">
                     <Font family="google_sans_flex_date_aod" size="24"
@@ -117,7 +143,7 @@
             </PartText>
 
             <!-- Date number badge background -->
-            <PartDraw x="218" y="48" width="44" height="34" alpha="255">
+            <PartDraw x="[CONFIGURATION.layoutStyle] == 2 || [CONFIGURATION.layoutStyle] == 3 ? 108 : 218" y="48" width="44" height="34" alpha="255">
                 <Variant mode="AMBIENT" target="alpha" value="0" duration="0.0" />
                 <RoundRectangle x="0" y="0" width="44" height="34"
                                 cornerRadiusX="8" cornerRadiusY="8">
@@ -126,7 +152,7 @@
             </PartDraw>
 
             <!-- Date number text: Interactive -->
-            <PartText x="218" y="48" width="44" height="34" alpha="255">
+            <PartText x="[CONFIGURATION.layoutStyle] == 2 || [CONFIGURATION.layoutStyle] == 3 ? 108 : 218" y="48" width="44" height="34" alpha="255">
                 <Variant mode="AMBIENT" target="alpha" value="0" duration="0.0" />
                 <Text align="CENTER">
                     <Font family="google_sans_flex_600" size="22"
@@ -139,7 +165,7 @@
             </PartText>
 
             <!-- Date number text: Ambient -->
-            <PartText x="218" y="48" width="44" height="34" alpha="0">
+            <PartText x="[CONFIGURATION.layoutStyle] == 2 || [CONFIGURATION.layoutStyle] == 3 ? 108 : 218" y="48" width="44" height="34" alpha="0">
                 <Variant mode="AMBIENT" target="alpha" value="255" duration="0.0" />
                 <Text align="CENTER">
                     <Font family="google_sans_flex_date_aod" size="22"
@@ -153,9 +179,9 @@
 
             <!-- ============================================================ -->
             <!-- DIGITAL CLOCK -->
-            <DigitalClock x="0" y="100" width="450" height="150">
+            <DigitalClock x="0" y="100" width="[CONFIGURATION.layoutStyle] == 2 || [CONFIGURATION.layoutStyle] == 3 ? 200 : 450" height="150">
                 <!-- Interactive Mode -->
-                <TimeText x="0" y="0" width="450" height="150"
+                <TimeText x="0" y="0" width="[CONFIGURATION.layoutStyle] == 2 || [CONFIGURATION.layoutStyle] == 3 ? 200 : 450" height="150"
                           format="hh:mm" hourFormat="SYNC_TO_DEVICE"
                           align="CENTER" alpha="255">
                     <Variant mode="AMBIENT" target="alpha" value="0" duration="0.0" />
@@ -163,7 +189,7 @@
                           color="#ffffffff" />
                 </TimeText>
                 <!-- Ambient Mode (AOD) -->
-                <TimeText x="0" y="0" width="450" height="150"
+                <TimeText x="0" y="0" width="[CONFIGURATION.layoutStyle] == 2 || [CONFIGURATION.layoutStyle] == 3 ? 200 : 450" height="150"
                           format="hh:mm" hourFormat="SYNC_TO_DEVICE"
                           align="CENTER" alpha="0">
                     <Variant mode="AMBIENT" target="alpha" value="255" duration="0.0" />
@@ -178,7 +204,7 @@
 
             <!-- Slot 0: Top-left arc — Steps
                  Ref: ComplicationArc class q1, startAngle≈145, sweepAngle≈70 -->
-            <ComplicationSlot slotId="0" x="0" y="0" width="450" height="450"
+            <ComplicationSlot slotId="0" x="0" y="0" width="[CONFIGURATION.layoutStyle] == 1 || [CONFIGURATION.layoutStyle] == 3 ? 450 : 0" height="[CONFIGURATION.layoutStyle] == 1 || [CONFIGURATION.layoutStyle] == 3 ? 450 : 0"
                               supportedTypes="RANGED_VALUE SHORT_TEXT EMPTY"
                               displayName="@string/top_left_complication">
                 <DefaultProviderPolicy
@@ -258,7 +284,7 @@
 
             <!-- Slot 1: Top-right arc — Activity
                  Ref: ComplicationArc class q2, startAngle≈325, sweepAngle≈70 -->
-            <ComplicationSlot slotId="1" x="0" y="0" width="450" height="450"
+            <ComplicationSlot slotId="1" x="0" y="0" width="[CONFIGURATION.layoutStyle] == 1 || [CONFIGURATION.layoutStyle] == 3 ? 450 : 0" height="[CONFIGURATION.layoutStyle] == 1 || [CONFIGURATION.layoutStyle] == 3 ? 450 : 0"
                               supportedTypes="RANGED_VALUE SHORT_TEXT EMPTY"
                               displayName="@string/top_right_complication">
                 <DefaultProviderPolicy
@@ -339,7 +365,7 @@
             <!-- Slot 2: Bottom-left circular bulb — Weather/Sunset
                  Ref: ComplicationBulb complication-7, (68,261) 100×100
                  Scaled 480→450: approx (64,245) 94×94 -->
-            <ComplicationSlot slotId="2" x="64" y="245" width="94" height="94"
+            <ComplicationSlot slotId="2" x="64" y="245" width="[CONFIGURATION.layoutStyle] == 0 || [CONFIGURATION.layoutStyle] == 1 ? 94 : 0" height="[CONFIGURATION.layoutStyle] == 0 || [CONFIGURATION.layoutStyle] == 1 ? 94 : 0"
                               supportedTypes="SHORT_TEXT RANGED_VALUE EMPTY"
                               displayName="@string/bottom_left_complication">
                 <DefaultProviderPolicy
@@ -436,7 +462,7 @@
             <!-- Slot 3: Bottom-right circular bulb — Heart Rate
                  Ref: ComplicationBulb complication-9, (313,261) 100×100
                  Scaled 480→450: approx (293,245) 94×94 -->
-            <ComplicationSlot slotId="3" x="293" y="245" width="94" height="94"
+            <ComplicationSlot slotId="3" x="293" y="245" width="[CONFIGURATION.layoutStyle] == 0 || [CONFIGURATION.layoutStyle] == 1 ? 94 : 0" height="[CONFIGURATION.layoutStyle] == 0 || [CONFIGURATION.layoutStyle] == 1 ? 94 : 0"
                               supportedTypes="SHORT_TEXT RANGED_VALUE EMPTY"
                               displayName="@string/bottom_right_complication">
                 <DefaultProviderPolicy
@@ -528,7 +554,7 @@
             <!-- Slot 4: Bottom-center app shortcut
                  Ref: ComplicationBulb complication-8, (190,320) 100×100
                  Scaled 480→450: approx (178,300) 94×94 -->
-            <ComplicationSlot slotId="4" x="178" y="300" width="94" height="94"
+            <ComplicationSlot slotId="4" x="178" y="300" width="[CONFIGURATION.layoutStyle] == 0 || [CONFIGURATION.layoutStyle] == 1 ? 94 : 0" height="[CONFIGURATION.layoutStyle] == 0 || [CONFIGURATION.layoutStyle] == 1 ? 94 : 0"
                               supportedTypes="SMALL_IMAGE EMPTY"
                               displayName="@string/bottom_center_shortcut">
                 <DefaultProviderPolicy
@@ -562,7 +588,7 @@
 
             <!-- Slot 5: Bottom-right arc — Calories
                  Ref: ComplicationArc class q3, bottom-right quadrant -->
-            <ComplicationSlot slotId="5" x="0" y="0" width="450" height="450"
+            <ComplicationSlot slotId="5" x="0" y="0" width="[CONFIGURATION.layoutStyle] == 1 || [CONFIGURATION.layoutStyle] == 3 ? 450 : 0" height="[CONFIGURATION.layoutStyle] == 1 || [CONFIGURATION.layoutStyle] == 3 ? 450 : 0"
                               supportedTypes="SHORT_TEXT EMPTY"
                               displayName="@string/arc_bottom_right">
                 <DefaultProviderPolicy
@@ -603,7 +629,7 @@
 
             <!-- Slot 6: Bottom-left arc — Distance
                  Ref: ComplicationArc class q4, bottom-left quadrant -->
-            <ComplicationSlot slotId="6" x="0" y="0" width="450" height="450"
+            <ComplicationSlot slotId="6" x="0" y="0" width="[CONFIGURATION.layoutStyle] == 1 || [CONFIGURATION.layoutStyle] == 3 ? 450 : 0" height="[CONFIGURATION.layoutStyle] == 1 || [CONFIGURATION.layoutStyle] == 3 ? 450 : 0"
                               supportedTypes="SHORT_TEXT EMPTY"
                               displayName="@string/arc_bottom_left">
                 <DefaultProviderPolicy
@@ -638,6 +664,171 @@
                         </PartImage>
                             </Compare>
                         </Condition>
+                    </Group>
+                </Complication>
+            </ComplicationSlot>
+
+    
+            <!-- Slot 7: First Linear -->
+            <ComplicationSlot slotId="7" x="190" y="112"
+                              width="[CONFIGURATION.layoutStyle] == 2 || [CONFIGURATION.layoutStyle] == 3 ? 240 : 0"
+                              height="[CONFIGURATION.layoutStyle] == 2 || [CONFIGURATION.layoutStyle] == 3 ? 38 : 0"
+                              supportedTypes="SHORT_TEXT RANGED_VALUE EMPTY"
+                              displayName="Linear 1">
+                <DefaultProviderPolicy defaultSystemProvider="STEP_COUNT" defaultSystemProviderType="RANGED_VALUE" />
+                <BoundingRoundRect x="0" y="0" width="240" height="38" cornerRadiusX="19" cornerRadiusY="19" />
+                <Complication type="SHORT_TEXT">
+                    <Group alpha="255">
+                        <Variant mode="AMBIENT" target="alpha" value="0" duration="0.0" />
+                        <PartDraw x="0" y="0" width="240" height="38">
+                            <RoundRectangle x="0" y="0" width="240" height="38" cornerRadiusX="19" cornerRadiusY="19">
+                                <Fill color="[CONFIGURATION.themeColor.1]" />
+                            </RoundRectangle>
+                        </PartDraw>
+                        <Condition><Expressions><Expression name="has_img"><![CDATA[[COMPLICATION.ICON] != null]]></Expression></Expressions>
+                        <Compare expression="has_img">
+                            <PartImage x="8" y="7" width="24" height="24"><Image resource="[COMPLICATION.ICON]" tintColor="[CONFIGURATION.themeColor.0]" /></PartImage>
+                        </Compare></Condition>
+                        <PartText x="40" y="0" width="200" height="38"><Text align="START"><Font family="google_sans_flex_600" size="18" color="#ffffffff"><Template><![CDATA[%s]]><Parameter expression="[COMPLICATION.TEXT]" /></Template></Font></Text></PartText>
+                    </Group>
+                </Complication>
+                <Complication type="RANGED_VALUE">
+                    <Group alpha="255">
+                        <Variant mode="AMBIENT" target="alpha" value="0" duration="0.0" />
+                        <PartDraw x="0" y="0" width="240" height="38">
+                            <RoundRectangle x="0" y="0" width="240" height="38" cornerRadiusX="19" cornerRadiusY="19">
+                                <Fill color="[CONFIGURATION.themeColor.1]" />
+                            </RoundRectangle>
+                            <Line startX="40" startY="28" endX="220" endY="28">
+                                <Stroke color="[CONFIGURATION.themeColor.2]" thickness="4" cap="ROUND" />
+                            </Line>
+                            <Line startX="40" startY="28" endX="40" endY="28">
+                                <Transform target="endX" value="[COMPLICATION.RANGED_VALUE_MAX] &gt; 0 ? (40 + 180 * ([COMPLICATION.RANGED_VALUE_VALUE] / [COMPLICATION.RANGED_VALUE_MAX])) : 40" />
+                                <Stroke color="[CONFIGURATION.themeColor.0]" thickness="4" cap="ROUND" />
+                            </Line>
+                        </PartDraw>
+                        <Condition><Expressions><Expression name="has_img"><![CDATA[[COMPLICATION.ICON] != null]]></Expression></Expressions>
+                        <Compare expression="has_img">
+                            <PartImage x="8" y="7" width="24" height="24"><Image resource="[COMPLICATION.ICON]" tintColor="[CONFIGURATION.themeColor.0]" /></PartImage>
+                        </Compare></Condition>
+                        <PartText x="40" y="0" width="200" height="24"><Text align="START"><Font family="google_sans_flex_600" size="14" color="#ffffffff"><Template><![CDATA[%s]]><Parameter expression="[COMPLICATION.TEXT]" /></Template></Font></Text></PartText>
+                    </Group>
+                </Complication>
+            </ComplicationSlot>
+
+            <!-- Slot 8: Second Linear -->
+            <ComplicationSlot slotId="8" x="190" y="159"
+                              width="[CONFIGURATION.layoutStyle] == 2 || [CONFIGURATION.layoutStyle] == 3 ? 240 : 0"
+                              height="[CONFIGURATION.layoutStyle] == 2 || [CONFIGURATION.layoutStyle] == 3 ? 38 : 0"
+                              supportedTypes="SHORT_TEXT RANGED_VALUE EMPTY"
+                              displayName="Linear 2">
+                <DefaultProviderPolicy defaultSystemProvider="HEART_RATE" defaultSystemProviderType="SHORT_TEXT" />
+                <BoundingRoundRect x="0" y="0" width="240" height="38" cornerRadiusX="19" cornerRadiusY="19" />
+                <Complication type="SHORT_TEXT">
+                    <Group alpha="255">
+                        <Variant mode="AMBIENT" target="alpha" value="0" duration="0.0" />
+                        <PartDraw x="0" y="0" width="240" height="38"><RoundRectangle x="0" y="0" width="240" height="38" cornerRadiusX="19" cornerRadiusY="19"><Fill color="[CONFIGURATION.themeColor.1]" /></RoundRectangle></PartDraw>
+                        <Condition><Expressions><Expression name="has_img"><![CDATA[[COMPLICATION.ICON] != null]]></Expression></Expressions>
+                        <Compare expression="has_img">
+                            <PartImage x="8" y="7" width="24" height="24"><Image resource="[COMPLICATION.ICON]" tintColor="[CONFIGURATION.themeColor.0]" /></PartImage>
+                        </Compare></Condition>
+                        <PartText x="40" y="0" width="200" height="38"><Text align="START"><Font family="google_sans_flex_600" size="18" color="#ffffffff"><Template><![CDATA[%s]]><Parameter expression="[COMPLICATION.TEXT]" /></Template></Font></Text></PartText>
+                    </Group>
+                </Complication>
+                <Complication type="RANGED_VALUE">
+                    <Group alpha="255">
+                        <Variant mode="AMBIENT" target="alpha" value="0" duration="0.0" />
+                        <PartDraw x="0" y="0" width="240" height="38">
+                            <RoundRectangle x="0" y="0" width="240" height="38" cornerRadiusX="19" cornerRadiusY="19"><Fill color="[CONFIGURATION.themeColor.1]" /></RoundRectangle>
+                            <Line startX="40" startY="28" endX="220" endY="28"><Stroke color="[CONFIGURATION.themeColor.2]" thickness="4" cap="ROUND" /></Line>
+                            <Line startX="40" startY="28" endX="40" endY="28">
+                                <Transform target="endX" value="[COMPLICATION.RANGED_VALUE_MAX] &gt; 0 ? (40 + 180 * ([COMPLICATION.RANGED_VALUE_VALUE] / [COMPLICATION.RANGED_VALUE_MAX])) : 40" />
+                                <Stroke color="[CONFIGURATION.themeColor.0]" thickness="4" cap="ROUND" />
+                            </Line>
+                        </PartDraw>
+                        <Condition><Expressions><Expression name="has_img"><![CDATA[[COMPLICATION.ICON] != null]]></Expression></Expressions>
+                        <Compare expression="has_img">
+                            <PartImage x="8" y="7" width="24" height="24"><Image resource="[COMPLICATION.ICON]" tintColor="[CONFIGURATION.themeColor.0]" /></PartImage>
+                        </Compare></Condition>
+                        <PartText x="40" y="0" width="200" height="24"><Text align="START"><Font family="google_sans_flex_600" size="14" color="#ffffffff"><Template><![CDATA[%s]]><Parameter expression="[COMPLICATION.TEXT]" /></Template></Font></Text></PartText>
+                    </Group>
+                </Complication>
+            </ComplicationSlot>
+
+            <!-- Slot 9: Third Linear -->
+            <ComplicationSlot slotId="9" x="190" y="206"
+                              width="[CONFIGURATION.layoutStyle] == 2 || [CONFIGURATION.layoutStyle] == 3 ? 240 : 0"
+                              height="[CONFIGURATION.layoutStyle] == 2 || [CONFIGURATION.layoutStyle] == 3 ? 38 : 0"
+                              supportedTypes="SHORT_TEXT RANGED_VALUE EMPTY"
+                              displayName="Linear 3">
+                <DefaultProviderPolicy defaultSystemProvider="WATCH_BATTERY" defaultSystemProviderType="RANGED_VALUE" />
+                <BoundingRoundRect x="0" y="0" width="240" height="38" cornerRadiusX="19" cornerRadiusY="19" />
+                <Complication type="SHORT_TEXT">
+                    <Group alpha="255">
+                        <Variant mode="AMBIENT" target="alpha" value="0" duration="0.0" />
+                        <PartDraw x="0" y="0" width="240" height="38"><RoundRectangle x="0" y="0" width="240" height="38" cornerRadiusX="19" cornerRadiusY="19"><Fill color="[CONFIGURATION.themeColor.1]" /></RoundRectangle></PartDraw>
+                        <Condition><Expressions><Expression name="has_img"><![CDATA[[COMPLICATION.ICON] != null]]></Expression></Expressions>
+                        <Compare expression="has_img">
+                            <PartImage x="8" y="7" width="24" height="24"><Image resource="[COMPLICATION.ICON]" tintColor="[CONFIGURATION.themeColor.0]" /></PartImage>
+                        </Compare></Condition>
+                        <PartText x="40" y="0" width="200" height="38"><Text align="START"><Font family="google_sans_flex_600" size="18" color="#ffffffff"><Template><![CDATA[%s]]><Parameter expression="[COMPLICATION.TEXT]" /></Template></Font></Text></PartText>
+                    </Group>
+                </Complication>
+                <Complication type="RANGED_VALUE">
+                    <Group alpha="255">
+                        <Variant mode="AMBIENT" target="alpha" value="0" duration="0.0" />
+                        <PartDraw x="0" y="0" width="240" height="38">
+                            <RoundRectangle x="0" y="0" width="240" height="38" cornerRadiusX="19" cornerRadiusY="19"><Fill color="[CONFIGURATION.themeColor.1]" /></RoundRectangle>
+                            <Line startX="40" startY="28" endX="220" endY="28"><Stroke color="[CONFIGURATION.themeColor.2]" thickness="4" cap="ROUND" /></Line>
+                            <Line startX="40" startY="28" endX="40" endY="28">
+                                <Transform target="endX" value="[COMPLICATION.RANGED_VALUE_MAX] &gt; 0 ? (40 + 180 * ([COMPLICATION.RANGED_VALUE_VALUE] / [COMPLICATION.RANGED_VALUE_MAX])) : 40" />
+                                <Stroke color="[CONFIGURATION.themeColor.0]" thickness="4" cap="ROUND" />
+                            </Line>
+                        </PartDraw>
+                        <Condition><Expressions><Expression name="has_img"><![CDATA[[COMPLICATION.ICON] != null]]></Expression></Expressions>
+                        <Compare expression="has_img">
+                            <PartImage x="8" y="7" width="24" height="24"><Image resource="[COMPLICATION.ICON]" tintColor="[CONFIGURATION.themeColor.0]" /></PartImage>
+                        </Compare></Condition>
+                        <PartText x="40" y="0" width="200" height="24"><Text align="START"><Font family="google_sans_flex_600" size="14" color="#ffffffff"><Template><![CDATA[%s]]><Parameter expression="[COMPLICATION.TEXT]" /></Template></Font></Text></PartText>
+                    </Group>
+                </Complication>
+            </ComplicationSlot>
+
+            <!-- Slot 10: Fourth Linear -->
+            <ComplicationSlot slotId="10" x="190" y="253"
+                              width="[CONFIGURATION.layoutStyle] == 2 || [CONFIGURATION.layoutStyle] == 3 ? 240 : 0"
+                              height="[CONFIGURATION.layoutStyle] == 2 || [CONFIGURATION.layoutStyle] == 3 ? 38 : 0"
+                              supportedTypes="SHORT_TEXT RANGED_VALUE EMPTY"
+                              displayName="Linear 4">
+                <DefaultProviderPolicy defaultSystemProvider="SUNRISE_SUNSET" defaultSystemProviderType="SHORT_TEXT" />
+                <BoundingRoundRect x="0" y="0" width="240" height="38" cornerRadiusX="19" cornerRadiusY="19" />
+                <Complication type="SHORT_TEXT">
+                    <Group alpha="255">
+                        <Variant mode="AMBIENT" target="alpha" value="0" duration="0.0" />
+                        <PartDraw x="0" y="0" width="240" height="38"><RoundRectangle x="0" y="0" width="240" height="38" cornerRadiusX="19" cornerRadiusY="19"><Fill color="[CONFIGURATION.themeColor.1]" /></RoundRectangle></PartDraw>
+                        <Condition><Expressions><Expression name="has_img"><![CDATA[[COMPLICATION.ICON] != null]]></Expression></Expressions>
+                        <Compare expression="has_img">
+                            <PartImage x="8" y="7" width="24" height="24"><Image resource="[COMPLICATION.ICON]" tintColor="[CONFIGURATION.themeColor.0]" /></PartImage>
+                        </Compare></Condition>
+                        <PartText x="40" y="0" width="200" height="38"><Text align="START"><Font family="google_sans_flex_600" size="18" color="#ffffffff"><Template><![CDATA[%s]]><Parameter expression="[COMPLICATION.TEXT]" /></Template></Font></Text></PartText>
+                    </Group>
+                </Complication>
+                <Complication type="RANGED_VALUE">
+                    <Group alpha="255">
+                        <Variant mode="AMBIENT" target="alpha" value="0" duration="0.0" />
+                        <PartDraw x="0" y="0" width="240" height="38">
+                            <RoundRectangle x="0" y="0" width="240" height="38" cornerRadiusX="19" cornerRadiusY="19"><Fill color="[CONFIGURATION.themeColor.1]" /></RoundRectangle>
+                            <Line startX="40" startY="28" endX="220" endY="28"><Stroke color="[CONFIGURATION.themeColor.2]" thickness="4" cap="ROUND" /></Line>
+                            <Line startX="40" startY="28" endX="40" endY="28">
+                                <Transform target="endX" value="[COMPLICATION.RANGED_VALUE_MAX] &gt; 0 ? (40 + 180 * ([COMPLICATION.RANGED_VALUE_VALUE] / [COMPLICATION.RANGED_VALUE_MAX])) : 40" />
+                                <Stroke color="[CONFIGURATION.themeColor.0]" thickness="4" cap="ROUND" />
+                            </Line>
+                        </PartDraw>
+                        <Condition><Expressions><Expression name="has_img"><![CDATA[[COMPLICATION.ICON] != null]]></Expression></Expressions>
+                        <Compare expression="has_img">
+                            <PartImage x="8" y="7" width="24" height="24"><Image resource="[COMPLICATION.ICON]" tintColor="[CONFIGURATION.themeColor.0]" /></PartImage>
+                        </Compare></Condition>
+                        <PartText x="40" y="0" width="200" height="24"><Text align="START"><Font family="google_sans_flex_600" size="14" color="#ffffffff"><Template><![CDATA[%s]]><Parameter expression="[COMPLICATION.TEXT]" /></Template></Font></Text></PartText>
                     </Group>
                 </Complication>
             </ComplicationSlot>

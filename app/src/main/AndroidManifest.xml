@@ -24,6 +24,10 @@
             android:value="4" />
 
         <meta-data
+            android:name="com.google.wear.watchface.info"
+            android:resource="@xml/watch_face_info" />
+
+        <meta-data
             android:name="com.google.android.wearable.watchface.preview"
             android:resource="@drawable/preview_image" />
 

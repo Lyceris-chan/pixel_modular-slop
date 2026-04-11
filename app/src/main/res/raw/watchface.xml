@@ -206,7 +206,7 @@
                             </TextCircular>
                         </PartText>
                         <PartImage x="45" y="125" width="22" height="22">
-                            <Image resource="[COMPLICATION.ICON]"
+                            <Image resource="[COMPLICATION.MONOCHROMATIC_IMAGE]"
                                    tintColor="[CONFIGURATION.themeColor.0]" />
                         </PartImage>
                     </Group>
@@ -240,7 +240,7 @@
                             </Arc>
                         </PartDraw>
                         <PartImage x="45" y="125" width="22" height="22">
-                            <Image resource="[COMPLICATION.ICON]"
+                            <Image resource="[COMPLICATION.MONOCHROMATIC_IMAGE]"
                                    tintColor="[CONFIGURATION.themeColor.0]" />
                         </PartImage>
                     </Group>
@@ -252,6 +252,9 @@
             <ComplicationSlot slotId="1" x="0" y="0" width="450" height="450"
                               supportedTypes="RANGED_VALUE SHORT_TEXT EMPTY"
                               displayName="@string/top_right_complication">
+                <DefaultProviderPolicy
+                    defaultSystemProvider="WATCH_BATTERY"
+                    defaultSystemProviderType="RANGED_VALUE" />
                 <BoundingArc centerX="225" centerY="225"
                              width="450" height="450"
                              startAngle="325" endAngle="35"
@@ -274,7 +277,7 @@
                             </TextCircular>
                         </PartText>
                         <PartImage x="385" y="125" width="22" height="22">
-                            <Image resource="[COMPLICATION.ICON]"
+                            <Image resource="[COMPLICATION.MONOCHROMATIC_IMAGE]"
                                    tintColor="[CONFIGURATION.themeColor.0]" />
                         </PartImage>
                     </Group>
@@ -308,7 +311,7 @@
                             </Arc>
                         </PartDraw>
                         <PartImage x="385" y="125" width="22" height="22">
-                            <Image resource="[COMPLICATION.ICON]"
+                            <Image resource="[COMPLICATION.MONOCHROMATIC_IMAGE]"
                                    tintColor="[CONFIGURATION.themeColor.0]" />
                         </PartImage>
                     </Group>
@@ -353,7 +356,7 @@
                         </PartText>
                         <!-- Icon below text -->
                         <PartImage x="35" y="68" width="24" height="24">
-                            <Image resource="[COMPLICATION.ICON]"
+                            <Image resource="[COMPLICATION.MONOCHROMATIC_IMAGE]"
                                    tintColor="[CONFIGURATION.themeColor.0]" />
                         </PartImage>
                     </Group>
@@ -393,7 +396,7 @@
                             </Text>
                         </PartText>
                         <PartImage x="35" y="68" width="24" height="24">
-                            <Image resource="[COMPLICATION.ICON]"
+                            <Image resource="[COMPLICATION.MONOCHROMATIC_IMAGE]"
                                    tintColor="[CONFIGURATION.themeColor.0]" />
                         </PartImage>
                     </Group>
@@ -435,7 +438,7 @@
                             </Text>
                         </PartText>
                         <PartImage x="35" y="68" width="24" height="24">
-                            <Image resource="[COMPLICATION.ICON]"
+                            <Image resource="[COMPLICATION.MONOCHROMATIC_IMAGE]"
                                    tintColor="[CONFIGURATION.themeColor.0]" />
                         </PartImage>
                     </Group>
@@ -473,7 +476,7 @@
                             </Text>
                         </PartText>
                         <PartImage x="35" y="68" width="24" height="24">
-                            <Image resource="[COMPLICATION.ICON]"
+                            <Image resource="[COMPLICATION.MONOCHROMATIC_IMAGE]"
                                    tintColor="[CONFIGURATION.themeColor.0]" />
                         </PartImage>
                     </Group>
@@ -514,6 +517,9 @@
             <ComplicationSlot slotId="5" x="0" y="0" width="450" height="450"
                               supportedTypes="SHORT_TEXT EMPTY"
                               displayName="@string/arc_bottom_right">
+                <DefaultProviderPolicy
+                    defaultSystemProvider="NEXT_EVENT"
+                    defaultSystemProviderType="SHORT_TEXT" />
                 <BoundingArc centerX="225" centerY="225"
                              width="450" height="450"
                              startAngle="55" endAngle="125"
@@ -537,7 +543,7 @@
                             </TextCircular>
                         </PartText>
                         <PartImage x="160" y="405" width="22" height="22">
-                            <Image resource="[COMPLICATION.ICON]"
+                            <Image resource="[COMPLICATION.MONOCHROMATIC_IMAGE]"
                                    tintColor="[CONFIGURATION.themeColor.0]" />
                         </PartImage>
                     </Group>
@@ -549,6 +555,9 @@
             <ComplicationSlot slotId="6" x="0" y="0" width="450" height="450"
                               supportedTypes="SHORT_TEXT EMPTY"
                               displayName="@string/arc_bottom_left">
+                <DefaultProviderPolicy
+                    defaultSystemProvider="DAY_AND_DATE"
+                    defaultSystemProviderType="SHORT_TEXT" />
                 <BoundingArc centerX="225" centerY="225"
                              width="450" height="450"
                              startAngle="235" endAngle="305"
@@ -572,7 +581,7 @@
                             </TextCircular>
                         </PartText>
                         <PartImage x="268" y="405" width="22" height="22">
-                            <Image resource="[COMPLICATION.ICON]"
+                            <Image resource="[COMPLICATION.MONOCHROMATIC_IMAGE]"
                                    tintColor="[CONFIGURATION.themeColor.0]" />
                         </PartImage>
                     </Group>

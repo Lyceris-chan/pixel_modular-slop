@@ -184,10 +184,7 @@
                 <DefaultProviderPolicy
                     defaultSystemProvider="STEP_COUNT"
                     defaultSystemProviderType="RANGED_VALUE" />
-                <BoundingArc centerX="225" centerY="225"
-                             width="450" height="450"
-                             startAngle="145" endAngle="215"
-                             thickness="30" />
+                <BoundingOval x="0" y="0" width="225" height="225" />
 
                 <Complication type="SHORT_TEXT">
                     <Group alpha="255">
@@ -267,10 +264,7 @@
                 <DefaultProviderPolicy
                     defaultSystemProvider="WATCH_BATTERY"
                     defaultSystemProviderType="RANGED_VALUE" />
-                <BoundingArc centerX="225" centerY="225"
-                             width="450" height="450"
-                             startAngle="325" endAngle="35"
-                             thickness="30" />
+                <BoundingOval x="225" y="0" width="225" height="225" />
 
                 <Complication type="SHORT_TEXT">
                     <Group alpha="255">
@@ -574,10 +568,7 @@
                 <DefaultProviderPolicy
                     defaultSystemProvider="NEXT_EVENT"
                     defaultSystemProviderType="SHORT_TEXT" />
-                <BoundingArc centerX="225" centerY="225"
-                             width="450" height="450"
-                             startAngle="55" endAngle="125"
-                             thickness="30" />
+                <BoundingOval x="225" y="225" width="225" height="225" />
 
                 <Complication type="SHORT_TEXT">
                     <Group alpha="255">
@@ -618,10 +609,7 @@
                 <DefaultProviderPolicy
                     defaultSystemProvider="DAY_AND_DATE"
                     defaultSystemProviderType="SHORT_TEXT" />
-                <BoundingArc centerX="225" centerY="225"
-                             width="450" height="450"
-                             startAngle="235" endAngle="305"
-                             thickness="30" />
+                <BoundingOval x="0" y="225" width="225" height="225" />
 
                 <Complication type="SHORT_TEXT">
                     <Group alpha="255">

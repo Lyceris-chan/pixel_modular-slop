@@ -344,7 +344,7 @@
                                  direction="CLOCKWISE">
                                 <Transform target="endAngle"
                                     value="[COMPLICATION.RANGED_VALUE_MAX] &gt; 0 ? (325 + 70 * ([COMPLICATION.RANGED_VALUE_VALUE] / [COMPLICATION.RANGED_VALUE_MAX])) : 325" />
-                                <Stroke color="#ffffffff"
+                                <Stroke color="[CONFIGURATION.themeColor.0]"
                                         thickness="8" cap="ROUND" />
                             </Arc>
                         </PartDraw><Condition>
@@ -649,7 +649,7 @@
                                  direction="COUNTER_CLOCKWISE">
                                 <Transform target="endAngle"
                                     value="[COMPLICATION.RANGED_VALUE_MAX] &gt; 0 ? (125 - 70 * ([COMPLICATION.RANGED_VALUE_VALUE] / [COMPLICATION.RANGED_VALUE_MAX])) : 125" />
-                                <Stroke color="#ffffffff"
+                                <Stroke color="[CONFIGURATION.themeColor.0]"
                                         thickness="8" cap="ROUND" />
                             </Arc>
                         </PartDraw><Condition>
@@ -730,7 +730,7 @@
                                  direction="COUNTER_CLOCKWISE">
                                 <Transform target="endAngle"
                                     value="[COMPLICATION.RANGED_VALUE_MAX] &gt; 0 ? (305 - 70 * ([COMPLICATION.RANGED_VALUE_VALUE] / [COMPLICATION.RANGED_VALUE_MAX])) : 305" />
-                                <Stroke color="#ffffffff"
+                                <Stroke color="[CONFIGURATION.themeColor.0]"
                                         thickness="8" cap="ROUND" />
                             </Arc>
                         </PartDraw><Condition>

@@ -48,6 +48,8 @@
             <ColorOption id="11" displayName="@string/color_theme_11"
                 colors="#FFF1B4BE #FF3F3234 #FF2D2A2A #FFFFDEE4" />
         </ColorConfiguration>
+        <BooleanConfiguration id="show_arcs" defaultValue="TRUE"
+            displayName="@string/arc_configuration_display_name" />
     </UserConfigurations>
 
     <Scene backgroundColor="#ff000000">
@@ -56,6 +58,11 @@
             <!-- ARC TRACKS — Decorative background arcs for the 4 arc slots  -->
             <!-- Ref: base_0.apk default_arcs layout, ComplicationArc arcs    -->
             <!-- ============================================================ -->
+            <Condition>
+                <Expressions>
+                    <Expression name="show_arcs">[CONFIGURATION.show_arcs]</Expression>
+                </Expressions>
+                <Compare expression="show_arcs">
             <PartDraw x="0" y="0" width="450" height="450">
                 <Variant mode="AMBIENT" target="alpha" value="0" duration="0.0" />
                 <!-- Top-left arc track -->
@@ -83,6 +90,8 @@
                             thickness="8" cap="ROUND" />
                 </Arc>
             </PartDraw>
+                </Compare>
+            </Condition>
 
             <!-- ============================================================ -->
             <!-- DAY & DATE WIDGET                                            -->
@@ -206,7 +215,7 @@
                             </TextCircular>
                         </PartText>
                         <PartImage x="45" y="125" width="22" height="22">
-                            <Image resource="[COMPLICATION.ICON]"
+                            <Image resource="[COMPLICATION.MONOCHROMATIC_IMAGE]"
                                    tintColor="[CONFIGURATION.themeColor.0]" />
                         </PartImage>
                     </Group>
@@ -228,6 +237,11 @@
                                 </Font>
                             </TextCircular>
                         </PartText>
+                        <Condition>
+                            <Expressions>
+                                <Expression name="show_arcs">[CONFIGURATION.show_arcs]</Expression>
+                            </Expressions>
+                            <Compare expression="show_arcs">
                         <PartDraw x="0" y="0" width="450" height="450">
                             <Arc centerX="225" centerY="225"
                                  width="450" height="450"
@@ -239,8 +253,10 @@
                                         thickness="8" cap="ROUND" />
                             </Arc>
                         </PartDraw>
+                            </Compare>
+                        </Condition>
                         <PartImage x="45" y="125" width="22" height="22">
-                            <Image resource="[COMPLICATION.ICON]"
+                            <Image resource="[COMPLICATION.MONOCHROMATIC_IMAGE]"
                                    tintColor="[CONFIGURATION.themeColor.0]" />
                         </PartImage>
                     </Group>
@@ -274,7 +290,7 @@
                             </TextCircular>
                         </PartText>
                         <PartImage x="385" y="125" width="22" height="22">
-                            <Image resource="[COMPLICATION.ICON]"
+                            <Image resource="[COMPLICATION.MONOCHROMATIC_IMAGE]"
                                    tintColor="[CONFIGURATION.themeColor.0]" />
                         </PartImage>
                     </Group>
@@ -296,6 +312,11 @@
                                 </Font>
                             </TextCircular>
                         </PartText>
+                        <Condition>
+                            <Expressions>
+                                <Expression name="show_arcs">[CONFIGURATION.show_arcs]</Expression>
+                            </Expressions>
+                            <Compare expression="show_arcs">
                         <PartDraw x="0" y="0" width="450" height="450">
                             <Arc centerX="225" centerY="225"
                                  width="450" height="450"
@@ -307,8 +328,10 @@
                                         thickness="8" cap="ROUND" />
                             </Arc>
                         </PartDraw>
+                            </Compare>
+                        </Condition>
                         <PartImage x="385" y="125" width="22" height="22">
-                            <Image resource="[COMPLICATION.ICON]"
+                            <Image resource="[COMPLICATION.MONOCHROMATIC_IMAGE]"
                                    tintColor="[CONFIGURATION.themeColor.0]" />
                         </PartImage>
                     </Group>
@@ -353,7 +376,7 @@
                         </PartText>
                         <!-- Icon below text -->
                         <PartImage x="35" y="68" width="24" height="24">
-                            <Image resource="[COMPLICATION.ICON]"
+                            <Image resource="[COMPLICATION.MONOCHROMATIC_IMAGE]"
                                    tintColor="[CONFIGURATION.themeColor.0]" />
                         </PartImage>
                     </Group>
@@ -393,7 +416,7 @@
                             </Text>
                         </PartText>
                         <PartImage x="35" y="68" width="24" height="24">
-                            <Image resource="[COMPLICATION.ICON]"
+                            <Image resource="[COMPLICATION.MONOCHROMATIC_IMAGE]"
                                    tintColor="[CONFIGURATION.themeColor.0]" />
                         </PartImage>
                     </Group>
@@ -435,7 +458,7 @@
                             </Text>
                         </PartText>
                         <PartImage x="35" y="68" width="24" height="24">
-                            <Image resource="[COMPLICATION.ICON]"
+                            <Image resource="[COMPLICATION.MONOCHROMATIC_IMAGE]"
                                    tintColor="[CONFIGURATION.themeColor.0]" />
                         </PartImage>
                     </Group>
@@ -473,7 +496,7 @@
                             </Text>
                         </PartText>
                         <PartImage x="35" y="68" width="24" height="24">
-                            <Image resource="[COMPLICATION.ICON]"
+                            <Image resource="[COMPLICATION.MONOCHROMATIC_IMAGE]"
                                    tintColor="[CONFIGURATION.themeColor.0]" />
                         </PartImage>
                     </Group>
@@ -537,7 +560,7 @@
                             </TextCircular>
                         </PartText>
                         <PartImage x="160" y="405" width="22" height="22">
-                            <Image resource="[COMPLICATION.ICON]"
+                            <Image resource="[COMPLICATION.MONOCHROMATIC_IMAGE]"
                                    tintColor="[CONFIGURATION.themeColor.0]" />
                         </PartImage>
                     </Group>
@@ -572,7 +595,7 @@
                             </TextCircular>
                         </PartText>
                         <PartImage x="268" y="405" width="22" height="22">
-                            <Image resource="[COMPLICATION.ICON]"
+                            <Image resource="[COMPLICATION.MONOCHROMATIC_IMAGE]"
                                    tintColor="[CONFIGURATION.themeColor.0]" />
                         </PartImage>
                     </Group>

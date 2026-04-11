@@ -21,4 +21,5 @@
     <string name="bottom_center_shortcut">Bottom Center</string>
     <string name="arc_bottom_right">Bottom Right Arc</string>
     <string name="arc_bottom_left">Bottom Left Arc</string>
+    <string name="arc_configuration_display_name">Show arcs</string>
 </resources>

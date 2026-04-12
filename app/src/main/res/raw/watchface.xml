@@ -138,12 +138,14 @@
              ============================================================ -->
 
         <!-- Day-of-week — interactive. -->
-        <PartText name="day_text" x="160" y="56" width="78" height="42" alpha="255">
+        <PartText name="day_text" x="160" y="56" width="78" height="40" alpha="255">
             <Variant mode="AMBIENT" target="alpha" value="0" />
             <Transform target="y"
                 value="[CONFIGURATION.layoutStyle] == 1 || [CONFIGURATION.layoutStyle] == 3 ? 56 : 36" />
+            <Transform target="height"
+                value="[CONFIGURATION.layoutStyle] == 1 || [CONFIGURATION.layoutStyle] == 3 ? 40 : 42" />
             <Text align="END">
-                <Font family="google_sans_flex_600" size="28" color="#ffffffff">
+                <Font family="google_sans_flex_600" size="28" color="[CONFIGURATION.themeColor.0]">
                     <Transform target="size"
                         value="[CONFIGURATION.layoutStyle] == 1 || [CONFIGURATION.layoutStyle] == 3 ? 28 : 32" />
                     <Template><![CDATA[%s]]>
@@ -154,10 +156,12 @@
         </PartText>
 
         <!-- Day-of-week — ambient. Provenance: base_0.apk → GoogleSansFlex-400_W104_R100 -->
-        <PartText name="day_text_aod" x="160" y="56" width="78" height="42" alpha="0">
+        <PartText name="day_text_aod" x="160" y="56" width="78" height="40" alpha="0">
             <Variant mode="AMBIENT" target="alpha" value="255" />
             <Transform target="y"
                 value="[CONFIGURATION.layoutStyle] == 1 || [CONFIGURATION.layoutStyle] == 3 ? 56 : 36" />
+            <Transform target="height"
+                value="[CONFIGURATION.layoutStyle] == 1 || [CONFIGURATION.layoutStyle] == 3 ? 40 : 42" />
             <Text align="END">
                 <Font family="google_sans_flex_date_aod" size="28" color="#ffffffff">
                     <Transform target="size"
@@ -1110,10 +1114,9 @@
                     <Transform target="width" value="[CONFIGURATION.layoutStyle] == 1 ? 100 : 120" />
                     <Transform target="height" value="[CONFIGURATION.layoutStyle] == 1 ? 100 : 120" />
                     <PartDraw name="bulb4_st_bg" x="0" y="0" width="120" height="120">
-                        <Arc centerX="60" centerY="60" width="120" height="120"
-                             startAngle="0" endAngle="359.9" direction="CLOCKWISE">
+                        <Ellipse x="0" y="0" width="120" height="120">
                             <Fill color="[CONFIGURATION.themeColor.1]" />
-                        </Arc>
+                        </Ellipse>
                     </PartDraw>
                     <Condition>
                         <Expressions>
@@ -1216,10 +1219,9 @@
                     <Transform target="width" value="[CONFIGURATION.layoutStyle] == 1 ? 100 : 120" />
                     <Transform target="height" value="[CONFIGURATION.layoutStyle] == 1 ? 100 : 120" />
                     <PartDraw name="bulb4_rv_bg" x="0" y="0" width="120" height="120">
-                        <Arc centerX="60" centerY="60" width="120" height="120"
-                             startAngle="0" endAngle="359.9" direction="CLOCKWISE">
+                        <Ellipse x="0" y="0" width="120" height="120">
                             <Fill color="[CONFIGURATION.themeColor.1]" />
-                        </Arc>
+                        </Ellipse>
                     </PartDraw>
                     <PartDraw name="bulb4_rv_track" x="0" y="0" width="120" height="120">
                         <Arc centerX="60" centerY="60" width="114" height="114"
@@ -1369,10 +1371,9 @@
                     <Transform target="width" value="[CONFIGURATION.layoutStyle] == 1 ? 100 : 120" />
                     <Transform target="height" value="[CONFIGURATION.layoutStyle] == 1 ? 100 : 120" />
                     <PartDraw name="bulb4_gp_bg" x="0" y="0" width="120" height="120">
-                        <Arc centerX="60" centerY="60" width="120" height="120"
-                             startAngle="0" endAngle="359.9" direction="CLOCKWISE">
+                        <Ellipse x="0" y="0" width="120" height="120">
                             <Fill color="[CONFIGURATION.themeColor.1]" />
-                        </Arc>
+                        </Ellipse>
                     </PartDraw>
                     <PartDraw name="bulb4_gp_track" x="0" y="0" width="120" height="120">
                         <Arc centerX="60" centerY="60" width="114" height="114"
@@ -1518,11 +1519,11 @@
                     <Transform target="y" value="[CONFIGURATION.layoutStyle] == 1 ? 261 : 263" />
                     <Transform target="width" value="[CONFIGURATION.layoutStyle] == 1 ? 100 : 120" />
                     <Transform target="height" value="[CONFIGURATION.layoutStyle] == 1 ? 100 : 120" />
-                    <PartDraw name="bulb4_si_bg" x="0" y="0" width="120" height="120">
-                        <Arc centerX="60" centerY="60" width="120" height="120"
-                             startAngle="0" endAngle="359.9" direction="CLOCKWISE">
-                            <Fill color="[CONFIGURATION.themeColor.1]" />
-                        </Arc>
+                    <PartDraw name="bulb4_si_bg" x="0" y="0" width="120" height="120" alpha="153">
+                        <!-- APK CSS: ComplicationBulb.monochromatic-image #background-disc { fill: color-d; opacity: 0.6; } -->
+                        <Ellipse x="0" y="0" width="120" height="120">
+                            <Fill color="[CONFIGURATION.themeColor.3]" />
+                        </Ellipse>
                     </PartDraw>
                     <Condition>
                         <Expressions>
@@ -1588,10 +1589,9 @@
                     <Transform target="width" value="[CONFIGURATION.layoutStyle] == 1 ? 100 : 120" />
                     <Transform target="height" value="[CONFIGURATION.layoutStyle] == 1 ? 100 : 120" />
                     <PartDraw name="bulb5_st_bg" x="0" y="0" width="120" height="120">
-                        <Arc centerX="60" centerY="60" width="120" height="120"
-                             startAngle="0" endAngle="359.9" direction="CLOCKWISE">
+                        <Ellipse x="0" y="0" width="120" height="120">
                             <Fill color="[CONFIGURATION.themeColor.1]" />
-                        </Arc>
+                        </Ellipse>
                     </PartDraw>
                     <Condition>
                         <Expressions>
@@ -1694,10 +1694,9 @@
                     <Transform target="width" value="[CONFIGURATION.layoutStyle] == 1 ? 100 : 120" />
                     <Transform target="height" value="[CONFIGURATION.layoutStyle] == 1 ? 100 : 120" />
                     <PartDraw name="bulb5_rv_bg" x="0" y="0" width="120" height="120">
-                        <Arc centerX="60" centerY="60" width="120" height="120"
-                             startAngle="0" endAngle="359.9" direction="CLOCKWISE">
+                        <Ellipse x="0" y="0" width="120" height="120">
                             <Fill color="[CONFIGURATION.themeColor.1]" />
-                        </Arc>
+                        </Ellipse>
                     </PartDraw>
                     <PartDraw name="bulb5_rv_track" x="0" y="0" width="120" height="120">
                         <Arc centerX="60" centerY="60" width="114" height="114"
@@ -1847,10 +1846,9 @@
                     <Transform target="width" value="[CONFIGURATION.layoutStyle] == 1 ? 100 : 120" />
                     <Transform target="height" value="[CONFIGURATION.layoutStyle] == 1 ? 100 : 120" />
                     <PartDraw name="bulb5_gp_bg" x="0" y="0" width="120" height="120">
-                        <Arc centerX="60" centerY="60" width="120" height="120"
-                             startAngle="0" endAngle="359.9" direction="CLOCKWISE">
+                        <Ellipse x="0" y="0" width="120" height="120">
                             <Fill color="[CONFIGURATION.themeColor.1]" />
-                        </Arc>
+                        </Ellipse>
                     </PartDraw>
                     <PartDraw name="bulb5_gp_track" x="0" y="0" width="120" height="120">
                         <Arc centerX="60" centerY="60" width="114" height="114"
@@ -1996,11 +1994,12 @@
                     <Transform target="y" value="[CONFIGURATION.layoutStyle] == 1 ? 320 : 329" />
                     <Transform target="width" value="[CONFIGURATION.layoutStyle] == 1 ? 100 : 120" />
                     <Transform target="height" value="[CONFIGURATION.layoutStyle] == 1 ? 100 : 120" />
-                    <PartDraw name="bulb5_si_bg" x="0" y="0" width="120" height="120">
-                        <Arc centerX="60" centerY="60" width="120" height="120"
-                             startAngle="0" endAngle="359.9" direction="CLOCKWISE">
-                            <Fill color="[CONFIGURATION.themeColor.1]" />
-                        </Arc>
+                    <PartDraw name="bulb5_si_bg" x="0" y="0" width="120" height="120" alpha="153">
+                        <!-- APK CSS: ComplicationBulb.monochromatic-image #background-disc { fill: color-d; opacity: 0.6; }
+                             color-d = themeColor[3] (bright accent), opacity 0.6 = alpha 153 -->
+                        <Ellipse x="0" y="0" width="120" height="120">
+                            <Fill color="[CONFIGURATION.themeColor.3]" />
+                        </Ellipse>
                     </PartDraw>
                     <Condition>
                         <Expressions>
@@ -2068,10 +2067,9 @@
                     <Transform target="width" value="[CONFIGURATION.layoutStyle] == 1 ? 100 : 120" />
                     <Transform target="height" value="[CONFIGURATION.layoutStyle] == 1 ? 100 : 120" />
                     <PartDraw name="bulb6_st_bg" x="0" y="0" width="120" height="120">
-                        <Arc centerX="60" centerY="60" width="120" height="120"
-                             startAngle="0" endAngle="359.9" direction="CLOCKWISE">
+                        <Ellipse x="0" y="0" width="120" height="120">
                             <Fill color="[CONFIGURATION.themeColor.1]" />
-                        </Arc>
+                        </Ellipse>
                     </PartDraw>
                     <Condition>
                         <Expressions>
@@ -2174,10 +2172,9 @@
                     <Transform target="width" value="[CONFIGURATION.layoutStyle] == 1 ? 100 : 120" />
                     <Transform target="height" value="[CONFIGURATION.layoutStyle] == 1 ? 100 : 120" />
                     <PartDraw name="bulb6_rv_bg" x="0" y="0" width="120" height="120">
-                        <Arc centerX="60" centerY="60" width="120" height="120"
-                             startAngle="0" endAngle="359.9" direction="CLOCKWISE">
+                        <Ellipse x="0" y="0" width="120" height="120">
                             <Fill color="[CONFIGURATION.themeColor.1]" />
-                        </Arc>
+                        </Ellipse>
                     </PartDraw>
                     <PartDraw name="bulb6_rv_track" x="0" y="0" width="120" height="120">
                         <Arc centerX="60" centerY="60" width="114" height="114"
@@ -2327,10 +2324,9 @@
                     <Transform target="width" value="[CONFIGURATION.layoutStyle] == 1 ? 100 : 120" />
                     <Transform target="height" value="[CONFIGURATION.layoutStyle] == 1 ? 100 : 120" />
                     <PartDraw name="bulb6_gp_bg" x="0" y="0" width="120" height="120">
-                        <Arc centerX="60" centerY="60" width="120" height="120"
-                             startAngle="0" endAngle="359.9" direction="CLOCKWISE">
+                        <Ellipse x="0" y="0" width="120" height="120">
                             <Fill color="[CONFIGURATION.themeColor.1]" />
-                        </Arc>
+                        </Ellipse>
                     </PartDraw>
                     <PartDraw name="bulb6_gp_track" x="0" y="0" width="120" height="120">
                         <Arc centerX="60" centerY="60" width="114" height="114"
@@ -2476,11 +2472,11 @@
                     <Transform target="y" value="[CONFIGURATION.layoutStyle] == 1 ? 261 : 263" />
                     <Transform target="width" value="[CONFIGURATION.layoutStyle] == 1 ? 100 : 120" />
                     <Transform target="height" value="[CONFIGURATION.layoutStyle] == 1 ? 100 : 120" />
-                    <PartDraw name="bulb6_si_bg" x="0" y="0" width="120" height="120">
-                        <Arc centerX="60" centerY="60" width="120" height="120"
-                             startAngle="0" endAngle="359.9" direction="CLOCKWISE">
-                            <Fill color="[CONFIGURATION.themeColor.1]" />
-                        </Arc>
+                    <PartDraw name="bulb6_si_bg" x="0" y="0" width="120" height="120" alpha="153">
+                        <!-- APK CSS: ComplicationBulb.monochromatic-image #background-disc { fill: color-d; opacity: 0.6; } -->
+                        <Ellipse x="0" y="0" width="120" height="120">
+                            <Fill color="[CONFIGURATION.themeColor.3]" />
+                        </Ellipse>
                     </PartDraw>
                     <Condition>
                         <Expressions>

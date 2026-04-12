@@ -23,6 +23,8 @@
     <string name="flavor_sunbeam_default_arcs">Sunbeam Default Arcs</string>
     <string name="flavor_moonstone_default">Moonstone Default</string>
     <string name="flavor_celadon_linear">Celadon Linear</string>
+    <string name="flavor_kiwi_default_arcs">Kiwi Default Arcs</string>
+    <string name="flavor_vermillion_default">Vermillion Default</string>
     <string name="flavor_jade_linear_arcs">Jade Linear Arcs</string>
     <string name="top_left_complication">Top Left Arc</string>
     <string name="top_right_complication">Top Right Arc</string>

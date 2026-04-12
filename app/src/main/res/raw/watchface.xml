@@ -1,221 +1,70 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
   Pixel Modular Watch Face — WFF v4 (Wear OS 6 / API 36)
-
-  Source:     base_0.apk → assets/modular/
-  WFF 4 spec: https://developer.android.com/training/wearables/wff
-  Style guide: https://developer.android.com/distribute/best-practices/develop/google-play-developer-policy
-
-  Architecture:
-    Declarative XML only — zero Kotlin/Java code (android:hasCode="false").
-    Canvas: 480 × 480 px. Provenance: base_0.apk → assets/modular/main.css,
-    section#unified-view-scaler { width: 480; height: 480; }.
-    resourceVersion="4" targets WFF v4. No WFF v1–v3 or AndroidX watch face
-    library elements are used anywhere in this file.
-
-  Scaling model (WFF 4 — no manual intervention required):
-    The Wear OS system scales the 480 × 480 logical canvas uniformly to fit
-    the physical display diameter while preserving aspect ratio.
-    450 px display → scale factor = 450 / 480 ≈ 0.9375. All coordinates and
-    sizes are proportionally reduced automatically. All layout-critical elements
-    (arcs, lines, text) are vector-based and scale without blurriness or
-    artifacting at any supported size. The only raster asset is preview_image.png,
-    a picker thumbnail that has no effect on runtime rendering fidelity. No
-    absolute pixel values exceed the 480 × 480 canvas boundary, so no clipping
-    occurs at smaller display sizes (e.g., 450 px).
-    Reference: https://developer.android.com/training/wearables/wff/watch-face
-
-  Layouts. Provenance: base_0.apk → assets/modular/main.css @media blocks:
-    id=0  Default       — 3 bulb complications (bottom), no arcs
-    id=1  Default Arcs  — 3 bulb complications (bottom) + 4 arc complications
-    id=2  Linear        — 4 linear row complications (right column), no arcs
-    id=3  Linear Arcs   — 4 linear row complications (right column) + 4 arcs
-
-  Complication slots summary:
-    Slot 0  Top-Left Arc       RANGED_VALUE / SHORT_TEXT  default=STEP_COUNT
-    Slot 1  Top-Right Arc      RANGED_VALUE / SHORT_TEXT  default=WATCH_BATTERY
-    Slot 2  Bottom-Left Arc    RANGED_VALUE / SHORT_TEXT  default=DAY_AND_DATE
-    Slot 3  Bottom-Right Arc   RANGED_VALUE / SHORT_TEXT  default=WATCH_BATTERY
-    Slot 4  Bulb BL / Linear 1 SHORT_TEXT / RANGED_VALUE / SMALL_IMAGE  default=SUNRISE_SUNSET
-    Slot 5  Bulb BC / Linear 2 SHORT_TEXT / RANGED_VALUE / SMALL_IMAGE  default=APP_SHORTCUT
-    Slot 6  Bulb BR / Linear 3 SHORT_TEXT / RANGED_VALUE / SMALL_IMAGE  default=HEART_RATE
-    Slot 7  Linear 4 only      SHORT_TEXT / RANGED_VALUE                default=WATCH_BATTERY
-
-    Note: Slots 1 and 3 both default to WATCH_BATTERY. This is intentional —
-    the original Pixel Modular design places battery on both the top-right and
-    bottom-right arc positions as a symmetric pair. Users may reassign either.
-
-  Fonts (all declared in app/src/main/res/font/):
-    google_sans_flex_450       — clock digits, interactive mode (weight 450)
-    google_sans_flex_600       — day/date widget text (weight 600)
-    google_sans_flex_700       — arc and bulb complication text (weight 700)
-    google_sans_flex_clock_aod — clock digits, ambient mode
-    google_sans_flex_date_aod  — day/date widget, ambient mode
-    Note: google_sans_flex_500 is not a declared font resource in this project.
-    Complication body text uses google_sans_flex_450 (nearest lighter weight)
-    to avoid a missing-resource runtime error.
-
-  Samsung One UI 8 / Wear OS 6 AOD complication refresh workaround:
-    On Samsung Galaxy Watch running One UI 8, complications may not re-render
-    after the screen turns off and back on (AOD → interactive transition).
-    Workaround: each ComplicationSlot includes a hidden PartText that reads
-    [COMPLICATION.LAST_UPDATE_TIME]. This forces the WFF renderer to
-    re-evaluate the complication data binding on every wake, ensuring fresh
-    data is displayed. This is a known platform issue with no official fix as
-    of Wear OS 6 / One UI 8. The hidden element has alpha="0" and zero size,
-    so it has no visual impact.
+  Source: base_0.apk → assets/modular/
+  Canvas: 480×480 px. Provenance: base_0.apk → assets/modular/main.css
 -->
-
-<!-- Provenance: base_0.apk → assets/modular/main.css,
-     section#unified-view-scaler { width: 480; height: 480; }.
-     resourceVersion="4" declares WFF v4 targeting. -->
+<!-- Provenance: base_0.apk → assets/modular/main.css section#unified-view-scaler { width:480; height:480; } -->
 <WatchFace width="480" height="480" resourceVersion="4">
 
-    <!-- Required system metadata.
-         Provenance: base_0.apk → AndroidManifest.xml meta-data clock_type=DIGITAL. -->
+    <!-- Provenance: base_0.apk → AndroidManifest.xml meta-data clock_type=DIGITAL -->
     <Metadata key="CLOCK_TYPE" value="DIGITAL" />
-    <!-- Provenance: base_0.apk → standard Pixel watch face picker preview time convention. -->
+    <!-- Provenance: base_0.apk → standard Pixel watch face picker preview time -->
     <Metadata key="PREVIEW_TIME" value="10:08:32" />
 
-    <!-- ================================================================
-         USER CONFIGURATIONS
-         Provenance: base_0.apk → assets/modular/main.css @media blocks
-         and assets/phenotype/wear_watchfaces_package_metadata.binarypb.
-         ================================================================ -->
     <UserConfigurations>
 
-        <!-- Color themes.
-             Provenance: base_0.apk → assets/modular/theme.css color-a/b/c/d roles.
-             Each ColorOption carries 4 roles in order:
-               [0] accent color  — arc fill, icon tint, progress fill (color-a / color-c)
-               [1] dark fill     — date badge background (color-d)
-               [2] arc track     — decorative background arc stroke (color-c dimmed)
-               [3] bright text   — date badge foreground text (color-b) -->
-        <ColorConfiguration
-            id="themeColor"
-            defaultValue="0"
+        <!-- Color themes. Provenance: base_0.apk → assets/modular/theme.css
+             4 roles: [0] accent  [1] dark-fill  [2] arc-track  [3] bright-text -->
+        <ColorConfiguration id="themeColor" defaultValue="0"
             displayName="@string/color_selector_display_name">
-
-            <!-- Provenance: base_0.apk → Iris theme.
-                 [0]=#FFCAB4F0 accent/lavender  [1]=#FF37333F dark-fill/deep-purple
-                 [2]=#FF2B2A2D arc-track/near-black  [3]=#FFEADFFF bright-text/pale-lavender -->
-            <ColorOption id="0" displayName="@string/color_theme_0"
-                colors="#FFCAB4F0 #FF37333F #FF2B2A2D #FFEADFFF" />
-
-            <!-- Provenance: base_0.apk → Lemongrass theme.
-                 [0]=#FFE3E293 accent/yellow-green  [1]=#FF3F3F2D dark-fill/olive
-                 [2]=#FF2D2D29 arc-track/near-black  [3]=#FFFFFED2 bright-text/cream -->
-            <ColorOption id="1" displayName="@string/color_theme_1"
-                colors="#FFE3E293 #FF3F3F2D #FF2D2D29 #FFFFFED2" />
-
-            <!-- Provenance: base_0.apk → Hazel theme.
-                 [0]=#FFA5AD84 accent/sage-green  [1]=#FF3D3F33 dark-fill/dark-olive
-                 [2]=#FF2D2D2A arc-track/near-black  [3]=#FFCACFB7 bright-text/light-sage -->
-            <ColorOption id="2" displayName="@string/color_theme_2"
-                colors="#FFA5AD84 #FF3D3F33 #FF2D2D2A #FFCACFB7" />
-
-            <!-- Provenance: base_0.apk → Obsidian theme.
-                 [0]=#FFE2E2E2 accent/light-grey  [1]=#FF3F3F3F dark-fill/dark-grey
-                 [2]=#FF2D2D2D arc-track/near-black  [3]=#FFFFFFFF bright-text/white -->
-            <ColorOption id="3" displayName="@string/color_theme_3"
-                colors="#FFE2E2E2 #FF3F3F3F #FF2D2D2D #FFFFFFFF" />
-
-            <!-- Provenance: base_0.apk → Chalk theme.
-                 [0]=#FFF1ECE6 accent/warm-white  [1]=#FF3F3E3D dark-fill/warm-dark
-                 [2]=#FF2D2D2D arc-track/near-black  [3]=#FFFFFCF9 bright-text/off-white -->
-            <ColorOption id="4" displayName="@string/color_theme_4"
-                colors="#FFF1ECE6 #FF3F3E3D #FF2D2D2D #FFFFFCF9" />
-
-            <!-- Provenance: base_0.apk → Mint theme.
-                 [0]=#FF9EF3C8 accent/mint-green  [1]=#FF2D3F36 dark-fill/dark-teal
-                 [2]=#FF292D2B arc-track/near-black  [3]=#FFD2FFE8 bright-text/pale-mint -->
-            <ColorOption id="5" displayName="@string/color_theme_5"
-                colors="#FF9EF3C8 #FF2D3F36 #FF292D2B #FFD2FFE8" />
-
-            <!-- Provenance: base_0.apk → Coral theme.
-                 [0]=#FFF98C7F accent/coral-red  [1]=#FF3F2926 dark-fill/dark-red
-                 [2]=#FF2D2727 arc-track/near-black  [3]=#FFFFC7C0 bright-text/pale-coral -->
-            <ColorOption id="6" displayName="@string/color_theme_6"
-                colors="#FFF98C7F #FF3F2926 #FF2D2727 #FFFFC7C0" />
-
-            <!-- Provenance: base_0.apk → Seafoam theme.
-                 [0]=#FF84D1C3 accent/seafoam-teal  [1]=#FF2C3F3C dark-fill/dark-teal
-                 [2]=#FF282D2C arc-track/near-black  [3]=#FFCCFAF2 bright-text/pale-seafoam -->
-            <ColorOption id="7" displayName="@string/color_theme_7"
-                colors="#FF84D1C3 #FF2C3F3C #FF282D2C #FFCCFAF2" />
-
-            <!-- Provenance: base_0.apk → Moondust theme.
-                 [0]=#FFD9D9E0 accent/cool-grey  [1]=#FF3E3E3F dark-fill/dark-grey
-                 [2]=#FF2D2D2D arc-track/near-black  [3]=#FFFBFBFF bright-text/near-white -->
-            <ColorOption id="8" displayName="@string/color_theme_8"
-                colors="#FFD9D9E0 #FF3E3E3F #FF2D2D2D #FFFBFBFF" />
-
-            <!-- Provenance: base_0.apk → Porcelain theme.
-                 [0]=#FFEFEAE5 accent/warm-beige  [1]=#FF3F3E3D dark-fill/warm-dark
-                 [2]=#FF2D2D2D arc-track/near-black  [3]=#FFFFFCF9 bright-text/off-white -->
-            <ColorOption id="9" displayName="@string/color_theme_9"
-                colors="#FFEFEAE5 #FF3F3E3D #FF2D2D2D #FFFFFCF9" />
-
-            <!-- Provenance: base_0.apk → Sky theme.
-                 [0]=#FFA7E0FE accent/sky-blue  [1]=#FF2E393F dark-fill/dark-blue
-                 [2]=#FF292C2D arc-track/near-black  [3]=#FFD3EFFF bright-text/pale-blue -->
-            <ColorOption id="10" displayName="@string/color_theme_10"
-                colors="#FFA7E0FE #FF2E393F #FF292C2D #FFD3EFFF" />
-
-            <!-- Provenance: base_0.apk → Rose theme.
-                 [0]=#FFF1B4BE accent/rose-pink  [1]=#FF3F3234 dark-fill/dark-rose
-                 [2]=#FF2D2A2A arc-track/near-black  [3]=#FFFFDEE4 bright-text/pale-rose -->
-            <ColorOption id="11" displayName="@string/color_theme_11"
-                colors="#FFF1B4BE #FF3F3234 #FF2D2A2A #FFFFDEE4" />
-
+            <ColorOption id="0"  displayName="@string/color_theme_0"  colors="#FFCAB4F0 #FF37333F #FF2B2A2D #FFEADFFF" />
+            <ColorOption id="1"  displayName="@string/color_theme_1"  colors="#FFE3E293 #FF3F3F2D #FF2D2D29 #FFFFFED2" />
+            <ColorOption id="2"  displayName="@string/color_theme_2"  colors="#FFA5AD84 #FF3D3F33 #FF2D2D2A #FFCACFB7" />
+            <ColorOption id="3"  displayName="@string/color_theme_3"  colors="#FFE2E2E2 #FF3F3F3F #FF2D2D2D #FFFFFFFF" />
+            <ColorOption id="4"  displayName="@string/color_theme_4"  colors="#FFF1ECE6 #FF3F3E3D #FF2D2D2D #FFFFFCF9" />
+            <ColorOption id="5"  displayName="@string/color_theme_5"  colors="#FF9EF3C8 #FF2D3F36 #FF292D2B #FFD2FFE8" />
+            <ColorOption id="6"  displayName="@string/color_theme_6"  colors="#FFF98C7F #FF3F2926 #FF2D2727 #FFFFC7C0" />
+            <ColorOption id="7"  displayName="@string/color_theme_7"  colors="#FF84D1C3 #FF2C3F3C #FF282D2C #FFCCFAF2" />
+            <ColorOption id="8"  displayName="@string/color_theme_8"  colors="#FFD9D9E0 #FF3E3E3F #FF2D2D2D #FFFBFBFF" />
+            <ColorOption id="9"  displayName="@string/color_theme_9"  colors="#FFEFEAE5 #FF3F3E3D #FF2D2D2D #FFFFFCF9" />
+            <ColorOption id="10" displayName="@string/color_theme_10" colors="#FFA7E0FE #FF2E393F #FF292C2D #FFD3EFFF" />
+            <ColorOption id="11" displayName="@string/color_theme_11" colors="#FFF1B4BE #FF3F3234 #FF2D2A2A #FFFFDEE4" />
         </ColorConfiguration>
 
-        <!-- Layout style — ListConfiguration.
-             Provenance: base_0.apk → assets/modular/main.css @media
-             (COMPLICATIONS_LAYOUT_STYLES = ...) blocks.
-             WFF 4 ref: https://developer.android.com/training/wearables/wff/personalization/user-configurations
-             Four layout options control which complications and clock style are shown.
-             The selected option id is read via [CONFIGURATION.layoutStyle] in Scene expressions.
-             id=0  Default       — 3 bulb complications (bottom), no arcs
-             id=1  Default Arcs  — 3 bulb complications (bottom) + 4 arc complications
-             id=2  Linear        — 4 linear row complications (right column), no arcs
-             id=3  Linear Arcs   — 4 linear row complications (right column) + 4 arcs -->
-        <ListConfiguration
-            id="layoutStyle"
-            defaultValue="1"
+        <!-- Layout style. Provenance: base_0.apk → COMPLICATIONS_LAYOUT_STYLES @media blocks -->
+        <ListConfiguration id="layoutStyle" defaultValue="1"
             displayName="@string/layout_selector_display_name">
-            <!-- Provenance: base_0.apk → COMPLICATIONS_LAYOUT_STYLES = default -->
             <ListOption id="0" displayName="@string/layout_default" />
-            <!-- Provenance: base_0.apk → COMPLICATIONS_LAYOUT_STYLES = default_arcs -->
             <ListOption id="1" displayName="@string/layout_default_arcs" />
-            <!-- Provenance: base_0.apk → COMPLICATIONS_LAYOUT_STYLES = linear -->
             <ListOption id="2" displayName="@string/layout_linear" />
-            <!-- Provenance: base_0.apk → COMPLICATIONS_LAYOUT_STYLES = linear_arcs -->
             <ListOption id="3" displayName="@string/layout_linear_arcs" />
         </ListConfiguration>
 
-        <!-- Flavors — pre-configured style presets.
-             Provenance: base_0.apk → assets/phenotype/wear_watchfaces_package_metadata.binarypb.
-             WFF 4 ref: https://developer.android.com/training/wearables/wff/user-configuration/flavor
-             Flavors must be declared inside UserConfigurations per the WFF 4 XSD.
-             defaultValue references the id of the default flavor shown in the companion. -->
+        <!-- Flavors. Provenance: base_0.apk → res/fD.xml UserStyleFlavors -->
         <Flavors defaultValue="flavor_sunbeam_default_arcs">
-            <!-- Provenance: base_0.apk → "Sunbeam Default Arcs" themeColor=0 (Iris) layoutStyle=1 (Default Arcs). -->
             <Flavor id="flavor_sunbeam_default_arcs" displayName="@string/flavor_sunbeam_default_arcs">
                 <Configuration id="themeColor" optionId="0" />
                 <Configuration id="layoutStyle" optionId="1" />
             </Flavor>
-            <!-- Provenance: base_0.apk → "Moonstone Default" themeColor=1 (Lemongrass) layoutStyle=0 (Default). -->
             <Flavor id="flavor_moonstone_default" displayName="@string/flavor_moonstone_default">
                 <Configuration id="themeColor" optionId="1" />
                 <Configuration id="layoutStyle" optionId="0" />
             </Flavor>
-            <!-- Provenance: base_0.apk → "Celadon Linear" themeColor=2 (Hazel) layoutStyle=2 (Linear). -->
             <Flavor id="flavor_celadon_linear" displayName="@string/flavor_celadon_linear">
                 <Configuration id="themeColor" optionId="2" />
                 <Configuration id="layoutStyle" optionId="2" />
             </Flavor>
-            <!-- Provenance: base_0.apk → "Jade Linear Arcs" themeColor=5 (Mint) layoutStyle=3 (Linear Arcs). -->
+            <!-- Kiwi (yellow-green) mapped to themeColor=1 (Lemongrass). Provenance: base_0.apk -->
+            <Flavor id="flavor_kiwi_default_arcs" displayName="@string/flavor_kiwi_default_arcs">
+                <Configuration id="themeColor" optionId="1" />
+                <Configuration id="layoutStyle" optionId="1" />
+            </Flavor>
+            <!-- Vermillion (red-orange) mapped to themeColor=6 (Coral). Provenance: base_0.apk -->
+            <Flavor id="flavor_vermillion_default" displayName="@string/flavor_vermillion_default">
+                <Configuration id="themeColor" optionId="6" />
+                <Configuration id="layoutStyle" optionId="0" />
+            </Flavor>
             <Flavor id="flavor_jade_linear_arcs" displayName="@string/flavor_jade_linear_arcs">
                 <Configuration id="themeColor" optionId="5" />
                 <Configuration id="layoutStyle" optionId="3" />
@@ -224,92 +73,57 @@
 
     </UserConfigurations>
 
-
-    <!-- Scene. Provenance: base_0.apk → assets/modular/theme.css
-         .background-color { fill: #000000; } -->
+    <!-- Provenance: base_0.apk → assets/modular/theme.css .background-color { fill: #000000; } -->
     <Scene backgroundColor="#ff000000">
 
-        <!-- Arc tracks — decorative background arcs shown in arc layouts.
+        <!-- ============================================================
+             ARC TRACKS — decorative background arcs (arc layouts only).
              Provenance: base_0.apk → assets/modular/main.css
-             @media (COMPLICATIONS_LAYOUT_STYLES = default_arcs) and linear_arcs.
+             Stroke: color=themeColor[2], thickness=8, cap=ROUND.
              Visible only in layoutStyle 1 (Default Arcs) and 3 (Linear Arcs).
-             Hidden in AMBIENT mode (Variant alpha=0).
-             All arcs share the same full-canvas circle:
-               centerX=240, centerY=240 — canvas center
-               width=480, height=480    — full canvas diameter
-             Stroke: color=[CONFIGURATION.themeColor.2] (arc-track role, index 2)
-                     thickness=8, cap=ROUND.
-             Provenance: base_0.apk → assets/modular/main.css
-             ComplicationArc arc { arc-width: 12; arc-alignment: center; }
-             (arc-width 12 = 8px stroke + 2px each side alignment = effective 8px visible) -->
-        <PartDraw x="0" y="0" width="480" height="480" alpha="255">
-            <Variant mode="AMBIENT" target="alpha" value="0" duration="0.0" />
-            <!-- Arc tracks are only visible in arc layouts (1 = Default Arcs, 3 = Linear Arcs).
-                 Provenance: base_0.apk → DefaultArcsComplicationContainer / LinearArcsComplicationContainer
-                 only display in their respective @media blocks. -->
+             ============================================================ -->
+        <PartDraw name="arc_tracks" x="0" y="0" width="480" height="480" alpha="255">
+            <Variant mode="AMBIENT" target="alpha" value="0" />
             <Transform target="alpha"
-                       value="[CONFIGURATION.layoutStyle] == 1 || [CONFIGURATION.layoutStyle] == 3 ? 255 : 0" />
-
-            <!-- Provenance: base_0.apk → arc track top-left.
-                 startAngle=145°, endAngle=215° (70° sweep, upper-left quadrant).
-                 Matches Slot 0 BoundingArc angles exactly. -->
+                value="[CONFIGURATION.layoutStyle] == 1 || [CONFIGURATION.layoutStyle] == 3 ? 255 : 0" />
+            <!-- Provenance: base_0.apk → q4 (NW): WFF 285°–345° CLOCKWISE -->
             <Arc centerX="240" centerY="240" width="480" height="480"
-                 startAngle="145" endAngle="215" direction="CLOCKWISE">
+                 startAngle="285" endAngle="345" direction="CLOCKWISE">
                 <Stroke color="[CONFIGURATION.themeColor.2]" thickness="8" cap="ROUND" />
             </Arc>
-
-            <!-- Provenance: base_0.apk → arc track top-right.
-                 startAngle=325°, endAngle=395° (70° sweep, upper-right quadrant).
-                 Matches Slot 1 BoundingArc angles exactly. -->
+            <!-- Provenance: base_0.apk → q1 (NE): WFF 15°–75° CLOCKWISE -->
             <Arc centerX="240" centerY="240" width="480" height="480"
-                 startAngle="325" endAngle="395" direction="CLOCKWISE">
+                 startAngle="15" endAngle="75" direction="CLOCKWISE">
                 <Stroke color="[CONFIGURATION.themeColor.2]" thickness="8" cap="ROUND" />
             </Arc>
-
-            <!-- Provenance: base_0.apk → arc track bottom-right.
-                 startAngle=55°, endAngle=125° (70° sweep, lower-right quadrant).
-                 Matches Slot 3 BoundingArc angles exactly. -->
+            <!-- Provenance: base_0.apk → q2 (SE): WFF 105°–165° CLOCKWISE -->
             <Arc centerX="240" centerY="240" width="480" height="480"
-                 startAngle="55" endAngle="125" direction="CLOCKWISE">
+                 startAngle="105" endAngle="165" direction="CLOCKWISE">
                 <Stroke color="[CONFIGURATION.themeColor.2]" thickness="8" cap="ROUND" />
             </Arc>
-
-            <!-- Provenance: base_0.apk → arc track bottom-left.
-                 startAngle=235°, endAngle=305° (70° sweep, lower-left quadrant).
-                 Matches Slot 2 BoundingArc angles exactly. -->
+            <!-- Provenance: base_0.apk → q3 (SW): WFF 195°–255° CLOCKWISE -->
             <Arc centerX="240" centerY="240" width="480" height="480"
-                 startAngle="235" endAngle="305" direction="CLOCKWISE">
+                 startAngle="195" endAngle="255" direction="CLOCKWISE">
                 <Stroke color="[CONFIGURATION.themeColor.2]" thickness="8" cap="ROUND" />
             </Arc>
         </PartDraw>
 
-        <!-- Day & date widget.
-             Provenance: base_0.apk → assets/modular/main.css
-             #date-text-container { x:200; y:36(default/linear) or y:56(arcs); height:42; width:140; }
-             Day text: right-aligned within container, font=google_sans_flex_600.
-             Date badge: filled rounded rect (cornerRadius=8) + centered number text.
-             Y position shifts between arc layouts (y=56) and non-arc (y=36) to
-             account for the arc labels consuming vertical space.
-             Font size: 28 in arc layouts, 32 in non-arc layouts.
-             Provenance: base_0.apk → assets/modular/main.css
-             Clock text { font-size: 144; } (default) / { font-size: 140; } (arcs). -->
+        <!-- ============================================================
+             DAY & DATE WIDGET
+             Provenance: base_0.apk → assets/modular/main.css #date-text-container
+             Arc layouts (1,3): y=56, font-size=28.
+             Non-arc layouts (0,2): y=36, font-size=32.
+             ============================================================ -->
 
-        <!-- Day-of-week text — interactive mode.
-             Provenance: base_0.apk → assets/modular/main.css
-             #date-text-container #day { x:37.92; y:0%; } text-anchor:end.
-             Container x=200, so day text right-edge ≈ x=238 on canvas.
-             width=80, height=42; font=google_sans_flex_600 size=28(arcs)/32(no-arcs). -->
-        <PartText x="238"
-                  y="[CONFIGURATION.layoutStyle] == 1 || [CONFIGURATION.layoutStyle] == 3 ? 56 : 36"
-                  width="80" height="42" alpha="255">
-            <Variant mode="AMBIENT" target="alpha" value="0" duration="0.0" />
+        <!-- Day-of-week — interactive. -->
+        <PartText name="day_text" x="238" y="56" width="80" height="42" alpha="255">
+            <Variant mode="AMBIENT" target="alpha" value="0" />
+            <Transform target="y"
+                value="[CONFIGURATION.layoutStyle] == 1 || [CONFIGURATION.layoutStyle] == 3 ? 56 : 36" />
             <Text align="END">
-                <!-- Provenance: base_0.apk → assets/modular/main.css
-                     #date-text-container text { font-size: 32; } (default)
-                     #date-text-container text { font-size: 28; } (arcs) -->
-                <Font family="google_sans_flex_600"
-                      size="[CONFIGURATION.layoutStyle] == 1 || [CONFIGURATION.layoutStyle] == 3 ? 28 : 32"
-                      color="#ffffffff">
+                <Font family="google_sans_flex_600" size="28" color="#ffffffff">
+                    <Transform target="size"
+                        value="[CONFIGURATION.layoutStyle] == 1 || [CONFIGURATION.layoutStyle] == 3 ? 28 : 32" />
                     <Template><![CDATA[%s]]>
                         <Parameter expression="[DAY_OF_WEEK_S]" />
                     </Template>
@@ -317,19 +131,15 @@
             </Text>
         </PartText>
 
-        <!-- Day-of-week text — ambient mode.
-             Provenance: base_0.apk → assets/modular/symbols/date_text.defs
-             #date-text-container .aod text { font-family: 'GoogleSansFlex-400_W104_R100'; }
-             Mapped to google_sans_flex_date_aod. Color=#ffffffff (ambient white). -->
-        <PartText x="238"
-                  y="[CONFIGURATION.layoutStyle] == 1 || [CONFIGURATION.layoutStyle] == 3 ? 56 : 36"
-                  width="80" height="42" alpha="0">
-            <Variant mode="AMBIENT" target="alpha" value="255" duration="0.0" />
+        <!-- Day-of-week — ambient. Provenance: base_0.apk → GoogleSansFlex-400_W104_R100 -->
+        <PartText name="day_text_aod" x="238" y="56" width="80" height="42" alpha="0">
+            <Variant mode="AMBIENT" target="alpha" value="255" />
+            <Transform target="y"
+                value="[CONFIGURATION.layoutStyle] == 1 || [CONFIGURATION.layoutStyle] == 3 ? 56 : 36" />
             <Text align="END">
-                <!-- Provenance: base_0.apk → ambient font google_sans_flex_date_aod size=28(arcs)/32(no-arcs). -->
-                <Font family="google_sans_flex_date_aod"
-                      size="[CONFIGURATION.layoutStyle] == 1 || [CONFIGURATION.layoutStyle] == 3 ? 28 : 32"
-                      color="#ffffffff">
+                <Font family="google_sans_flex_date_aod" size="28" color="#ffffffff">
+                    <Transform target="size"
+                        value="[CONFIGURATION.layoutStyle] == 1 || [CONFIGURATION.layoutStyle] == 3 ? 28 : 32" />
                     <Template><![CDATA[%s]]>
                         <Parameter expression="[DAY_OF_WEEK_S]" />
                     </Template>
@@ -337,45 +147,62 @@
             </Text>
         </PartText>
 
-        <!-- Date badge background — interactive mode.
-             Provenance: base_0.apk → assets/modular/main.css
-             #date-text-container #date { x:46.32; height:100%; width:59; } (default)
-             #date-text-container #date { x:46; height:100%; width:52; } (arcs)
-             Container x=200, so badge x ≈ 246 on canvas.
-             width=52(arcs)/59(no-arcs), height=40(arcs)/42(no-arcs).
-             cornerRadiusX=8, cornerRadiusY=8.
-             fill color=[CONFIGURATION.themeColor.1] (dark-fill role). -->
-        <PartDraw x="246"
-                  y="[CONFIGURATION.layoutStyle] == 1 || [CONFIGURATION.layoutStyle] == 3 ? 56 : 36"
-                  width="[CONFIGURATION.layoutStyle] == 1 || [CONFIGURATION.layoutStyle] == 3 ? 52 : 59"
-                  height="[CONFIGURATION.layoutStyle] == 1 || [CONFIGURATION.layoutStyle] == 3 ? 40 : 42"
-                  alpha="255">
-            <Variant mode="AMBIENT" target="alpha" value="0" duration="0.0" />
-            <!-- Provenance: base_0.apk → assets/modular/main.css
-                 #date-text-container #date rect { rx:8; ry:8; fill:color-b; } -->
-            <RoundRectangle x="0" y="0"
-                            width="[CONFIGURATION.layoutStyle] == 1 || [CONFIGURATION.layoutStyle] == 3 ? 52 : 59"
-                            height="[CONFIGURATION.layoutStyle] == 1 || [CONFIGURATION.layoutStyle] == 3 ? 40 : 42"
-                            cornerRadiusX="8" cornerRadiusY="8">
+        <!-- Date badge — outer rect (opacity 0.3, themeColor[1]).
+             Provenance: base_0.apk → #date-text-container #date rect { opacity:0.3; fill:color-b; rx:8; ry:8; }
+             Arc: x=246, y=56, w=52, h=40. Non-arc: x=246, y=36, w=59, h=42. -->
+        <PartDraw name="date_badge_outer" x="246" y="56" width="52" height="40" alpha="76">
+            <Variant mode="AMBIENT" target="alpha" value="0" />
+            <Transform target="y"
+                value="[CONFIGURATION.layoutStyle] == 1 || [CONFIGURATION.layoutStyle] == 3 ? 56 : 36" />
+            <Transform target="width"
+                value="[CONFIGURATION.layoutStyle] == 1 || [CONFIGURATION.layoutStyle] == 3 ? 52 : 59" />
+            <Transform target="height"
+                value="[CONFIGURATION.layoutStyle] == 1 || [CONFIGURATION.layoutStyle] == 3 ? 40 : 42" />
+            <RoundRectangle x="0" y="0" width="52" height="40" cornerRadiusX="8" cornerRadiusY="8">
+                <Transform target="width"
+                    value="[CONFIGURATION.layoutStyle] == 1 || [CONFIGURATION.layoutStyle] == 3 ? 52 : 59" />
+                <Transform target="height"
+                    value="[CONFIGURATION.layoutStyle] == 1 || [CONFIGURATION.layoutStyle] == 3 ? 40 : 42" />
                 <Fill color="[CONFIGURATION.themeColor.1]" />
             </RoundRectangle>
         </PartDraw>
 
-        <!-- Date number text — interactive mode.
-             Provenance: base_0.apk → assets/modular/main.css
-             #date-text-container #date-text { x:50%; y:31; text-anchor:middle; }
-             font=google_sans_flex_600, color=[CONFIGURATION.themeColor.3] (bright-text role). -->
-        <PartText x="246"
-                  y="[CONFIGURATION.layoutStyle] == 1 || [CONFIGURATION.layoutStyle] == 3 ? 56 : 36"
-                  width="[CONFIGURATION.layoutStyle] == 1 || [CONFIGURATION.layoutStyle] == 3 ? 52 : 59"
-                  height="[CONFIGURATION.layoutStyle] == 1 || [CONFIGURATION.layoutStyle] == 3 ? 40 : 42"
-                  alpha="255">
-            <Variant mode="AMBIENT" target="alpha" value="0" duration="0.0" />
+        <!-- Date badge — inner black rect (3px inset).
+             Provenance: base_0.apk → #date-text-container #inner-rect { fill:#000000; x:3; y:3; }
+             Arc: w=46, h=34. Non-arc: w=53, h=36. -->
+        <PartDraw name="date_badge_inner" x="249" y="59" width="46" height="34" alpha="255">
+            <Variant mode="AMBIENT" target="alpha" value="0" />
+            <Transform target="x"
+                value="[CONFIGURATION.layoutStyle] == 1 || [CONFIGURATION.layoutStyle] == 3 ? 249 : 249" />
+            <Transform target="y"
+                value="[CONFIGURATION.layoutStyle] == 1 || [CONFIGURATION.layoutStyle] == 3 ? 59 : 39" />
+            <Transform target="width"
+                value="[CONFIGURATION.layoutStyle] == 1 || [CONFIGURATION.layoutStyle] == 3 ? 46 : 53" />
+            <Transform target="height"
+                value="[CONFIGURATION.layoutStyle] == 1 || [CONFIGURATION.layoutStyle] == 3 ? 34 : 36" />
+            <RoundRectangle x="0" y="0" width="46" height="34" cornerRadiusX="5" cornerRadiusY="5">
+                <Transform target="width"
+                    value="[CONFIGURATION.layoutStyle] == 1 || [CONFIGURATION.layoutStyle] == 3 ? 46 : 53" />
+                <Transform target="height"
+                    value="[CONFIGURATION.layoutStyle] == 1 || [CONFIGURATION.layoutStyle] == 3 ? 34 : 36" />
+                <Fill color="#FF000000" />
+            </RoundRectangle>
+        </PartDraw>
+
+        <!-- Date number — interactive.
+             Provenance: base_0.apk → #date-text-container #date-text { color: themeColor[3]; } -->
+        <PartText name="date_number" x="246" y="56" width="52" height="40" alpha="255">
+            <Variant mode="AMBIENT" target="alpha" value="0" />
+            <Transform target="y"
+                value="[CONFIGURATION.layoutStyle] == 1 || [CONFIGURATION.layoutStyle] == 3 ? 56 : 36" />
+            <Transform target="width"
+                value="[CONFIGURATION.layoutStyle] == 1 || [CONFIGURATION.layoutStyle] == 3 ? 52 : 59" />
+            <Transform target="height"
+                value="[CONFIGURATION.layoutStyle] == 1 || [CONFIGURATION.layoutStyle] == 3 ? 40 : 42" />
             <Text align="CENTER">
-                <!-- Provenance: base_0.apk → date number font google_sans_flex_600 size=28(arcs)/32(no-arcs). -->
-                <Font family="google_sans_flex_600"
-                      size="[CONFIGURATION.layoutStyle] == 1 || [CONFIGURATION.layoutStyle] == 3 ? 28 : 32"
-                      color="[CONFIGURATION.themeColor.3]">
+                <Font family="google_sans_flex_600" size="28" color="[CONFIGURATION.themeColor.3]">
+                    <Transform target="size"
+                        value="[CONFIGURATION.layoutStyle] == 1 || [CONFIGURATION.layoutStyle] == 3 ? 28 : 32" />
                     <Template><![CDATA[%d]]>
                         <Parameter expression="[DAY]" />
                     </Template>
@@ -383,21 +210,19 @@
             </Text>
         </PartText>
 
-        <!-- Date number text — ambient mode.
-             Provenance: base_0.apk → assets/modular/symbols/date_text.defs
-             #date-text-container .aod text { font-family: 'GoogleSansFlex-400_W104_R100'; }
-             Mapped to google_sans_flex_date_aod. Color=#ffffffff (ambient white). -->
-        <PartText x="246"
-                  y="[CONFIGURATION.layoutStyle] == 1 || [CONFIGURATION.layoutStyle] == 3 ? 56 : 36"
-                  width="[CONFIGURATION.layoutStyle] == 1 || [CONFIGURATION.layoutStyle] == 3 ? 52 : 59"
-                  height="[CONFIGURATION.layoutStyle] == 1 || [CONFIGURATION.layoutStyle] == 3 ? 40 : 42"
-                  alpha="0">
-            <Variant mode="AMBIENT" target="alpha" value="255" duration="0.0" />
+        <!-- Date number — ambient. -->
+        <PartText name="date_number_aod" x="246" y="56" width="52" height="40" alpha="0">
+            <Variant mode="AMBIENT" target="alpha" value="255" />
+            <Transform target="y"
+                value="[CONFIGURATION.layoutStyle] == 1 || [CONFIGURATION.layoutStyle] == 3 ? 56 : 36" />
+            <Transform target="width"
+                value="[CONFIGURATION.layoutStyle] == 1 || [CONFIGURATION.layoutStyle] == 3 ? 52 : 59" />
+            <Transform target="height"
+                value="[CONFIGURATION.layoutStyle] == 1 || [CONFIGURATION.layoutStyle] == 3 ? 40 : 42" />
             <Text align="CENTER">
-                <!-- Provenance: base_0.apk → ambient date font google_sans_flex_date_aod size=28(arcs)/32(no-arcs). -->
-                <Font family="google_sans_flex_date_aod"
-                      size="[CONFIGURATION.layoutStyle] == 1 || [CONFIGURATION.layoutStyle] == 3 ? 28 : 32"
-                      color="#ffffffff">
+                <Font family="google_sans_flex_date_aod" size="28" color="#ffffffff">
+                    <Transform target="size"
+                        value="[CONFIGURATION.layoutStyle] == 1 || [CONFIGURATION.layoutStyle] == 3 ? 28 : 32" />
                     <Template><![CDATA[%d]]>
                         <Parameter expression="[DAY]" />
                     </Template>
@@ -405,15 +230,12 @@
             </Text>
         </PartText>
 
-
-        <!-- Digital clock — Default and Default Arcs layouts (id=0, id=1).
+        <!-- ============================================================
+             DIGITAL CLOCK — Default and Default Arcs layouts (id=0, id=1).
              Provenance: base_0.apk → assets/modular/main.css
-             Clock #horizontal-clock { x:0; y:104; height:152; width:480; } (default)
-             Clock #horizontal-clock { x:0; y:110; height:152; width:480; } (arcs)
-             Clock text { font-size: 144; } (default) / { font-size: 140; } (arcs)
-             Visible only when layoutStyle==0 or layoutStyle==1.
-             WFF 4 note: DigitalClock alpha is a static integer and cannot be set via expression. Condition wrapping is used for layout-based visibility.
-             Visibility is controlled via Condition wrapping. -->
+             #horizontal-clock { y:104(default) / y:110(arcs); height:152; width:480; }
+             font-size: 144(default) / 140(arcs).
+             ============================================================ -->
         <Condition>
             <Expressions>
                 <Expression name="is_bulb_layout"><![CDATA[
@@ -421,50 +243,39 @@
                 ]]></Expression>
             </Expressions>
             <Compare expression="is_bulb_layout">
-                <!-- Provenance: base_0.apk → assets/modular/main.css
-                     Clock #horizontal-clock { x:0; y:110(arcs)/104(no-arcs); height:152; width:480; } -->
-                <DigitalClock x="0"
-                              y="[CONFIGURATION.layoutStyle] == 1 ? 110 : 104"
-                              width="480" height="152">
-                    <!-- Interactive clock face.
-                         Provenance: base_0.apk → assets/modular/main.css
-                         Clock text { font-family:'GoogleSansFlex-450'; font-size:140(arcs)/144(no-arcs); } -->
-                    <TimeText x="0" y="0" width="480" height="152"
+                <DigitalClock name="horizontal_clock" x="0" y="110" width="480" height="152">
+                    <Transform target="y"
+                        value="[CONFIGURATION.layoutStyle] == 1 ? 110 : 104" />
+                    <!-- Interactive -->
+                    <TimeText name="clock_interactive" x="0" y="0" width="480" height="152"
                               format="hh:mm" hourFormat="SYNC_TO_DEVICE"
                               align="CENTER" alpha="255">
-                        <Variant mode="AMBIENT" target="alpha" value="0" duration="0.0" />
-                        <!-- Provenance: base_0.apk → Clock text { font-size:140; } (arcs) / { font-size:144; } (default). -->
-                        <Font family="google_sans_flex_450"
-                              size="[CONFIGURATION.layoutStyle] == 1 ? 140 : 144"
-                              color="#ffffffff" />
+                        <Variant mode="AMBIENT" target="alpha" value="0" />
+                        <Font family="google_sans_flex_450" size="140" color="#ffffffff">
+                            <Transform target="size"
+                                value="[CONFIGURATION.layoutStyle] == 1 ? 140 : 144" />
+                        </Font>
                     </TimeText>
-                    <!-- Ambient clock face.
-                         Provenance: base_0.apk → assets/modular/symbols/digital_clock.defs
-                         Clock.aod text { font-family:'GoogleSansFlex-colon-350'; }
-                         Mapped to google_sans_flex_clock_aod. -->
-                    <TimeText x="0" y="0" width="480" height="152"
+                    <!-- Ambient. Provenance: base_0.apk → GoogleSansFlex-colon-350 -->
+                    <TimeText name="clock_ambient" x="0" y="0" width="480" height="152"
                               format="hh:mm" hourFormat="SYNC_TO_DEVICE"
                               align="CENTER" alpha="0">
-                        <Variant mode="AMBIENT" target="alpha" value="255" duration="0.0" />
-                        <!-- Provenance: base_0.apk → ambient clock font google_sans_flex_clock_aod size=140(arcs)/144(no-arcs). -->
-                        <Font family="google_sans_flex_clock_aod"
-                              size="[CONFIGURATION.layoutStyle] == 1 ? 140 : 144"
-                              color="#ffffffff" />
+                        <Variant mode="AMBIENT" target="alpha" value="255" />
+                        <Font family="google_sans_flex_clock_aod" size="140" color="#ffffffff">
+                            <Transform target="size"
+                                value="[CONFIGURATION.layoutStyle] == 1 ? 140 : 144" />
+                        </Font>
                     </TimeText>
                 </DigitalClock>
             </Compare>
         </Condition>
 
-        <!-- Split digit clock — Linear layouts (id=2, id=3).
+        <!-- ============================================================
+             SPLIT DIGIT CLOCK — Linear layouts (id=2, id=3).
              Provenance: base_0.apk → assets/modular/main.css
-             Clock #split-digits { x:56; y:118; height:220; width:176; } (linear)
-             Clock #split-digits { x:60; y:130; height:210; width:162; } (linear arcs)
-             Clock text { font-size: 128; } (linear) / { font-size: 118; } (linear arcs)
-             Visible only when layoutStyle==2 or layoutStyle==3.
-             WFF 4 note: DigitalClock alpha is a static integer and cannot be set via expression. Condition wrapping is used for layout-based visibility.
-             Visibility is controlled via Condition wrapping.
-             Hours and minutes are rendered as separate DigitalClock elements
-             because WFF 4 DigitalClock does not support split-digit layout natively. -->
+             Linear: hours x=56,y=118,w=176,h=110 / minutes x=56,y=228,w=176,h=110, size=128
+             Linear Arcs: hours x=60,y=130,w=162,h=105 / minutes x=60,y=235,w=162,h=105, size=118
+             ============================================================ -->
         <Condition>
             <Expressions>
                 <Expression name="is_linear_layout"><![CDATA[
@@ -472,138 +283,127 @@
                 ]]></Expression>
             </Expressions>
             <Compare expression="is_linear_layout">
-                <!-- Hours digit panel.
-                     Provenance: base_0.apk → assets/modular/main.css
-                     Clock #hour-text { x:0; y:0; height:50%; width:100%; } within split-digits.
-                     Split-digits container: x=56, y=118, w=176, h=220 (linear)
-                                             x=60, y=130, w=162, h=210 (linear arcs)
-                     Hours panel occupies top 50% of split-digits height:
-                       linear:      x=56, y=118, w=176, h=110
-                       linear arcs: x=60, y=130, w=162, h=105 -->
-                <DigitalClock x="[CONFIGURATION.layoutStyle] == 3 ? 60 : 56"
-                              y="[CONFIGURATION.layoutStyle] == 3 ? 130 : 118"
-                              width="[CONFIGURATION.layoutStyle] == 3 ? 162 : 176"
-                              height="[CONFIGURATION.layoutStyle] == 3 ? 105 : 110">
-                    <TimeText x="0" y="0"
-                              width="[CONFIGURATION.layoutStyle] == 3 ? 162 : 176"
-                              height="[CONFIGURATION.layoutStyle] == 3 ? 105 : 110"
-                              format="hh" hourFormat="SYNC_TO_DEVICE" align="CENTER" alpha="255">
-                        <Variant mode="AMBIENT" target="alpha" value="0" duration="0.0" />
-                        <!-- Provenance: base_0.apk → Clock text { font-size:128; } (linear) / { font-size:118; } (linear arcs). -->
-                        <Font family="google_sans_flex_450"
-                              size="[CONFIGURATION.layoutStyle] == 3 ? 118 : 128"
-                              color="#ffffffff" />
+                <!-- Hours panel -->
+                <DigitalClock name="split_hours" x="60" y="130" width="162" height="105">
+                    <Transform target="x"
+                        value="[CONFIGURATION.layoutStyle] == 3 ? 60 : 56" />
+                    <Transform target="y"
+                        value="[CONFIGURATION.layoutStyle] == 3 ? 130 : 118" />
+                    <Transform target="width"
+                        value="[CONFIGURATION.layoutStyle] == 3 ? 162 : 176" />
+                    <Transform target="height"
+                        value="[CONFIGURATION.layoutStyle] == 3 ? 105 : 110" />
+                    <TimeText name="hours_interactive" x="0" y="0" width="162" height="105"
+                              format="hh" hourFormat="SYNC_TO_DEVICE"
+                              align="CENTER" alpha="255">
+                        <Variant mode="AMBIENT" target="alpha" value="0" />
+                        <Transform target="width"
+                            value="[CONFIGURATION.layoutStyle] == 3 ? 162 : 176" />
+                        <Transform target="height"
+                            value="[CONFIGURATION.layoutStyle] == 3 ? 105 : 110" />
+                        <Font family="google_sans_flex_450" size="118" color="#ffffffff">
+                            <Transform target="size"
+                                value="[CONFIGURATION.layoutStyle] == 3 ? 118 : 128" />
+                        </Font>
                     </TimeText>
-                    <TimeText x="0" y="0"
-                              width="[CONFIGURATION.layoutStyle] == 3 ? 162 : 176"
-                              height="[CONFIGURATION.layoutStyle] == 3 ? 105 : 110"
-                              format="hh" hourFormat="SYNC_TO_DEVICE" align="CENTER" alpha="0">
-                        <Variant mode="AMBIENT" target="alpha" value="255" duration="0.0" />
-                        <!-- Provenance: base_0.apk → ambient split clock font google_sans_flex_clock_aod. -->
-                        <Font family="google_sans_flex_clock_aod"
-                              size="[CONFIGURATION.layoutStyle] == 3 ? 118 : 128"
-                              color="#ffffffff" />
+                    <TimeText name="hours_ambient" x="0" y="0" width="162" height="105"
+                              format="hh" hourFormat="SYNC_TO_DEVICE"
+                              align="CENTER" alpha="0">
+                        <Variant mode="AMBIENT" target="alpha" value="255" />
+                        <Transform target="width"
+                            value="[CONFIGURATION.layoutStyle] == 3 ? 162 : 176" />
+                        <Transform target="height"
+                            value="[CONFIGURATION.layoutStyle] == 3 ? 105 : 110" />
+                        <Font family="google_sans_flex_clock_aod" size="118" color="#ffffffff">
+                            <Transform target="size"
+                                value="[CONFIGURATION.layoutStyle] == 3 ? 118 : 128" />
+                        </Font>
                     </TimeText>
                 </DigitalClock>
-
-                <!-- Minutes digit panel.
-                     Provenance: base_0.apk → assets/modular/main.css
-                     Clock #minute-text { x:0; y:50%; height:50%; width:100%; } within split-digits.
-                     Minutes panel occupies bottom 50% of split-digits height:
-                       linear:      x=56, y=228 (118+110), w=176, h=110
-                       linear arcs: x=60, y=235 (130+105), w=162, h=105 -->
-                <DigitalClock x="[CONFIGURATION.layoutStyle] == 3 ? 60 : 56"
-                              y="[CONFIGURATION.layoutStyle] == 3 ? 235 : 228"
-                              width="[CONFIGURATION.layoutStyle] == 3 ? 162 : 176"
-                              height="[CONFIGURATION.layoutStyle] == 3 ? 105 : 110">
-                    <TimeText x="0" y="0"
-                              width="[CONFIGURATION.layoutStyle] == 3 ? 162 : 176"
-                              height="[CONFIGURATION.layoutStyle] == 3 ? 105 : 110"
-                              format="mm" hourFormat="SYNC_TO_DEVICE" align="CENTER" alpha="255">
-                        <Variant mode="AMBIENT" target="alpha" value="0" duration="0.0" />
-                        <!-- Provenance: base_0.apk → Clock text { font-size:128; } (linear) / { font-size:118; } (linear arcs). -->
-                        <Font family="google_sans_flex_450"
-                              size="[CONFIGURATION.layoutStyle] == 3 ? 118 : 128"
-                              color="#ffffffff" />
+                <!-- Minutes panel -->
+                <DigitalClock name="split_minutes" x="60" y="235" width="162" height="105">
+                    <Transform target="x"
+                        value="[CONFIGURATION.layoutStyle] == 3 ? 60 : 56" />
+                    <Transform target="y"
+                        value="[CONFIGURATION.layoutStyle] == 3 ? 235 : 228" />
+                    <Transform target="width"
+                        value="[CONFIGURATION.layoutStyle] == 3 ? 162 : 176" />
+                    <Transform target="height"
+                        value="[CONFIGURATION.layoutStyle] == 3 ? 105 : 110" />
+                    <TimeText name="minutes_interactive" x="0" y="0" width="162" height="105"
+                              format="mm" hourFormat="SYNC_TO_DEVICE"
+                              align="CENTER" alpha="255">
+                        <Variant mode="AMBIENT" target="alpha" value="0" />
+                        <Transform target="width"
+                            value="[CONFIGURATION.layoutStyle] == 3 ? 162 : 176" />
+                        <Transform target="height"
+                            value="[CONFIGURATION.layoutStyle] == 3 ? 105 : 110" />
+                        <Font family="google_sans_flex_450" size="118" color="#ffffffff">
+                            <Transform target="size"
+                                value="[CONFIGURATION.layoutStyle] == 3 ? 118 : 128" />
+                        </Font>
                     </TimeText>
-                    <TimeText x="0" y="0"
-                              width="[CONFIGURATION.layoutStyle] == 3 ? 162 : 176"
-                              height="[CONFIGURATION.layoutStyle] == 3 ? 105 : 110"
-                              format="mm" hourFormat="SYNC_TO_DEVICE" align="CENTER" alpha="0">
-                        <Variant mode="AMBIENT" target="alpha" value="255" duration="0.0" />
-                        <!-- Provenance: base_0.apk → ambient split clock font google_sans_flex_clock_aod. -->
-                        <Font family="google_sans_flex_clock_aod"
-                              size="[CONFIGURATION.layoutStyle] == 3 ? 118 : 128"
-                              color="#ffffffff" />
+                    <TimeText name="minutes_ambient" x="0" y="0" width="162" height="105"
+                              format="mm" hourFormat="SYNC_TO_DEVICE"
+                              align="CENTER" alpha="0">
+                        <Variant mode="AMBIENT" target="alpha" value="255" />
+                        <Transform target="width"
+                            value="[CONFIGURATION.layoutStyle] == 3 ? 162 : 176" />
+                        <Transform target="height"
+                            value="[CONFIGURATION.layoutStyle] == 3 ? 105 : 110" />
+                        <Font family="google_sans_flex_clock_aod" size="118" color="#ffffffff">
+                            <Transform target="size"
+                                value="[CONFIGURATION.layoutStyle] == 3 ? 118 : 128" />
+                        </Font>
                     </TimeText>
                 </DigitalClock>
             </Compare>
         </Condition>
 
 
-        <!-- Complication Slot 0 — Top-Left Arc.
-             Provenance: base_0.apk → assets/modular/symbols/complications.defs
-             ComplicationArc id='complication-3' class='q1' (top-left quadrant).
-             slotId:          0
-             displayName:     @string/top_left_complication ("Top Left Arc")
-             supportedTypes:  RANGED_VALUE, SHORT_TEXT, EMPTY
-             defaultProvider: STEP_COUNT (RANGED_VALUE)
-             Slot bounds:     x=0, y=0, width=480, height=480 (full canvas)
-             BoundingArc:     centerX=240, centerY=240, width=480, height=480
-                              startAngle=145°, endAngle=215°, thickness=30
-                              (70° sweep, upper-left quadrant)
-             Arc fill sweep:  startAngle=145°, endAngle computed from RANGED_VALUE
-             Text arc:        startAngle=160°, endAngle=215°, align=START
-             Icon position:   x=80, y=110, width=22, height=22
-             Provenance: base_0.apk → assets/modular/main.css
-             ComplicationArc { anchor:center-middle; x:50%; y:50%; width:100%-31; height:100%-31; }
-             On 480×480 canvas: width=449, height=449, centered at 240,240.
-             BoundingArc thickness=30 matches ComplicationArc arc-width:12 + highlight arc-width:28. -->
-        <ComplicationSlot slotId="0" x="0" y="0" width="480" height="480"
-                          supportedTypes="RANGED_VALUE SHORT_TEXT EMPTY"
-                          displayName="@string/top_left_complication">
-            <!-- Provenance: base_0.apk → default STEP_COUNT RANGED_VALUE for top-left arc. -->
+        <!-- ============================================================
+             COMPLICATION SLOT 0 — Top-Left Arc (NW).
+             Provenance: base_0.apk → complications.defs complication-6 class='q4'.
+             q4 { angle:270; } → WFF 285°–345°. Default: STEP_COUNT.
+             ============================================================ -->
+        <ComplicationSlot slotId="0" name="top_left_arc"
+            x="0" y="0" width="480" height="480"
+            supportedTypes="RANGED_VALUE SHORT_TEXT EMPTY"
+            displayName="@string/top_left_complication">
             <DefaultProviderPolicy defaultSystemProvider="STEP_COUNT"
                                    defaultSystemProviderType="RANGED_VALUE" />
-            <!-- Provenance: base_0.apk → BoundingArc center=240,240 w=480 h=480
-                 startAngle=145° endAngle=215° thickness=30. -->
             <BoundingArc centerX="240" centerY="240" width="480" height="480"
-                         thickness="30" startAngle="145" endAngle="215" />
+                         thickness="30" startAngle="285" endAngle="345" />
 
             <Complication type="SHORT_TEXT">
-                <!-- Arc slots are only visible in layoutStyle 1 (Default Arcs) and 3 (Linear Arcs).
-                     Provenance: base_0.apk → DefaultArcsComplicationContainer / LinearArcsComplicationContainer
-                     only display in their respective @media blocks. -->
-                <Group name="arc_interactive" alpha="255" x="0" y="0" width="480" height="480">
-                    <Variant mode="AMBIENT" target="alpha" value="0" duration="0.0" />
-                    <Transform target="alpha" value="[CONFIGURATION.layoutStyle] == 1 || [CONFIGURATION.layoutStyle] == 3 ? 255 : 0" />
-                    <PartText x="0" y="0" width="480" height="480">
-                        <!-- Provenance: base_0.apk → assets/modular/main.css
-                             ComplicationArc textArc { font-size:24; y:9; }
-                             TextCircular startAngle=160° endAngle=215° align=START. -->
+                <Group name="arc_slot0_short_text" x="0" y="0" width="480" height="480" alpha="255">
+                    <Variant mode="AMBIENT" target="alpha" value="0" />
+                    <Transform target="alpha"
+                        value="[CONFIGURATION.layoutStyle] == 1 || [CONFIGURATION.layoutStyle] == 3 ? 255 : 0" />
+                    <PartText name="arc0_st_text" x="0" y="0" width="480" height="480">
                         <TextCircular centerX="240" centerY="240" width="440" height="440"
-                                      startAngle="160" endAngle="215"
+                                      startAngle="285" endAngle="345"
                                       direction="CLOCKWISE" align="START">
-                            <!-- Provenance: base_0.apk → ComplicationArc textArc { font-family:'GoogleSansFlex-700_RW100'; font-size:24; } -->
-                            <Font family="google_sans_flex_700" size="20" color="#ffffffff">
-                                <Template><![CDATA[%s]]><Parameter expression="[COMPLICATION.TEXT]" /></Template>
+                            <Font family="google_sans_flex_700" size="24" color="#ffffffff">
+                                <Template><![CDATA[%s]]>
+                                    <Parameter expression="[COMPLICATION.TEXT]" />
+                                </Template>
                             </Font>
                         </TextCircular>
                     </PartText>
                     <Condition>
                         <Expressions>
-                            <Expression name="has_img"><![CDATA[[COMPLICATION.ICON] != null]]></Expression>
+                            <Expression name="arc0_st_has_icon"><![CDATA[[COMPLICATION.MONOCHROMATIC_IMAGE] != null]]></Expression>
                         </Expressions>
-                        <Compare expression="has_img">
-                            <!-- Provenance: base_0.apk → slot 0 icon x=80 y=110 w=22 h=22. -->
-                            <PartImage x="80" y="110" width="22" height="22">
-                                <Image resource="[COMPLICATION.ICON]" tintColor="[CONFIGURATION.themeColor.0]" />
+                        <Compare expression="arc0_st_has_icon">
+                            <PartImage name="arc0_st_icon" x="80" y="80" width="22" height="22">
+                                <Image resource="[COMPLICATION.MONOCHROMATIC_IMAGE]"
+                                       tintColor="[CONFIGURATION.themeColor.0]" />
                             </PartImage>
                         </Compare>
                     </Condition>
-                    <!-- Samsung One UI 8 AOD refresh workaround — zero-size hidden element.
-                         Forces re-evaluation of complication data on every wake transition. -->
-                    <PartText x="0" y="0" width="0" height="0" alpha="0">
+                    <!-- Samsung One UI 8 AOD refresh workaround -->
+                    <PartText name="arc0_st_aod_refresh" x="0" y="0" width="1" height="1" alpha="0">
                         <Text align="START">
                             <Font family="google_sans_flex_450" size="1" color="#00000000">
                                 <Template><![CDATA[%d]]>
@@ -616,44 +416,43 @@
             </Complication>
 
             <Complication type="RANGED_VALUE">
-                <Group name="arc_interactive" alpha="255" x="0" y="0" width="480" height="480">
-                    <Variant mode="AMBIENT" target="alpha" value="0" duration="0.0" />
-                    <Transform target="alpha" value="[CONFIGURATION.layoutStyle] == 1 || [CONFIGURATION.layoutStyle] == 3 ? 255 : 0" />
-                    <PartText x="0" y="0" width="480" height="480">
-                        <!-- Provenance: base_0.apk → slot 0 TextCircular startAngle=160° endAngle=215° align=START. -->
+                <Group name="arc_slot0_ranged" x="0" y="0" width="480" height="480" alpha="255">
+                    <Variant mode="AMBIENT" target="alpha" value="0" />
+                    <Transform target="alpha"
+                        value="[CONFIGURATION.layoutStyle] == 1 || [CONFIGURATION.layoutStyle] == 3 ? 255 : 0" />
+                    <PartText name="arc0_rv_text" x="0" y="0" width="480" height="480">
                         <TextCircular centerX="240" centerY="240" width="440" height="440"
-                                      startAngle="160" endAngle="215"
+                                      startAngle="285" endAngle="345"
                                       direction="CLOCKWISE" align="START">
-                            <!-- Provenance: base_0.apk → ComplicationArc textArc { font-family:'GoogleSansFlex-700_RW100'; font-size:24; } -->
-                            <Font family="google_sans_flex_700" size="20" color="#ffffffff">
-                                <Template><![CDATA[%s]]><Parameter expression="[COMPLICATION.TEXT]" /></Template>
+                            <Font family="google_sans_flex_700" size="24" color="#ffffffff">
+                                <Template><![CDATA[%s]]>
+                                    <Parameter expression="[COMPLICATION.TEXT]" />
+                                </Template>
                             </Font>
                         </TextCircular>
                     </PartText>
-                    <PartDraw x="0" y="0" width="480" height="480">
-                        <!-- Provenance: base_0.apk → slot 0 ranged-value arc fill.
-                             startAngle=145°, endAngle computed: 145 + 70*(value/max).
-                             stroke thickness=8, cap=ROUND, color=themeColor[0] (accent). -->
+                    <PartDraw name="arc0_rv_fill" x="0" y="0" width="480" height="480">
+                        <!-- Provenance: base_0.apk → q4 ranged fill CLOCKWISE from 285° -->
                         <Arc centerX="240" centerY="240" width="480" height="480"
-                             startAngle="145" endAngle="145" direction="CLOCKWISE">
+                             startAngle="285" endAngle="285" direction="CLOCKWISE">
                             <Transform target="endAngle"
-                                       value="[COMPLICATION.RANGED_VALUE_MAX] &gt; 0 ? (145 + 70 * ([COMPLICATION.RANGED_VALUE_VALUE] / [COMPLICATION.RANGED_VALUE_MAX])) : 145" />
+                                value="[COMPLICATION.RANGED_VALUE_MAX] &gt; 0 ? (285 + 60 * ([COMPLICATION.RANGED_VALUE_VALUE] / [COMPLICATION.RANGED_VALUE_MAX])) : 285" />
                             <Stroke color="[CONFIGURATION.themeColor.0]" thickness="8" cap="ROUND" />
                         </Arc>
                     </PartDraw>
                     <Condition>
                         <Expressions>
-                            <Expression name="has_img"><![CDATA[[COMPLICATION.ICON] != null]]></Expression>
+                            <Expression name="arc0_rv_has_icon"><![CDATA[[COMPLICATION.MONOCHROMATIC_IMAGE] != null]]></Expression>
                         </Expressions>
-                        <Compare expression="has_img">
-                            <!-- Provenance: base_0.apk → slot 0 icon x=80 y=110 w=22 h=22. -->
-                            <PartImage x="80" y="110" width="22" height="22">
-                                <Image resource="[COMPLICATION.ICON]" tintColor="[CONFIGURATION.themeColor.0]" />
+                        <Compare expression="arc0_rv_has_icon">
+                            <PartImage name="arc0_rv_icon" x="80" y="80" width="22" height="22">
+                                <Image resource="[COMPLICATION.MONOCHROMATIC_IMAGE]"
+                                       tintColor="[CONFIGURATION.themeColor.0]" />
                             </PartImage>
                         </Compare>
                     </Condition>
-                    <!-- Samsung One UI 8 AOD refresh workaround. -->
-                    <PartText x="0" y="0" width="0" height="0" alpha="0">
+                    <!-- Samsung One UI 8 AOD refresh workaround -->
+                    <PartText name="arc0_rv_aod_refresh" x="0" y="0" width="1" height="1" alpha="0">
                         <Text align="START">
                             <Font family="google_sans_flex_450" size="1" color="#00000000">
                                 <Template><![CDATA[%d]]>
@@ -666,63 +465,49 @@
             </Complication>
         </ComplicationSlot>
 
-        <!-- Complication Slot 1 — Top-Right Arc.
-             Provenance: base_0.apk → assets/modular/symbols/complications.defs
-             ComplicationArc id='complication-4' class='q2' (top-right quadrant).
-             slotId:          1
-             displayName:     @string/top_right_complication ("Top Right Arc")
-             supportedTypes:  RANGED_VALUE, SHORT_TEXT, EMPTY
-             defaultProvider: WATCH_BATTERY (RANGED_VALUE)
-             Slot bounds:     x=0, y=0, width=480, height=480 (full canvas)
-             BoundingArc:     centerX=240, centerY=240, width=480, height=480
-                              startAngle=325°, endAngle=395°, thickness=30
-                              (70° sweep, upper-right quadrant)
-             Arc fill sweep:  startAngle=395°, endAngle computed (counter-clockwise toward 325°)
-             Text arc:        startAngle=380°, endAngle=325°, align=END
-             Icon position:   x=375, y=110, width=22, height=22
-             Note: Slots 1 and 3 both default to WATCH_BATTERY. This is intentional —
-             the original Pixel Modular design places battery on both the top-right and
-             bottom-right arc positions as a symmetric pair. Users may reassign either. -->
-        <ComplicationSlot slotId="1" x="0" y="0" width="480" height="480"
-                          supportedTypes="RANGED_VALUE SHORT_TEXT EMPTY"
-                          displayName="@string/top_right_complication">
-            <!-- Provenance: base_0.apk → default WATCH_BATTERY RANGED_VALUE for top-right arc.
-                 Intentional duplicate of Slot 3 default — symmetric arc pair design. -->
+        <!-- ============================================================
+             COMPLICATION SLOT 1 — Top-Right Arc (NE).
+             Provenance: base_0.apk → complications.defs complication-3 class='q1'.
+             q1 { angle:0; } → WFF 15°–75°. Default: WATCH_BATTERY.
+             ============================================================ -->
+        <ComplicationSlot slotId="1" name="top_right_arc"
+            x="0" y="0" width="480" height="480"
+            supportedTypes="RANGED_VALUE SHORT_TEXT EMPTY"
+            displayName="@string/top_right_complication">
             <DefaultProviderPolicy defaultSystemProvider="WATCH_BATTERY"
                                    defaultSystemProviderType="RANGED_VALUE" />
-            <!-- Provenance: base_0.apk → BoundingArc center=240,240 w=480 h=480
-                 startAngle=325° endAngle=395° thickness=30. -->
             <BoundingArc centerX="240" centerY="240" width="480" height="480"
-                         thickness="30" startAngle="325" endAngle="395" />
+                         thickness="30" startAngle="15" endAngle="75" />
 
             <Complication type="SHORT_TEXT">
-                <Group name="arc_interactive" alpha="255" x="0" y="0" width="480" height="480">
-                    <Variant mode="AMBIENT" target="alpha" value="0" duration="0.0" />
-                    <Transform target="alpha" value="[CONFIGURATION.layoutStyle] == 1 || [CONFIGURATION.layoutStyle] == 3 ? 255 : 0" />
-                    <PartText x="0" y="0" width="480" height="480">
-                        <!-- Provenance: base_0.apk → slot 1 TextCircular startAngle=380° endAngle=325° align=END. -->
+                <Group name="arc_slot1_short_text" x="0" y="0" width="480" height="480" alpha="255">
+                    <Variant mode="AMBIENT" target="alpha" value="0" />
+                    <Transform target="alpha"
+                        value="[CONFIGURATION.layoutStyle] == 1 || [CONFIGURATION.layoutStyle] == 3 ? 255 : 0" />
+                    <PartText name="arc1_st_text" x="0" y="0" width="480" height="480">
                         <TextCircular centerX="240" centerY="240" width="440" height="440"
-                                      startAngle="380" endAngle="325"
+                                      startAngle="15" endAngle="75"
                                       direction="CLOCKWISE" align="END">
-                            <!-- Provenance: base_0.apk → ComplicationArc textArc { font-family:'GoogleSansFlex-700_RW100'; font-size:24; } -->
-                            <Font family="google_sans_flex_700" size="20" color="#ffffffff">
-                                <Template><![CDATA[%s]]><Parameter expression="[COMPLICATION.TEXT]" /></Template>
+                            <Font family="google_sans_flex_700" size="24" color="#ffffffff">
+                                <Template><![CDATA[%s]]>
+                                    <Parameter expression="[COMPLICATION.TEXT]" />
+                                </Template>
                             </Font>
                         </TextCircular>
                     </PartText>
                     <Condition>
                         <Expressions>
-                            <Expression name="has_img"><![CDATA[[COMPLICATION.ICON] != null]]></Expression>
+                            <Expression name="arc1_st_has_icon"><![CDATA[[COMPLICATION.MONOCHROMATIC_IMAGE] != null]]></Expression>
                         </Expressions>
-                        <Compare expression="has_img">
-                            <!-- Provenance: base_0.apk → slot 1 icon x=375 y=110 w=22 h=22. -->
-                            <PartImage x="375" y="110" width="22" height="22">
-                                <Image resource="[COMPLICATION.ICON]" tintColor="[CONFIGURATION.themeColor.0]" />
+                        <Compare expression="arc1_st_has_icon">
+                            <PartImage name="arc1_st_icon" x="375" y="80" width="22" height="22">
+                                <Image resource="[COMPLICATION.MONOCHROMATIC_IMAGE]"
+                                       tintColor="[CONFIGURATION.themeColor.0]" />
                             </PartImage>
                         </Compare>
                     </Condition>
-                    <!-- Samsung One UI 8 AOD refresh workaround. -->
-                    <PartText x="0" y="0" width="0" height="0" alpha="0">
+                    <!-- Samsung One UI 8 AOD refresh workaround -->
+                    <PartText name="arc1_st_aod_refresh" x="0" y="0" width="1" height="1" alpha="0">
                         <Text align="START">
                             <Font family="google_sans_flex_450" size="1" color="#00000000">
                                 <Template><![CDATA[%d]]>
@@ -735,45 +520,43 @@
             </Complication>
 
             <Complication type="RANGED_VALUE">
-                <Group name="arc_interactive" alpha="255" x="0" y="0" width="480" height="480">
-                    <Variant mode="AMBIENT" target="alpha" value="0" duration="0.0" />
-                    <Transform target="alpha" value="[CONFIGURATION.layoutStyle] == 1 || [CONFIGURATION.layoutStyle] == 3 ? 255 : 0" />
-                    <PartText x="0" y="0" width="480" height="480">
-                        <!-- Provenance: base_0.apk → slot 1 TextCircular startAngle=380° endAngle=325° align=END. -->
+                <Group name="arc_slot1_ranged" x="0" y="0" width="480" height="480" alpha="255">
+                    <Variant mode="AMBIENT" target="alpha" value="0" />
+                    <Transform target="alpha"
+                        value="[CONFIGURATION.layoutStyle] == 1 || [CONFIGURATION.layoutStyle] == 3 ? 255 : 0" />
+                    <PartText name="arc1_rv_text" x="0" y="0" width="480" height="480">
                         <TextCircular centerX="240" centerY="240" width="440" height="440"
-                                      startAngle="380" endAngle="325"
+                                      startAngle="15" endAngle="75"
                                       direction="CLOCKWISE" align="END">
-                            <!-- Provenance: base_0.apk → ComplicationArc textArc { font-family:'GoogleSansFlex-700_RW100'; font-size:24; } -->
-                            <Font family="google_sans_flex_700" size="20" color="#ffffffff">
-                                <Template><![CDATA[%s]]><Parameter expression="[COMPLICATION.TEXT]" /></Template>
+                            <Font family="google_sans_flex_700" size="24" color="#ffffffff">
+                                <Template><![CDATA[%s]]>
+                                    <Parameter expression="[COMPLICATION.TEXT]" />
+                                </Template>
                             </Font>
                         </TextCircular>
                     </PartText>
-                    <PartDraw x="0" y="0" width="480" height="480">
-                        <!-- Provenance: base_0.apk → slot 1 ranged-value arc fill.
-                             startAngle=395°, endAngle computed: 395 - 70*(value/max).
-                             Counter-clockwise fill from right edge toward 325°.
-                             stroke thickness=8, cap=ROUND, color=themeColor[0] (accent). -->
+                    <PartDraw name="arc1_rv_fill" x="0" y="0" width="480" height="480">
+                        <!-- Provenance: base_0.apk → q1 ranged fill CLOCKWISE from 15° -->
                         <Arc centerX="240" centerY="240" width="480" height="480"
-                             startAngle="395" endAngle="395" direction="COUNTER_CLOCKWISE">
+                             startAngle="15" endAngle="15" direction="CLOCKWISE">
                             <Transform target="endAngle"
-                                       value="[COMPLICATION.RANGED_VALUE_MAX] &gt; 0 ? (395 - 70 * ([COMPLICATION.RANGED_VALUE_VALUE] / [COMPLICATION.RANGED_VALUE_MAX])) : 395" />
+                                value="[COMPLICATION.RANGED_VALUE_MAX] &gt; 0 ? (15 + 60 * ([COMPLICATION.RANGED_VALUE_VALUE] / [COMPLICATION.RANGED_VALUE_MAX])) : 15" />
                             <Stroke color="[CONFIGURATION.themeColor.0]" thickness="8" cap="ROUND" />
                         </Arc>
                     </PartDraw>
                     <Condition>
                         <Expressions>
-                            <Expression name="has_img"><![CDATA[[COMPLICATION.ICON] != null]]></Expression>
+                            <Expression name="arc1_rv_has_icon"><![CDATA[[COMPLICATION.MONOCHROMATIC_IMAGE] != null]]></Expression>
                         </Expressions>
-                        <Compare expression="has_img">
-                            <!-- Provenance: base_0.apk → slot 1 icon x=375 y=110 w=22 h=22. -->
-                            <PartImage x="375" y="110" width="22" height="22">
-                                <Image resource="[COMPLICATION.ICON]" tintColor="[CONFIGURATION.themeColor.0]" />
+                        <Compare expression="arc1_rv_has_icon">
+                            <PartImage name="arc1_rv_icon" x="375" y="80" width="22" height="22">
+                                <Image resource="[COMPLICATION.MONOCHROMATIC_IMAGE]"
+                                       tintColor="[CONFIGURATION.themeColor.0]" />
                             </PartImage>
                         </Compare>
                     </Condition>
-                    <!-- Samsung One UI 8 AOD refresh workaround. -->
-                    <PartText x="0" y="0" width="0" height="0" alpha="0">
+                    <!-- Samsung One UI 8 AOD refresh workaround -->
+                    <PartText name="arc1_rv_aod_refresh" x="0" y="0" width="1" height="1" alpha="0">
                         <Text align="START">
                             <Font family="google_sans_flex_450" size="1" color="#00000000">
                                 <Template><![CDATA[%d]]>
@@ -786,60 +569,51 @@
             </Complication>
         </ComplicationSlot>
 
-
-        <!-- Complication Slot 2 — Bottom-Left Arc.
-             Provenance: base_0.apk → assets/modular/symbols/complications.defs
-             ComplicationArc id='complication-5' class='q3' (bottom-left quadrant).
-             slotId:          2
-             displayName:     @string/arc_bottom_left ("Bottom Left Arc")
-             supportedTypes:  RANGED_VALUE, SHORT_TEXT, EMPTY
-             defaultProvider: DAY_AND_DATE (SHORT_TEXT)
-             Slot bounds:     x=0, y=0, width=480, height=480 (full canvas)
-             BoundingArc:     centerX=240, centerY=240, width=480, height=480
-                              startAngle=235°, endAngle=305°, thickness=30
-                              (70° sweep, lower-left quadrant)
-             Arc fill sweep:  startAngle=305°, endAngle computed (counter-clockwise toward 235°)
-             Text arc:        startAngle=290°, endAngle=235°, align=START, COUNTER_CLOCKWISE
-             Icon position:   x=268, y=405, width=22, height=22 -->
-        <ComplicationSlot slotId="2" x="0" y="0" width="480" height="480"
-                          supportedTypes="RANGED_VALUE SHORT_TEXT EMPTY"
-                          displayName="@string/arc_bottom_left">
-            <!-- Provenance: base_0.apk → default DAY_AND_DATE SHORT_TEXT for bottom-left arc. -->
+        <!-- ============================================================
+             COMPLICATION SLOT 2 — Bottom-Left Arc (SW).
+             Provenance: base_0.apk → complications.defs complication-5 class='q3'.
+             q3 { angle:180; flipped:true; } → WFF 195°–255°. Text COUNTER_CLOCKWISE.
+             Default: DAY_AND_DATE.
+             ============================================================ -->
+        <ComplicationSlot slotId="2" name="bottom_left_arc"
+            x="0" y="0" width="480" height="480"
+            supportedTypes="RANGED_VALUE SHORT_TEXT EMPTY"
+            displayName="@string/arc_bottom_left">
             <DefaultProviderPolicy defaultSystemProvider="DAY_AND_DATE"
                                    defaultSystemProviderType="SHORT_TEXT" />
-            <!-- Provenance: base_0.apk → BoundingArc center=240,240 w=480 h=480
-                 startAngle=235° endAngle=305° thickness=30. -->
             <BoundingArc centerX="240" centerY="240" width="480" height="480"
-                         thickness="30" startAngle="235" endAngle="305" />
+                         thickness="30" startAngle="195" endAngle="255" />
 
             <Complication type="SHORT_TEXT">
-                <Group name="arc_interactive" alpha="255" x="0" y="0" width="480" height="480">
-                    <Variant mode="AMBIENT" target="alpha" value="0" duration="0.0" />
-                    <Transform target="alpha" value="[CONFIGURATION.layoutStyle] == 1 || [CONFIGURATION.layoutStyle] == 3 ? 255 : 0" />
-                    <PartText x="0" y="0" width="480" height="480">
-                        <!-- Provenance: base_0.apk → slot 2 TextCircular startAngle=290° endAngle=235° align=START COUNTER_CLOCKWISE. -->
+                <Group name="arc_slot2_short_text" x="0" y="0" width="480" height="480" alpha="255">
+                    <Variant mode="AMBIENT" target="alpha" value="0" />
+                    <Transform target="alpha"
+                        value="[CONFIGURATION.layoutStyle] == 1 || [CONFIGURATION.layoutStyle] == 3 ? 255 : 0" />
+                    <PartText name="arc2_st_text" x="0" y="0" width="480" height="480">
+                        <!-- Provenance: base_0.apk → q3 text COUNTER_CLOCKWISE 255°→195° (flipped) -->
                         <TextCircular centerX="240" centerY="240" width="440" height="440"
-                                      startAngle="290" endAngle="235"
+                                      startAngle="255" endAngle="195"
                                       direction="COUNTER_CLOCKWISE" align="START">
-                            <!-- Provenance: base_0.apk → ComplicationArc textArc { font-family:'GoogleSansFlex-700_RW100'; font-size:24; } -->
-                            <Font family="google_sans_flex_700" size="20" color="#ffffffff">
-                                <Template><![CDATA[%s]]><Parameter expression="[COMPLICATION.TEXT]" /></Template>
+                            <Font family="google_sans_flex_700" size="24" color="#ffffffff">
+                                <Template><![CDATA[%s]]>
+                                    <Parameter expression="[COMPLICATION.TEXT]" />
+                                </Template>
                             </Font>
                         </TextCircular>
                     </PartText>
                     <Condition>
                         <Expressions>
-                            <Expression name="has_img"><![CDATA[[COMPLICATION.ICON] != null]]></Expression>
+                            <Expression name="arc2_st_has_icon"><![CDATA[[COMPLICATION.MONOCHROMATIC_IMAGE] != null]]></Expression>
                         </Expressions>
-                        <Compare expression="has_img">
-                            <!-- Provenance: base_0.apk → slot 2 icon x=268 y=405 w=22 h=22. -->
-                            <PartImage x="268" y="405" width="22" height="22">
-                                <Image resource="[COMPLICATION.ICON]" tintColor="[CONFIGURATION.themeColor.0]" />
+                        <Compare expression="arc2_st_has_icon">
+                            <PartImage name="arc2_st_icon" x="190" y="390" width="22" height="22">
+                                <Image resource="[COMPLICATION.MONOCHROMATIC_IMAGE]"
+                                       tintColor="[CONFIGURATION.themeColor.0]" />
                             </PartImage>
                         </Compare>
                     </Condition>
-                    <!-- Samsung One UI 8 AOD refresh workaround. -->
-                    <PartText x="0" y="0" width="0" height="0" alpha="0">
+                    <!-- Samsung One UI 8 AOD refresh workaround -->
+                    <PartText name="arc2_st_aod_refresh" x="0" y="0" width="1" height="1" alpha="0">
                         <Text align="START">
                             <Font family="google_sans_flex_450" size="1" color="#00000000">
                                 <Template><![CDATA[%d]]>
@@ -852,45 +626,43 @@
             </Complication>
 
             <Complication type="RANGED_VALUE">
-                <Group name="arc_interactive" alpha="255" x="0" y="0" width="480" height="480">
-                    <Variant mode="AMBIENT" target="alpha" value="0" duration="0.0" />
-                    <Transform target="alpha" value="[CONFIGURATION.layoutStyle] == 1 || [CONFIGURATION.layoutStyle] == 3 ? 255 : 0" />
-                    <PartText x="0" y="0" width="480" height="480">
-                        <!-- Provenance: base_0.apk → slot 2 TextCircular startAngle=290° endAngle=235° align=START COUNTER_CLOCKWISE. -->
+                <Group name="arc_slot2_ranged" x="0" y="0" width="480" height="480" alpha="255">
+                    <Variant mode="AMBIENT" target="alpha" value="0" />
+                    <Transform target="alpha"
+                        value="[CONFIGURATION.layoutStyle] == 1 || [CONFIGURATION.layoutStyle] == 3 ? 255 : 0" />
+                    <PartText name="arc2_rv_text" x="0" y="0" width="480" height="480">
                         <TextCircular centerX="240" centerY="240" width="440" height="440"
-                                      startAngle="290" endAngle="235"
+                                      startAngle="255" endAngle="195"
                                       direction="COUNTER_CLOCKWISE" align="START">
-                            <!-- Provenance: base_0.apk → ComplicationArc textArc { font-family:'GoogleSansFlex-700_RW100'; font-size:24; } -->
-                            <Font family="google_sans_flex_700" size="20" color="#ffffffff">
-                                <Template><![CDATA[%s]]><Parameter expression="[COMPLICATION.TEXT]" /></Template>
+                            <Font family="google_sans_flex_700" size="24" color="#ffffffff">
+                                <Template><![CDATA[%s]]>
+                                    <Parameter expression="[COMPLICATION.TEXT]" />
+                                </Template>
                             </Font>
                         </TextCircular>
                     </PartText>
-                    <PartDraw x="0" y="0" width="480" height="480">
-                        <!-- Provenance: base_0.apk → slot 2 ranged-value arc fill.
-                             startAngle=305°, endAngle computed: 305 - 70*(value/max).
-                             Counter-clockwise fill from bottom-left edge toward 235°.
-                             stroke thickness=8, cap=ROUND, color=themeColor[0] (accent). -->
+                    <PartDraw name="arc2_rv_fill" x="0" y="0" width="480" height="480">
+                        <!-- Provenance: base_0.apk → q3 ranged fill CLOCKWISE from 195° -->
                         <Arc centerX="240" centerY="240" width="480" height="480"
-                             startAngle="305" endAngle="305" direction="COUNTER_CLOCKWISE">
+                             startAngle="195" endAngle="195" direction="CLOCKWISE">
                             <Transform target="endAngle"
-                                       value="[COMPLICATION.RANGED_VALUE_MAX] &gt; 0 ? (305 - 70 * ([COMPLICATION.RANGED_VALUE_VALUE] / [COMPLICATION.RANGED_VALUE_MAX])) : 305" />
+                                value="[COMPLICATION.RANGED_VALUE_MAX] &gt; 0 ? (195 + 60 * ([COMPLICATION.RANGED_VALUE_VALUE] / [COMPLICATION.RANGED_VALUE_MAX])) : 195" />
                             <Stroke color="[CONFIGURATION.themeColor.0]" thickness="8" cap="ROUND" />
                         </Arc>
                     </PartDraw>
                     <Condition>
                         <Expressions>
-                            <Expression name="has_img"><![CDATA[[COMPLICATION.ICON] != null]]></Expression>
+                            <Expression name="arc2_rv_has_icon"><![CDATA[[COMPLICATION.MONOCHROMATIC_IMAGE] != null]]></Expression>
                         </Expressions>
-                        <Compare expression="has_img">
-                            <!-- Provenance: base_0.apk → slot 2 icon x=268 y=405 w=22 h=22. -->
-                            <PartImage x="268" y="405" width="22" height="22">
-                                <Image resource="[COMPLICATION.ICON]" tintColor="[CONFIGURATION.themeColor.0]" />
+                        <Compare expression="arc2_rv_has_icon">
+                            <PartImage name="arc2_rv_icon" x="190" y="390" width="22" height="22">
+                                <Image resource="[COMPLICATION.MONOCHROMATIC_IMAGE]"
+                                       tintColor="[CONFIGURATION.themeColor.0]" />
                             </PartImage>
                         </Compare>
                     </Condition>
-                    <!-- Samsung One UI 8 AOD refresh workaround. -->
-                    <PartText x="0" y="0" width="0" height="0" alpha="0">
+                    <!-- Samsung One UI 8 AOD refresh workaround -->
+                    <PartText name="arc2_rv_aod_refresh" x="0" y="0" width="1" height="1" alpha="0">
                         <Text align="START">
                             <Font family="google_sans_flex_450" size="1" color="#00000000">
                                 <Template><![CDATA[%d]]>
@@ -903,63 +675,51 @@
             </Complication>
         </ComplicationSlot>
 
-        <!-- Complication Slot 3 — Bottom-Right Arc.
-             Provenance: base_0.apk → assets/modular/symbols/complications.defs
-             ComplicationArc id='complication-6' class='q4' (bottom-right quadrant).
-             slotId:          3
-             displayName:     @string/arc_bottom_right ("Bottom Right Arc")
-             supportedTypes:  RANGED_VALUE, SHORT_TEXT, EMPTY
-             defaultProvider: WATCH_BATTERY (RANGED_VALUE)
-             Note: Slots 1 and 3 both default to WATCH_BATTERY — intentional symmetric pair.
-             The original Pixel Modular design places battery on both the top-right and
-             bottom-right arc positions. Users may reassign either slot freely.
-             Slot bounds:     x=0, y=0, width=480, height=480 (full canvas)
-             BoundingArc:     centerX=240, centerY=240, width=480, height=480
-                              startAngle=55°, endAngle=125°, thickness=30
-                              (70° sweep, lower-right quadrant)
-             Arc fill sweep:  startAngle=125°, endAngle computed (counter-clockwise toward 55°)
-             Text arc:        startAngle=70°, endAngle=125°, align=END, COUNTER_CLOCKWISE
-             Icon position:   x=190, y=405, width=22, height=22 -->
-        <ComplicationSlot slotId="3" x="0" y="0" width="480" height="480"
-                          supportedTypes="RANGED_VALUE SHORT_TEXT EMPTY"
-                          displayName="@string/arc_bottom_right">
-            <!-- Provenance: base_0.apk → default WATCH_BATTERY RANGED_VALUE for bottom-right arc.
-                 Intentional duplicate of Slot 1 default — symmetric arc pair design. -->
+        <!-- ============================================================
+             COMPLICATION SLOT 3 — Bottom-Right Arc (SE).
+             Provenance: base_0.apk → complications.defs complication-4 class='q2'.
+             q2 { angle:90; flipped:true; } → WFF 105°–165°. Text COUNTER_CLOCKWISE.
+             Default: WATCH_BATTERY.
+             ============================================================ -->
+        <ComplicationSlot slotId="3" name="bottom_right_arc"
+            x="0" y="0" width="480" height="480"
+            supportedTypes="RANGED_VALUE SHORT_TEXT EMPTY"
+            displayName="@string/arc_bottom_right">
             <DefaultProviderPolicy defaultSystemProvider="WATCH_BATTERY"
                                    defaultSystemProviderType="RANGED_VALUE" />
-            <!-- Provenance: base_0.apk → BoundingArc center=240,240 w=480 h=480
-                 startAngle=55° endAngle=125° thickness=30. -->
             <BoundingArc centerX="240" centerY="240" width="480" height="480"
-                         thickness="30" startAngle="55" endAngle="125" />
+                         thickness="30" startAngle="105" endAngle="165" />
 
             <Complication type="SHORT_TEXT">
-                <Group name="arc_interactive" alpha="255" x="0" y="0" width="480" height="480">
-                    <Variant mode="AMBIENT" target="alpha" value="0" duration="0.0" />
-                    <Transform target="alpha" value="[CONFIGURATION.layoutStyle] == 1 || [CONFIGURATION.layoutStyle] == 3 ? 255 : 0" />
-                    <PartText x="0" y="0" width="480" height="480">
-                        <!-- Provenance: base_0.apk → slot 3 TextCircular startAngle=70° endAngle=125° align=END COUNTER_CLOCKWISE. -->
+                <Group name="arc_slot3_short_text" x="0" y="0" width="480" height="480" alpha="255">
+                    <Variant mode="AMBIENT" target="alpha" value="0" />
+                    <Transform target="alpha"
+                        value="[CONFIGURATION.layoutStyle] == 1 || [CONFIGURATION.layoutStyle] == 3 ? 255 : 0" />
+                    <PartText name="arc3_st_text" x="0" y="0" width="480" height="480">
+                        <!-- Provenance: base_0.apk → q2 text COUNTER_CLOCKWISE 165°→105° (flipped) -->
                         <TextCircular centerX="240" centerY="240" width="440" height="440"
-                                      startAngle="70" endAngle="125"
-                                      direction="COUNTER_CLOCKWISE" align="END">
-                            <!-- Provenance: base_0.apk → ComplicationArc textArc { font-family:'GoogleSansFlex-700_RW100'; font-size:24; } -->
-                            <Font family="google_sans_flex_700" size="20" color="#ffffffff">
-                                <Template><![CDATA[%s]]><Parameter expression="[COMPLICATION.TEXT]" /></Template>
+                                      startAngle="165" endAngle="105"
+                                      direction="COUNTER_CLOCKWISE" align="START">
+                            <Font family="google_sans_flex_700" size="24" color="#ffffffff">
+                                <Template><![CDATA[%s]]>
+                                    <Parameter expression="[COMPLICATION.TEXT]" />
+                                </Template>
                             </Font>
                         </TextCircular>
                     </PartText>
                     <Condition>
                         <Expressions>
-                            <Expression name="has_img"><![CDATA[[COMPLICATION.ICON] != null]]></Expression>
+                            <Expression name="arc3_st_has_icon"><![CDATA[[COMPLICATION.MONOCHROMATIC_IMAGE] != null]]></Expression>
                         </Expressions>
-                        <Compare expression="has_img">
-                            <!-- Provenance: base_0.apk → slot 3 icon x=190 y=405 w=22 h=22. -->
-                            <PartImage x="190" y="405" width="22" height="22">
-                                <Image resource="[COMPLICATION.ICON]" tintColor="[CONFIGURATION.themeColor.0]" />
+                        <Compare expression="arc3_st_has_icon">
+                            <PartImage name="arc3_st_icon" x="290" y="390" width="22" height="22">
+                                <Image resource="[COMPLICATION.MONOCHROMATIC_IMAGE]"
+                                       tintColor="[CONFIGURATION.themeColor.0]" />
                             </PartImage>
                         </Compare>
                     </Condition>
-                    <!-- Samsung One UI 8 AOD refresh workaround. -->
-                    <PartText x="0" y="0" width="0" height="0" alpha="0">
+                    <!-- Samsung One UI 8 AOD refresh workaround -->
+                    <PartText name="arc3_st_aod_refresh" x="0" y="0" width="1" height="1" alpha="0">
                         <Text align="START">
                             <Font family="google_sans_flex_450" size="1" color="#00000000">
                                 <Template><![CDATA[%d]]>
@@ -972,45 +732,43 @@
             </Complication>
 
             <Complication type="RANGED_VALUE">
-                <Group name="arc_interactive" alpha="255" x="0" y="0" width="480" height="480">
-                    <Variant mode="AMBIENT" target="alpha" value="0" duration="0.0" />
-                    <Transform target="alpha" value="[CONFIGURATION.layoutStyle] == 1 || [CONFIGURATION.layoutStyle] == 3 ? 255 : 0" />
-                    <PartText x="0" y="0" width="480" height="480">
-                        <!-- Provenance: base_0.apk → slot 3 TextCircular startAngle=70° endAngle=125° align=END COUNTER_CLOCKWISE. -->
+                <Group name="arc_slot3_ranged" x="0" y="0" width="480" height="480" alpha="255">
+                    <Variant mode="AMBIENT" target="alpha" value="0" />
+                    <Transform target="alpha"
+                        value="[CONFIGURATION.layoutStyle] == 1 || [CONFIGURATION.layoutStyle] == 3 ? 255 : 0" />
+                    <PartText name="arc3_rv_text" x="0" y="0" width="480" height="480">
                         <TextCircular centerX="240" centerY="240" width="440" height="440"
-                                      startAngle="70" endAngle="125"
-                                      direction="COUNTER_CLOCKWISE" align="END">
-                            <!-- Provenance: base_0.apk → ComplicationArc textArc { font-family:'GoogleSansFlex-700_RW100'; font-size:24; } -->
-                            <Font family="google_sans_flex_700" size="20" color="#ffffffff">
-                                <Template><![CDATA[%s]]><Parameter expression="[COMPLICATION.TEXT]" /></Template>
+                                      startAngle="165" endAngle="105"
+                                      direction="COUNTER_CLOCKWISE" align="START">
+                            <Font family="google_sans_flex_700" size="24" color="#ffffffff">
+                                <Template><![CDATA[%s]]>
+                                    <Parameter expression="[COMPLICATION.TEXT]" />
+                                </Template>
                             </Font>
                         </TextCircular>
                     </PartText>
-                    <PartDraw x="0" y="0" width="480" height="480">
-                        <!-- Provenance: base_0.apk → slot 3 ranged-value arc fill.
-                             startAngle=125°, endAngle computed: 125 - 70*(value/max).
-                             Counter-clockwise fill from bottom-right edge toward 55°.
-                             stroke thickness=8, cap=ROUND, color=themeColor[0] (accent). -->
+                    <PartDraw name="arc3_rv_fill" x="0" y="0" width="480" height="480">
+                        <!-- Provenance: base_0.apk → q2 ranged fill CLOCKWISE from 105° -->
                         <Arc centerX="240" centerY="240" width="480" height="480"
-                             startAngle="125" endAngle="125" direction="COUNTER_CLOCKWISE">
+                             startAngle="105" endAngle="105" direction="CLOCKWISE">
                             <Transform target="endAngle"
-                                       value="[COMPLICATION.RANGED_VALUE_MAX] &gt; 0 ? (125 - 70 * ([COMPLICATION.RANGED_VALUE_VALUE] / [COMPLICATION.RANGED_VALUE_MAX])) : 125" />
+                                value="[COMPLICATION.RANGED_VALUE_MAX] &gt; 0 ? (105 + 60 * ([COMPLICATION.RANGED_VALUE_VALUE] / [COMPLICATION.RANGED_VALUE_MAX])) : 105" />
                             <Stroke color="[CONFIGURATION.themeColor.0]" thickness="8" cap="ROUND" />
                         </Arc>
                     </PartDraw>
                     <Condition>
                         <Expressions>
-                            <Expression name="has_img"><![CDATA[[COMPLICATION.ICON] != null]]></Expression>
+                            <Expression name="arc3_rv_has_icon"><![CDATA[[COMPLICATION.MONOCHROMATIC_IMAGE] != null]]></Expression>
                         </Expressions>
-                        <Compare expression="has_img">
-                            <!-- Provenance: base_0.apk → slot 3 icon x=190 y=405 w=22 h=22. -->
-                            <PartImage x="190" y="405" width="22" height="22">
-                                <Image resource="[COMPLICATION.ICON]" tintColor="[CONFIGURATION.themeColor.0]" />
+                        <Compare expression="arc3_rv_has_icon">
+                            <PartImage name="arc3_rv_icon" x="290" y="390" width="22" height="22">
+                                <Image resource="[COMPLICATION.MONOCHROMATIC_IMAGE]"
+                                       tintColor="[CONFIGURATION.themeColor.0]" />
                             </PartImage>
                         </Compare>
                     </Condition>
-                    <!-- Samsung One UI 8 AOD refresh workaround. -->
-                    <PartText x="0" y="0" width="0" height="0" alpha="0">
+                    <!-- Samsung One UI 8 AOD refresh workaround -->
+                    <PartText name="arc3_rv_aod_refresh" x="0" y="0" width="1" height="1" alpha="0">
                         <Text align="START">
                             <Font family="google_sans_flex_450" size="1" color="#00000000">
                                 <Template><![CDATA[%d]]>
@@ -1024,204 +782,281 @@
         </ComplicationSlot>
 
 
-        <!-- Complication Slot 4 — Bulb Bottom-Left / Linear Row 1.
-             Provenance: base_0.apk → ComplicationBulb#complication-0/7 and
-             ComplicationLinear#complication-10/18.
-             slotId:          4
-             displayName:     @string/bottom_left_complication
-             supportedTypes:  SHORT_TEXT, RANGED_VALUE, SMALL_IMAGE, EMPTY
-             defaultProvider: SUNRISE_SUNSET (SHORT_TEXT)
-             Base slot bounds: x=39, y=263, width=120, height=120 (bulb mode).
-             BoundingRoundBox: x=0, y=0, width=120, height=120, cornerRadius=18.
-             Note: BoundingRoundBox matches the base slot size. In WFF 4, complication
-             slot positions are fixed; layout-specific rendering is handled via
-             Condition expressions in the Scene. Oversized bounding areas cause
-             visible outline artifacts in the watch face editor.
-             Bulb icon: x=24, y=6, w=72, h=72. Bulb text: x=0, y=78, w=120, h=36.
-             Linear icon: x=0, y=4, w=28, h=28. Linear text: x=35, y=4, w=140, h=30.
-             Bulb ring: thickness=6, cap=ROUND. Linear line: thickness=4, cap=ROUND.
-             Provenance: base_0.apk → assets/modular/main.css
-             ComplicationBulb#complication-0 { x:39; y:263; width:120; height:120; } -->
-        <ComplicationSlot slotId="4" x="39" y="263" width="120" height="120"
-                          supportedTypes="SHORT_TEXT RANGED_VALUE SMALL_IMAGE EMPTY"
-                          displayName="@string/bottom_left_complication">
-            <!-- Provenance: base_0.apk → default SUNRISE_SUNSET SHORT_TEXT for bottom-left bulb. -->
-            <DefaultProviderPolicy defaultSystemProvider="SUNRISE_SUNSET"
-                                   defaultSystemProviderType="SHORT_TEXT" />
-            <!-- Provenance: base_0.apk → BoundingRoundBox matches slot base size 120×120.
-                 cornerRadius=18 matches ComplicationBulb rounded corner style.
-                 WFF 4 ref: BoundingRoundBox element in boundingElement.xsd. -->
-            <BoundingRoundBox x="0" y="0" width="120" height="120" cornerRadius="18" />
+        <!-- ============================================================
+             COMPLICATION SLOT 4 — Bottom-Left Bulb / Linear Row 1.
+             Provenance: base_0.apk → res/fD.xml slot4.
+             Bulb (Default/Arcs): x=39, y=263, w=120, h=120.
+             Linear row1: x=246, y=127, w=180, h=42.
+             Linear Arcs row1: x=242, y=142, w=160, h=35.
+             Default: WATCH_BATTERY.
+             ============================================================ -->
+        <ComplicationSlot slotId="4" name="bottom_left_bulb"
+            x="39" y="263" width="120" height="120"
+            supportedTypes="RANGED_VALUE SHORT_TEXT SMALL_IMAGE EMPTY"
+            displayName="@string/bottom_left_complication">
+            <DefaultProviderPolicy defaultSystemProvider="WATCH_BATTERY"
+                                   defaultSystemProviderType="RANGED_VALUE" />
 
+            <!-- BULB layout: SHORT_TEXT -->
             <Complication type="SHORT_TEXT">
-                <!-- Bulb view — shown in layoutStyle 0 (Default) and 1 (Default Arcs). -->
-                <Group name="bulb_interactive" alpha="255" x="0" y="0" width="120" height="120">
-                    <Variant mode="AMBIENT" target="alpha" value="0" duration="0.0" />
-                    <Transform target="alpha" value="[CONFIGURATION.layoutStyle] == 0 || [CONFIGURATION.layoutStyle] == 1 ? 255 : 0" />
-                    <!-- Provenance: base_0.apk → slot 4 bulb text x=0 y=78 w=120 h=36. -->
-                    <PartText x="0" y="78" width="120" height="36">
+                <Group name="bulb4_short_text" x="39" y="263" width="120" height="120" alpha="255">
+                    <Variant mode="AMBIENT" target="alpha" value="0" />
+                    <!-- Visible only in bulb layouts (0,1) -->
+                    <Transform target="alpha"
+                        value="[CONFIGURATION.layoutStyle] == 0 || [CONFIGURATION.layoutStyle] == 1 ? 255 : 0" />
+                    <!-- Bulb ring. Provenance: base_0.apk → .bulb-ring { thickness:6; cap:ROUND; } -->
+                    <PartDraw name="bulb4_st_ring" x="0" y="0" width="120" height="120">
+                        <Arc centerX="60" centerY="60" width="120" height="120"
+                             startAngle="0" endAngle="360" direction="CLOCKWISE">
+                            <Stroke color="[CONFIGURATION.themeColor.2]" thickness="6" cap="ROUND" />
+                        </Arc>
+                    </PartDraw>
+                    <!-- Bulb icon. Provenance: base_0.apk → .bulb-icon { x:24; y:6; w:72; h:72; } -->
+                    <Condition>
+                        <Expressions>
+                            <Expression name="bulb4_st_has_icon"><![CDATA[[COMPLICATION.MONOCHROMATIC_IMAGE] != null]]></Expression>
+                        </Expressions>
+                        <Compare expression="bulb4_st_has_icon">
+                            <PartImage name="bulb4_st_icon" x="24" y="6" width="72" height="72">
+                                <Image resource="[COMPLICATION.MONOCHROMATIC_IMAGE]"
+                                       tintColor="[CONFIGURATION.themeColor.0]" />
+                            </PartImage>
+                        </Compare>
+                    </Condition>
+                    <!-- Bulb text. Provenance: base_0.apk → .bulb-text { y:78; size:36; } -->
+                    <PartText name="bulb4_st_label" x="0" y="78" width="120" height="36">
                         <Text align="CENTER">
-                            <Font family="google_sans_flex_450" size="16" color="#ffffffff">
-                                <Template><![CDATA[%s]]><Parameter expression="[COMPLICATION.TEXT]" /></Template>
+                            <Font family="google_sans_flex_700" size="36" color="#ffffffff">
+                                <Template><![CDATA[%s]]>
+                                    <Parameter expression="[COMPLICATION.TEXT]" />
+                                </Template>
                             </Font>
                         </Text>
                     </PartText>
-                    <Condition>
-                        <Expressions>
-                            <Expression name="has_img"><![CDATA[[COMPLICATION.ICON] != null]]></Expression>
-                        </Expressions>
-                        <Compare expression="has_img">
-                            <!-- Provenance: base_0.apk → slot 4 bulb icon x=24 y=6 w=72 h=72. -->
-                            <PartImage x="24" y="6" width="72" height="72">
-                                <Image resource="[COMPLICATION.ICON]" tintColor="[CONFIGURATION.themeColor.0]" />
-                            </PartImage>
-                        </Compare>
-                    </Condition>
-                    <!-- Samsung One UI 8 AOD refresh workaround. -->
-                    <PartText x="0" y="0" width="0" height="0" alpha="0">
+                    <!-- Samsung One UI 8 AOD refresh workaround -->
+                    <PartText name="bulb4_st_aod_refresh" x="0" y="0" width="1" height="1" alpha="0">
                         <Text align="START">
                             <Font family="google_sans_flex_450" size="1" color="#00000000">
-                                <Template><![CDATA[%d]]><Parameter expression="[COMPLICATION.LAST_UPDATE_TIME]" /></Template>
-                            </Font>
-                        </Text>
-                    </PartText>
-                </Group>
-                <!-- Linear view — shown in layoutStyle 2 (Linear) and 3 (Linear Arcs). -->
-                <Group name="linear_interactive" alpha="255" x="0" y="0" width="120" height="120">
-                    <Variant mode="AMBIENT" target="alpha" value="0" duration="0.0" />
-                    <Transform target="alpha" value="[CONFIGURATION.layoutStyle] == 2 || [CONFIGURATION.layoutStyle] == 3 ? 255 : 0" />
-                    <!-- Provenance: base_0.apk → slot 4 linear text x=35 y=4 w=140 h=30. -->
-                    <PartText x="35" y="4" width="140" height="30">
-                        <Text align="START">
-                            <Font family="google_sans_flex_450" size="20" color="#ffffffff">
-                                <Template><![CDATA[%s]]><Parameter expression="[COMPLICATION.TEXT]" /></Template>
-                            </Font>
-                        </Text>
-                    </PartText>
-                    <Condition>
-                        <Expressions>
-                            <Expression name="has_img"><![CDATA[[COMPLICATION.ICON] != null]]></Expression>
-                        </Expressions>
-                        <Compare expression="has_img">
-                            <!-- Provenance: base_0.apk → slot 4 linear icon x=0 y=4 w=28 h=28. -->
-                            <PartImage x="0" y="4" width="28" height="28">
-                                <Image resource="[COMPLICATION.ICON]" tintColor="[CONFIGURATION.themeColor.0]" />
-                            </PartImage>
-                        </Compare>
-                    </Condition>
-                    <!-- Samsung One UI 8 AOD refresh workaround. -->
-                    <PartText x="0" y="0" width="0" height="0" alpha="0">
-                        <Text align="START">
-                            <Font family="google_sans_flex_450" size="1" color="#00000000">
-                                <Template><![CDATA[%d]]><Parameter expression="[COMPLICATION.LAST_UPDATE_TIME]" /></Template>
+                                <Template><![CDATA[%d]]>
+                                    <Parameter expression="[COMPLICATION.LAST_UPDATE_TIME]" />
+                                </Template>
                             </Font>
                         </Text>
                     </PartText>
                 </Group>
             </Complication>
 
+            <!-- BULB layout: RANGED_VALUE -->
             <Complication type="RANGED_VALUE">
-                <!-- Bulb view with progress ring. -->
-                <Group name="bulb_interactive" alpha="255" x="0" y="0" width="120" height="120">
-                    <Variant mode="AMBIENT" target="alpha" value="0" duration="0.0" />
-                    <Transform target="alpha" value="[CONFIGURATION.layoutStyle] == 0 || [CONFIGURATION.layoutStyle] == 1 ? 255 : 0" />
-                    <!-- Provenance: base_0.apk → slot 4 bulb text x=0 y=78 w=120 h=36. -->
-                    <PartText x="0" y="78" width="120" height="36">
-                        <Text align="CENTER">
-                            <Font family="google_sans_flex_450" size="16" color="#ffffffff">
-                                <Template><![CDATA[%s]]><Parameter expression="[COMPLICATION.TEXT]" /></Template>
-                            </Font>
-                        </Text>
-                    </PartText>
-                    <Condition>
-                        <Expressions>
-                            <Expression name="has_img"><![CDATA[[COMPLICATION.ICON] != null]]></Expression>
-                        </Expressions>
-                        <Compare expression="has_img">
-                            <!-- Provenance: base_0.apk → slot 4 bulb icon x=24 y=6 w=72 h=72. -->
-                            <PartImage x="24" y="6" width="72" height="72">
-                                <Image resource="[COMPLICATION.ICON]" tintColor="[CONFIGURATION.themeColor.0]" />
-                            </PartImage>
-                        </Compare>
-                    </Condition>
-                    <!-- Provenance: base_0.apk → slot 4 bulb progress ring.
-                         centerX=60, centerY=60 (center of 120×120 slot).
-                         startAngle=0°, endAngle=360*(value/max).
-                         stroke thickness=6, cap=ROUND, color=themeColor[0]. -->
-                    <PartDraw x="0" y="0" width="120" height="120">
+                <Group name="bulb4_ranged" x="39" y="263" width="120" height="120" alpha="255">
+                    <Variant mode="AMBIENT" target="alpha" value="0" />
+                    <Transform target="alpha"
+                        value="[CONFIGURATION.layoutStyle] == 0 || [CONFIGURATION.layoutStyle] == 1 ? 255 : 0" />
+                    <!-- Bulb ring track -->
+                    <PartDraw name="bulb4_rv_ring_track" x="0" y="0" width="120" height="120">
                         <Arc centerX="60" centerY="60" width="120" height="120"
-                             startAngle="0" endAngle="0" direction="CLOCKWISE">
+                             startAngle="0" endAngle="360" direction="CLOCKWISE">
+                            <Stroke color="[CONFIGURATION.themeColor.2]" thickness="6" cap="ROUND" />
+                        </Arc>
+                    </PartDraw>
+                    <!-- Bulb ring fill -->
+                    <PartDraw name="bulb4_rv_ring_fill" x="0" y="0" width="120" height="120">
+                        <Arc centerX="60" centerY="60" width="120" height="120"
+                             startAngle="270" endAngle="270" direction="CLOCKWISE">
                             <Transform target="endAngle"
-                                       value="[COMPLICATION.RANGED_VALUE_MAX] &gt; 0 ? (360 * ([COMPLICATION.RANGED_VALUE_VALUE] / [COMPLICATION.RANGED_VALUE_MAX])) : 0" />
+                                value="[COMPLICATION.RANGED_VALUE_MAX] &gt; 0 ? (270 + 360 * ([COMPLICATION.RANGED_VALUE_VALUE] / [COMPLICATION.RANGED_VALUE_MAX])) : 270" />
                             <Stroke color="[CONFIGURATION.themeColor.0]" thickness="6" cap="ROUND" />
                         </Arc>
                     </PartDraw>
-                    <!-- Samsung One UI 8 AOD refresh workaround. -->
-                    <PartText x="0" y="0" width="0" height="0" alpha="0">
-                        <Text align="START">
-                            <Font family="google_sans_flex_450" size="1" color="#00000000">
-                                <Template><![CDATA[%d]]><Parameter expression="[COMPLICATION.LAST_UPDATE_TIME]" /></Template>
-                            </Font>
-                        </Text>
-                    </PartText>
-                </Group>
-                <!-- Linear view with progress line. -->
-                <Group name="linear_interactive" alpha="255" x="0" y="0" width="120" height="120">
-                    <Variant mode="AMBIENT" target="alpha" value="0" duration="0.0" />
-                    <Transform target="alpha" value="[CONFIGURATION.layoutStyle] == 2 || [CONFIGURATION.layoutStyle] == 3 ? 255 : 0" />
-                    <!-- Provenance: base_0.apk → slot 4 linear text x=35 y=4 w=140 h=30. -->
-                    <PartText x="35" y="4" width="140" height="30">
-                        <Text align="START">
-                            <Font family="google_sans_flex_450" size="20" color="#ffffffff">
-                                <Template><![CDATA[%s]]><Parameter expression="[COMPLICATION.TEXT]" /></Template>
-                            </Font>
-                        </Text>
-                    </PartText>
+                    <!-- Bulb icon -->
                     <Condition>
                         <Expressions>
-                            <Expression name="has_img"><![CDATA[[COMPLICATION.ICON] != null]]></Expression>
+                            <Expression name="bulb4_rv_has_icon"><![CDATA[[COMPLICATION.MONOCHROMATIC_IMAGE] != null]]></Expression>
                         </Expressions>
-                        <Compare expression="has_img">
-                            <!-- Provenance: base_0.apk → slot 4 linear icon x=0 y=4 w=28 h=28. -->
-                            <PartImage x="0" y="4" width="28" height="28">
-                                <Image resource="[COMPLICATION.ICON]" tintColor="[CONFIGURATION.themeColor.0]" />
+                        <Compare expression="bulb4_rv_has_icon">
+                            <PartImage name="bulb4_rv_icon" x="24" y="6" width="72" height="72">
+                                <Image resource="[COMPLICATION.MONOCHROMATIC_IMAGE]"
+                                       tintColor="[CONFIGURATION.themeColor.0]" />
                             </PartImage>
                         </Compare>
                     </Condition>
-                    <!-- Provenance: base_0.apk → slot 4 linear progress line.
-                         startX=35, startY=40 (bottom of 42px row, after icon).
-                         endX computed: 35 + 140*(value/max).
-                         stroke thickness=4, cap=ROUND, color=themeColor[0]. -->
-                    <PartDraw x="0" y="0" width="180" height="42">
-                        <Line startX="35" startY="40" endX="35" endY="40">
-                            <Transform target="endX"
-                                       value="[COMPLICATION.RANGED_VALUE_MAX] &gt; 0 ? (35 + 140 * ([COMPLICATION.RANGED_VALUE_VALUE] / [COMPLICATION.RANGED_VALUE_MAX])) : 35" />
-                            <Stroke color="[CONFIGURATION.themeColor.0]" thickness="4" cap="ROUND" />
-                        </Line>
-                    </PartDraw>
-                    <!-- Samsung One UI 8 AOD refresh workaround. -->
-                    <PartText x="0" y="0" width="0" height="0" alpha="0">
+                    <!-- Bulb text -->
+                    <PartText name="bulb4_rv_label" x="0" y="78" width="120" height="36">
+                        <Text align="CENTER">
+                            <Font family="google_sans_flex_700" size="36" color="#ffffffff">
+                                <Template><![CDATA[%s]]>
+                                    <Parameter expression="[COMPLICATION.TEXT]" />
+                                </Template>
+                            </Font>
+                        </Text>
+                    </PartText>
+                    <!-- Samsung One UI 8 AOD refresh workaround -->
+                    <PartText name="bulb4_rv_aod_refresh" x="0" y="0" width="1" height="1" alpha="0">
                         <Text align="START">
                             <Font family="google_sans_flex_450" size="1" color="#00000000">
-                                <Template><![CDATA[%d]]><Parameter expression="[COMPLICATION.LAST_UPDATE_TIME]" /></Template>
+                                <Template><![CDATA[%d]]>
+                                    <Parameter expression="[COMPLICATION.LAST_UPDATE_TIME]" />
+                                </Template>
                             </Font>
                         </Text>
                     </PartText>
                 </Group>
             </Complication>
 
+            <!-- BULB layout: SMALL_IMAGE -->
             <Complication type="SMALL_IMAGE">
-                <Group name="small_image_content" alpha="255" x="0" y="0" width="120" height="120">
-                    <Variant mode="AMBIENT" target="alpha" value="0" duration="0.0" />
-                    <!-- Provenance: base_0.apk → slot 4 small image x=18 y=18 w=84 h=84 (centered in 120×120). -->
-                    <PartImage x="18" y="18" width="84" height="84">
+                <Group name="bulb4_small_image" x="39" y="263" width="120" height="120" alpha="255">
+                    <Variant mode="AMBIENT" target="alpha" value="0" />
+                    <Transform target="alpha"
+                        value="[CONFIGURATION.layoutStyle] == 0 || [CONFIGURATION.layoutStyle] == 1 ? 255 : 0" />
+                    <PartDraw name="bulb4_si_ring" x="0" y="0" width="120" height="120">
+                        <Arc centerX="60" centerY="60" width="120" height="120"
+                             startAngle="0" endAngle="360" direction="CLOCKWISE">
+                            <Stroke color="[CONFIGURATION.themeColor.2]" thickness="6" cap="ROUND" />
+                        </Arc>
+                    </PartDraw>
+                    <PartImage name="bulb4_si_img" x="24" y="6" width="72" height="72">
                         <Image resource="[COMPLICATION.SMALL_IMAGE]" />
                     </PartImage>
-                    <!-- Samsung One UI 8 AOD refresh workaround. -->
-                    <PartText x="0" y="0" width="0" height="0" alpha="0">
+                    <!-- Samsung One UI 8 AOD refresh workaround -->
+                    <PartText name="bulb4_si_aod_refresh" x="0" y="0" width="1" height="1" alpha="0">
                         <Text align="START">
                             <Font family="google_sans_flex_450" size="1" color="#00000000">
-                                <Template><![CDATA[%d]]><Parameter expression="[COMPLICATION.LAST_UPDATE_TIME]" /></Template>
+                                <Template><![CDATA[%d]]>
+                                    <Parameter expression="[COMPLICATION.LAST_UPDATE_TIME]" />
+                                </Template>
+                            </Font>
+                        </Text>
+                    </PartText>
+                </Group>
+            </Complication>
+
+            <!-- LINEAR layout: SHORT_TEXT
+                 Provenance: base_0.apk → linear row1 x=246,y=127,w=180,h=42 (linear) / x=242,y=142,w=160,h=35 (linear arcs) -->
+            <Complication type="SHORT_TEXT">
+                <Group name="linear4_short_text" x="246" y="127" width="180" height="42" alpha="255">
+                    <Variant mode="AMBIENT" target="alpha" value="0" />
+                    <Transform target="alpha"
+                        value="[CONFIGURATION.layoutStyle] == 2 || [CONFIGURATION.layoutStyle] == 3 ? 255 : 0" />
+                    <Transform target="x"
+                        value="[CONFIGURATION.layoutStyle] == 3 ? 242 : 246" />
+                    <Transform target="y"
+                        value="[CONFIGURATION.layoutStyle] == 3 ? 142 : 127" />
+                    <Transform target="width"
+                        value="[CONFIGURATION.layoutStyle] == 3 ? 160 : 180" />
+                    <Transform target="height"
+                        value="[CONFIGURATION.layoutStyle] == 3 ? 35 : 42" />
+                    <!-- Linear icon. Provenance: base_0.apk → .linear-icon { x:0; y:4; w:28; h:28; } -->
+                    <Condition>
+                        <Expressions>
+                            <Expression name="lin4_st_has_icon"><![CDATA[[COMPLICATION.MONOCHROMATIC_IMAGE] != null]]></Expression>
+                        </Expressions>
+                        <Compare expression="lin4_st_has_icon">
+                            <PartImage name="lin4_st_icon" x="0" y="4" width="28" height="28">
+                                <Image resource="[COMPLICATION.MONOCHROMATIC_IMAGE]"
+                                       tintColor="[CONFIGURATION.themeColor.0]" />
+                            </PartImage>
+                        </Compare>
+                    </Condition>
+                    <!-- Linear text. Provenance: base_0.apk → .linear-text { x:35; y:4; w:140; h:30; size:32(linear)/28(arcs) } -->
+                    <PartText name="lin4_st_label" x="35" y="4" width="140" height="30">
+                        <Text align="START">
+                            <Font family="google_sans_flex_700" size="32" color="#ffffffff">
+                                <Transform target="size"
+                                    value="[CONFIGURATION.layoutStyle] == 3 ? 28 : 32" />
+                                <Template><![CDATA[%s]]>
+                                    <Parameter expression="[COMPLICATION.TEXT]" />
+                                </Template>
+                            </Font>
+                        </Text>
+                    </PartText>
+                    <!-- Samsung One UI 8 AOD refresh workaround -->
+                    <PartText name="lin4_st_aod_refresh" x="0" y="0" width="1" height="1" alpha="0">
+                        <Text align="START">
+                            <Font family="google_sans_flex_450" size="1" color="#00000000">
+                                <Template><![CDATA[%d]]>
+                                    <Parameter expression="[COMPLICATION.LAST_UPDATE_TIME]" />
+                                </Template>
+                            </Font>
+                        </Text>
+                    </PartText>
+                </Group>
+            </Complication>
+
+            <!-- LINEAR layout: RANGED_VALUE -->
+            <Complication type="RANGED_VALUE">
+                <Group name="linear4_ranged" x="246" y="127" width="180" height="42" alpha="255">
+                    <Variant mode="AMBIENT" target="alpha" value="0" />
+                    <Transform target="alpha"
+                        value="[CONFIGURATION.layoutStyle] == 2 || [CONFIGURATION.layoutStyle] == 3 ? 255 : 0" />
+                    <Transform target="x"
+                        value="[CONFIGURATION.layoutStyle] == 3 ? 242 : 246" />
+                    <Transform target="y"
+                        value="[CONFIGURATION.layoutStyle] == 3 ? 142 : 127" />
+                    <Transform target="width"
+                        value="[CONFIGURATION.layoutStyle] == 3 ? 160 : 180" />
+                    <Transform target="height"
+                        value="[CONFIGURATION.layoutStyle] == 3 ? 35 : 42" />
+                    <Condition>
+                        <Expressions>
+                            <Expression name="lin4_rv_has_icon"><![CDATA[[COMPLICATION.MONOCHROMATIC_IMAGE] != null]]></Expression>
+                        </Expressions>
+                        <Compare expression="lin4_rv_has_icon">
+                            <PartImage name="lin4_rv_icon" x="0" y="4" width="28" height="28">
+                                <Image resource="[COMPLICATION.MONOCHROMATIC_IMAGE]"
+                                       tintColor="[CONFIGURATION.themeColor.0]" />
+                            </PartImage>
+                        </Compare>
+                    </Condition>
+                    <PartText name="lin4_rv_label" x="35" y="4" width="140" height="30">
+                        <Text align="START">
+                            <Font family="google_sans_flex_700" size="32" color="#ffffffff">
+                                <Transform target="size"
+                                    value="[CONFIGURATION.layoutStyle] == 3 ? 28 : 32" />
+                                <Template><![CDATA[%s]]>
+                                    <Parameter expression="[COMPLICATION.TEXT]" />
+                                </Template>
+                            </Font>
+                        </Text>
+                    </PartText>
+                    <!-- Linear progress line. Provenance: base_0.apk → .linear-progress { startX:35; startY:40; thickness:4; cap:ROUND; } -->
+                    <PartDraw name="lin4_rv_progress_track" x="0" y="0" width="180" height="42">
+                        <Transform target="width"
+                            value="[CONFIGURATION.layoutStyle] == 3 ? 160 : 180" />
+                        <Transform target="height"
+                            value="[CONFIGURATION.layoutStyle] == 3 ? 35 : 42" />
+                        <Line startX="35" startY="40" endX="180" endY="40">
+                            <Transform target="endX"
+                                value="[CONFIGURATION.layoutStyle] == 3 ? 160 : 180" />
+                            <Transform target="startY"
+                                value="[CONFIGURATION.layoutStyle] == 3 ? 33 : 40" />
+                            <Transform target="endY"
+                                value="[CONFIGURATION.layoutStyle] == 3 ? 33 : 40" />
+                            <Stroke color="[CONFIGURATION.themeColor.2]" thickness="4" cap="ROUND" />
+                        </Line>
+                    </PartDraw>
+                    <PartDraw name="lin4_rv_progress_fill" x="0" y="0" width="180" height="42">
+                        <Transform target="width"
+                            value="[CONFIGURATION.layoutStyle] == 3 ? 160 : 180" />
+                        <Transform target="height"
+                            value="[CONFIGURATION.layoutStyle] == 3 ? 35 : 42" />
+                        <Line startX="35" startY="40" endX="35" endY="40">
+                            <Transform target="endX"
+                                value="[COMPLICATION.RANGED_VALUE_MAX] &gt; 0 ? (35 + ([CONFIGURATION.layoutStyle] == 3 ? 125 : 145) * ([COMPLICATION.RANGED_VALUE_VALUE] / [COMPLICATION.RANGED_VALUE_MAX])) : 35" />
+                            <Transform target="startY"
+                                value="[CONFIGURATION.layoutStyle] == 3 ? 33 : 40" />
+                            <Transform target="endY"
+                                value="[CONFIGURATION.layoutStyle] == 3 ? 33 : 40" />
+                            <Stroke color="[CONFIGURATION.themeColor.0]" thickness="4" cap="ROUND" />
+                        </Line>
+                    </PartDraw>
+                    <!-- Samsung One UI 8 AOD refresh workaround -->
+                    <PartText name="lin4_rv_aod_refresh" x="0" y="0" width="1" height="1" alpha="0">
+                        <Text align="START">
+                            <Font family="google_sans_flex_450" size="1" color="#00000000">
+                                <Template><![CDATA[%d]]>
+                                    <Parameter expression="[COMPLICATION.LAST_UPDATE_TIME]" />
+                                </Template>
                             </Font>
                         </Text>
                     </PartText>
@@ -1229,186 +1064,311 @@
             </Complication>
         </ComplicationSlot>
 
-        <!-- Complication Slot 5 — Bulb Bottom-Center / Linear Row 2.
-             Provenance: base_0.apk → ComplicationBulb#complication-1/8 and
-             ComplicationLinear#complication-11/19.
-             slotId:          5
-             displayName:     @string/bottom_center_shortcut ("Bottom Center")
-             supportedTypes:  SHORT_TEXT, RANGED_VALUE, SMALL_IMAGE, EMPTY
-             defaultProvider: APP_SHORTCUT (SMALL_IMAGE)
-             Base slot bounds: x=180, y=329, width=120, height=120 (bulb mode).
-             BoundingRoundBox: x=0, y=0, width=120, height=120, cornerRadius=18.
-             Layout overrides, icon/text positions, and stroke thicknesses are
-             identical to Slot 4. See Slot 4 documentation above.
-             Provenance: base_0.apk → ComplicationBulb#complication-1 { x:180; y:329; width:120; height:120; } -->
-        <ComplicationSlot slotId="5" x="180" y="329" width="120" height="120"
-                          supportedTypes="SHORT_TEXT RANGED_VALUE SMALL_IMAGE EMPTY"
-                          displayName="@string/bottom_center_shortcut">
-            <!-- Provenance: base_0.apk → default APP_SHORTCUT SMALL_IMAGE for bottom-center bulb. -->
+
+        <!-- ============================================================
+             COMPLICATION SLOT 5 — Bottom-Center Bulb / Linear Row 2.
+             Provenance: base_0.apk → res/fD.xml slot5.
+             Bulb (Default/Arcs): x=180, y=329, w=120, h=120.
+             Linear row2: x=246, y=184, w=180, h=42.
+             Linear Arcs row2: x=242, y=193, w=160, h=35.
+             Default: APP_SHORTCUT.
+             ============================================================ -->
+        <ComplicationSlot slotId="5" name="bottom_center_shortcut"
+            x="180" y="329" width="120" height="120"
+            supportedTypes="SHORT_TEXT RANGED_VALUE SMALL_IMAGE EMPTY"
+            displayName="@string/bottom_center_shortcut">
             <DefaultProviderPolicy defaultSystemProvider="APP_SHORTCUT"
                                    defaultSystemProviderType="SMALL_IMAGE" />
-            <!-- Provenance: base_0.apk → BoundingRoundBox matches slot base size 120×120. cornerRadius=18. -->
-            <BoundingRoundBox x="0" y="0" width="120" height="120" cornerRadius="18" />
 
+            <!-- BULB: SHORT_TEXT -->
             <Complication type="SHORT_TEXT">
-                <Group name="bulb_interactive" alpha="255" x="0" y="0" width="120" height="120">
-                    <Variant mode="AMBIENT" target="alpha" value="0" duration="0.0" />
-                    <Transform target="alpha" value="[CONFIGURATION.layoutStyle] == 0 || [CONFIGURATION.layoutStyle] == 1 ? 255 : 0" />
-                    <!-- Provenance: base_0.apk → slot 5 bulb text x=0 y=78 w=120 h=36. -->
-                    <PartText x="0" y="78" width="120" height="36">
+                <Group name="bulb5_short_text" x="180" y="329" width="120" height="120" alpha="255">
+                    <Variant mode="AMBIENT" target="alpha" value="0" />
+                    <Transform target="alpha"
+                        value="[CONFIGURATION.layoutStyle] == 0 || [CONFIGURATION.layoutStyle] == 1 ? 255 : 0" />
+                    <PartDraw name="bulb5_st_ring" x="0" y="0" width="120" height="120">
+                        <Arc centerX="60" centerY="60" width="120" height="120"
+                             startAngle="0" endAngle="360" direction="CLOCKWISE">
+                            <Stroke color="[CONFIGURATION.themeColor.2]" thickness="6" cap="ROUND" />
+                        </Arc>
+                    </PartDraw>
+                    <Condition>
+                        <Expressions>
+                            <Expression name="bulb5_st_has_icon"><![CDATA[[COMPLICATION.MONOCHROMATIC_IMAGE] != null]]></Expression>
+                        </Expressions>
+                        <Compare expression="bulb5_st_has_icon">
+                            <PartImage name="bulb5_st_icon" x="24" y="6" width="72" height="72">
+                                <Image resource="[COMPLICATION.MONOCHROMATIC_IMAGE]"
+                                       tintColor="[CONFIGURATION.themeColor.0]" />
+                            </PartImage>
+                        </Compare>
+                    </Condition>
+                    <PartText name="bulb5_st_label" x="0" y="78" width="120" height="36">
                         <Text align="CENTER">
-                            <Font family="google_sans_flex_450" size="16" color="#ffffffff">
-                                <Template><![CDATA[%s]]><Parameter expression="[COMPLICATION.TEXT]" /></Template>
+                            <Font family="google_sans_flex_700" size="36" color="#ffffffff">
+                                <Template><![CDATA[%s]]>
+                                    <Parameter expression="[COMPLICATION.TEXT]" />
+                                </Template>
                             </Font>
                         </Text>
                     </PartText>
-                    <Condition>
-                        <Expressions>
-                            <Expression name="has_img"><![CDATA[[COMPLICATION.ICON] != null]]></Expression>
-                        </Expressions>
-                        <Compare expression="has_img">
-                            <!-- Provenance: base_0.apk → slot 5 bulb icon x=24 y=6 w=72 h=72. -->
-                            <PartImage x="24" y="6" width="72" height="72">
-                                <Image resource="[COMPLICATION.ICON]" tintColor="[CONFIGURATION.themeColor.0]" />
-                            </PartImage>
-                        </Compare>
-                    </Condition>
-                    <!-- Samsung One UI 8 AOD refresh workaround. -->
-                    <PartText x="0" y="0" width="0" height="0" alpha="0">
+                    <!-- Samsung One UI 8 AOD refresh workaround -->
+                    <PartText name="bulb5_st_aod_refresh" x="0" y="0" width="1" height="1" alpha="0">
                         <Text align="START">
                             <Font family="google_sans_flex_450" size="1" color="#00000000">
-                                <Template><![CDATA[%d]]><Parameter expression="[COMPLICATION.LAST_UPDATE_TIME]" /></Template>
-                            </Font>
-                        </Text>
-                    </PartText>
-                </Group>
-                <Group name="linear_interactive" alpha="255" x="0" y="0" width="120" height="120">
-                    <Variant mode="AMBIENT" target="alpha" value="0" duration="0.0" />
-                    <Transform target="alpha" value="[CONFIGURATION.layoutStyle] == 2 || [CONFIGURATION.layoutStyle] == 3 ? 255 : 0" />
-                    <!-- Provenance: base_0.apk → slot 5 linear text x=35 y=4 w=140 h=30. -->
-                    <PartText x="35" y="4" width="140" height="30">
-                        <Text align="START">
-                            <Font family="google_sans_flex_450" size="20" color="#ffffffff">
-                                <Template><![CDATA[%s]]><Parameter expression="[COMPLICATION.TEXT]" /></Template>
-                            </Font>
-                        </Text>
-                    </PartText>
-                    <Condition>
-                        <Expressions>
-                            <Expression name="has_img"><![CDATA[[COMPLICATION.ICON] != null]]></Expression>
-                        </Expressions>
-                        <Compare expression="has_img">
-                            <!-- Provenance: base_0.apk → slot 5 linear icon x=0 y=4 w=28 h=28. -->
-                            <PartImage x="0" y="4" width="28" height="28">
-                                <Image resource="[COMPLICATION.ICON]" tintColor="[CONFIGURATION.themeColor.0]" />
-                            </PartImage>
-                        </Compare>
-                    </Condition>
-                    <!-- Samsung One UI 8 AOD refresh workaround. -->
-                    <PartText x="0" y="0" width="0" height="0" alpha="0">
-                        <Text align="START">
-                            <Font family="google_sans_flex_450" size="1" color="#00000000">
-                                <Template><![CDATA[%d]]><Parameter expression="[COMPLICATION.LAST_UPDATE_TIME]" /></Template>
+                                <Template><![CDATA[%d]]>
+                                    <Parameter expression="[COMPLICATION.LAST_UPDATE_TIME]" />
+                                </Template>
                             </Font>
                         </Text>
                     </PartText>
                 </Group>
             </Complication>
 
+            <!-- BULB: RANGED_VALUE -->
             <Complication type="RANGED_VALUE">
-                <Group name="bulb_interactive" alpha="255" x="0" y="0" width="120" height="120">
-                    <Variant mode="AMBIENT" target="alpha" value="0" duration="0.0" />
-                    <Transform target="alpha" value="[CONFIGURATION.layoutStyle] == 0 || [CONFIGURATION.layoutStyle] == 1 ? 255 : 0" />
-                    <!-- Provenance: base_0.apk → slot 5 bulb text x=0 y=78 w=120 h=36. -->
-                    <PartText x="0" y="78" width="120" height="36">
-                        <Text align="CENTER">
-                            <Font family="google_sans_flex_450" size="16" color="#ffffffff">
-                                <Template><![CDATA[%s]]><Parameter expression="[COMPLICATION.TEXT]" /></Template>
-                            </Font>
-                        </Text>
-                    </PartText>
-                    <Condition>
-                        <Expressions>
-                            <Expression name="has_img"><![CDATA[[COMPLICATION.ICON] != null]]></Expression>
-                        </Expressions>
-                        <Compare expression="has_img">
-                            <!-- Provenance: base_0.apk → slot 5 bulb icon x=24 y=6 w=72 h=72. -->
-                            <PartImage x="24" y="6" width="72" height="72">
-                                <Image resource="[COMPLICATION.ICON]" tintColor="[CONFIGURATION.themeColor.0]" />
-                            </PartImage>
-                        </Compare>
-                    </Condition>
-                    <!-- Provenance: base_0.apk → slot 5 bulb progress ring centerX=60 centerY=60 thickness=6. -->
-                    <PartDraw x="0" y="0" width="120" height="120">
+                <Group name="bulb5_ranged" x="180" y="329" width="120" height="120" alpha="255">
+                    <Variant mode="AMBIENT" target="alpha" value="0" />
+                    <Transform target="alpha"
+                        value="[CONFIGURATION.layoutStyle] == 0 || [CONFIGURATION.layoutStyle] == 1 ? 255 : 0" />
+                    <PartDraw name="bulb5_rv_ring_track" x="0" y="0" width="120" height="120">
                         <Arc centerX="60" centerY="60" width="120" height="120"
-                             startAngle="0" endAngle="0" direction="CLOCKWISE">
+                             startAngle="0" endAngle="360" direction="CLOCKWISE">
+                            <Stroke color="[CONFIGURATION.themeColor.2]" thickness="6" cap="ROUND" />
+                        </Arc>
+                    </PartDraw>
+                    <PartDraw name="bulb5_rv_ring_fill" x="0" y="0" width="120" height="120">
+                        <Arc centerX="60" centerY="60" width="120" height="120"
+                             startAngle="270" endAngle="270" direction="CLOCKWISE">
                             <Transform target="endAngle"
-                                       value="[COMPLICATION.RANGED_VALUE_MAX] &gt; 0 ? (360 * ([COMPLICATION.RANGED_VALUE_VALUE] / [COMPLICATION.RANGED_VALUE_MAX])) : 0" />
+                                value="[COMPLICATION.RANGED_VALUE_MAX] &gt; 0 ? (270 + 360 * ([COMPLICATION.RANGED_VALUE_VALUE] / [COMPLICATION.RANGED_VALUE_MAX])) : 270" />
                             <Stroke color="[CONFIGURATION.themeColor.0]" thickness="6" cap="ROUND" />
                         </Arc>
                     </PartDraw>
-                    <!-- Samsung One UI 8 AOD refresh workaround. -->
-                    <PartText x="0" y="0" width="0" height="0" alpha="0">
-                        <Text align="START">
-                            <Font family="google_sans_flex_450" size="1" color="#00000000">
-                                <Template><![CDATA[%d]]><Parameter expression="[COMPLICATION.LAST_UPDATE_TIME]" /></Template>
-                            </Font>
-                        </Text>
-                    </PartText>
-                </Group>
-                <Group name="linear_interactive" alpha="255" x="0" y="0" width="120" height="120">
-                    <Variant mode="AMBIENT" target="alpha" value="0" duration="0.0" />
-                    <Transform target="alpha" value="[CONFIGURATION.layoutStyle] == 2 || [CONFIGURATION.layoutStyle] == 3 ? 255 : 0" />
-                    <!-- Provenance: base_0.apk → slot 5 linear text x=35 y=4 w=140 h=30. -->
-                    <PartText x="35" y="4" width="140" height="30">
-                        <Text align="START">
-                            <Font family="google_sans_flex_450" size="20" color="#ffffffff">
-                                <Template><![CDATA[%s]]><Parameter expression="[COMPLICATION.TEXT]" /></Template>
-                            </Font>
-                        </Text>
-                    </PartText>
                     <Condition>
                         <Expressions>
-                            <Expression name="has_img"><![CDATA[[COMPLICATION.ICON] != null]]></Expression>
+                            <Expression name="bulb5_rv_has_icon"><![CDATA[[COMPLICATION.MONOCHROMATIC_IMAGE] != null]]></Expression>
                         </Expressions>
-                        <Compare expression="has_img">
-                            <!-- Provenance: base_0.apk → slot 5 linear icon x=0 y=4 w=28 h=28. -->
-                            <PartImage x="0" y="4" width="28" height="28">
-                                <Image resource="[COMPLICATION.ICON]" tintColor="[CONFIGURATION.themeColor.0]" />
+                        <Compare expression="bulb5_rv_has_icon">
+                            <PartImage name="bulb5_rv_icon" x="24" y="6" width="72" height="72">
+                                <Image resource="[COMPLICATION.MONOCHROMATIC_IMAGE]"
+                                       tintColor="[CONFIGURATION.themeColor.0]" />
                             </PartImage>
                         </Compare>
                     </Condition>
-                    <!-- Provenance: base_0.apk → slot 5 linear progress line startX=35 startY=40 thickness=4. -->
-                    <PartDraw x="0" y="0" width="180" height="42">
-                        <Line startX="35" startY="40" endX="35" endY="40">
-                            <Transform target="endX"
-                                       value="[COMPLICATION.RANGED_VALUE_MAX] &gt; 0 ? (35 + 140 * ([COMPLICATION.RANGED_VALUE_VALUE] / [COMPLICATION.RANGED_VALUE_MAX])) : 35" />
-                            <Stroke color="[CONFIGURATION.themeColor.0]" thickness="4" cap="ROUND" />
-                        </Line>
-                    </PartDraw>
-                    <!-- Samsung One UI 8 AOD refresh workaround. -->
-                    <PartText x="0" y="0" width="0" height="0" alpha="0">
+                    <PartText name="bulb5_rv_label" x="0" y="78" width="120" height="36">
+                        <Text align="CENTER">
+                            <Font family="google_sans_flex_700" size="36" color="#ffffffff">
+                                <Template><![CDATA[%s]]>
+                                    <Parameter expression="[COMPLICATION.TEXT]" />
+                                </Template>
+                            </Font>
+                        </Text>
+                    </PartText>
+                    <!-- Samsung One UI 8 AOD refresh workaround -->
+                    <PartText name="bulb5_rv_aod_refresh" x="0" y="0" width="1" height="1" alpha="0">
                         <Text align="START">
                             <Font family="google_sans_flex_450" size="1" color="#00000000">
-                                <Template><![CDATA[%d]]><Parameter expression="[COMPLICATION.LAST_UPDATE_TIME]" /></Template>
+                                <Template><![CDATA[%d]]>
+                                    <Parameter expression="[COMPLICATION.LAST_UPDATE_TIME]" />
+                                </Template>
                             </Font>
                         </Text>
                     </PartText>
                 </Group>
             </Complication>
 
+            <!-- BULB: SMALL_IMAGE -->
             <Complication type="SMALL_IMAGE">
-                <Group name="small_image_content" alpha="255" x="0" y="0" width="120" height="120">
-                    <Variant mode="AMBIENT" target="alpha" value="0" duration="0.0" />
-                    <!-- Provenance: base_0.apk → slot 5 small image x=18 y=18 w=84 h=84. -->
-                    <PartImage x="18" y="18" width="84" height="84">
+                <Group name="bulb5_small_image" x="180" y="329" width="120" height="120" alpha="255">
+                    <Variant mode="AMBIENT" target="alpha" value="0" />
+                    <Transform target="alpha"
+                        value="[CONFIGURATION.layoutStyle] == 0 || [CONFIGURATION.layoutStyle] == 1 ? 255 : 0" />
+                    <PartDraw name="bulb5_si_ring" x="0" y="0" width="120" height="120">
+                        <Arc centerX="60" centerY="60" width="120" height="120"
+                             startAngle="0" endAngle="360" direction="CLOCKWISE">
+                            <Stroke color="[CONFIGURATION.themeColor.2]" thickness="6" cap="ROUND" />
+                        </Arc>
+                    </PartDraw>
+                    <PartImage name="bulb5_si_img" x="24" y="6" width="72" height="72">
                         <Image resource="[COMPLICATION.SMALL_IMAGE]" />
                     </PartImage>
-                    <!-- Samsung One UI 8 AOD refresh workaround. -->
-                    <PartText x="0" y="0" width="0" height="0" alpha="0">
+                    <!-- Samsung One UI 8 AOD refresh workaround -->
+                    <PartText name="bulb5_si_aod_refresh" x="0" y="0" width="1" height="1" alpha="0">
                         <Text align="START">
                             <Font family="google_sans_flex_450" size="1" color="#00000000">
-                                <Template><![CDATA[%d]]><Parameter expression="[COMPLICATION.LAST_UPDATE_TIME]" /></Template>
+                                <Template><![CDATA[%d]]>
+                                    <Parameter expression="[COMPLICATION.LAST_UPDATE_TIME]" />
+                                </Template>
+                            </Font>
+                        </Text>
+                    </PartText>
+                </Group>
+            </Complication>
+
+            <!-- LINEAR: SHORT_TEXT row2 -->
+            <Complication type="SHORT_TEXT">
+                <Group name="linear5_short_text" x="246" y="184" width="180" height="42" alpha="255">
+                    <Variant mode="AMBIENT" target="alpha" value="0" />
+                    <Transform target="alpha"
+                        value="[CONFIGURATION.layoutStyle] == 2 || [CONFIGURATION.layoutStyle] == 3 ? 255 : 0" />
+                    <Transform target="x"
+                        value="[CONFIGURATION.layoutStyle] == 3 ? 242 : 246" />
+                    <Transform target="y"
+                        value="[CONFIGURATION.layoutStyle] == 3 ? 193 : 184" />
+                    <Transform target="width"
+                        value="[CONFIGURATION.layoutStyle] == 3 ? 160 : 180" />
+                    <Transform target="height"
+                        value="[CONFIGURATION.layoutStyle] == 3 ? 35 : 42" />
+                    <Condition>
+                        <Expressions>
+                            <Expression name="lin5_st_has_icon"><![CDATA[[COMPLICATION.MONOCHROMATIC_IMAGE] != null]]></Expression>
+                        </Expressions>
+                        <Compare expression="lin5_st_has_icon">
+                            <PartImage name="lin5_st_icon" x="0" y="4" width="28" height="28">
+                                <Image resource="[COMPLICATION.MONOCHROMATIC_IMAGE]"
+                                       tintColor="[CONFIGURATION.themeColor.0]" />
+                            </PartImage>
+                        </Compare>
+                    </Condition>
+                    <PartText name="lin5_st_label" x="35" y="4" width="140" height="30">
+                        <Text align="START">
+                            <Font family="google_sans_flex_700" size="32" color="#ffffffff">
+                                <Transform target="size"
+                                    value="[CONFIGURATION.layoutStyle] == 3 ? 28 : 32" />
+                                <Template><![CDATA[%s]]>
+                                    <Parameter expression="[COMPLICATION.TEXT]" />
+                                </Template>
+                            </Font>
+                        </Text>
+                    </PartText>
+                    <!-- Samsung One UI 8 AOD refresh workaround -->
+                    <PartText name="lin5_st_aod_refresh" x="0" y="0" width="1" height="1" alpha="0">
+                        <Text align="START">
+                            <Font family="google_sans_flex_450" size="1" color="#00000000">
+                                <Template><![CDATA[%d]]>
+                                    <Parameter expression="[COMPLICATION.LAST_UPDATE_TIME]" />
+                                </Template>
+                            </Font>
+                        </Text>
+                    </PartText>
+                </Group>
+            </Complication>
+
+            <!-- LINEAR: RANGED_VALUE row2 -->
+            <Complication type="RANGED_VALUE">
+                <Group name="linear5_ranged" x="246" y="184" width="180" height="42" alpha="255">
+                    <Variant mode="AMBIENT" target="alpha" value="0" />
+                    <Transform target="alpha"
+                        value="[CONFIGURATION.layoutStyle] == 2 || [CONFIGURATION.layoutStyle] == 3 ? 255 : 0" />
+                    <Transform target="x"
+                        value="[CONFIGURATION.layoutStyle] == 3 ? 242 : 246" />
+                    <Transform target="y"
+                        value="[CONFIGURATION.layoutStyle] == 3 ? 193 : 184" />
+                    <Transform target="width"
+                        value="[CONFIGURATION.layoutStyle] == 3 ? 160 : 180" />
+                    <Transform target="height"
+                        value="[CONFIGURATION.layoutStyle] == 3 ? 35 : 42" />
+                    <Condition>
+                        <Expressions>
+                            <Expression name="lin5_rv_has_icon"><![CDATA[[COMPLICATION.MONOCHROMATIC_IMAGE] != null]]></Expression>
+                        </Expressions>
+                        <Compare expression="lin5_rv_has_icon">
+                            <PartImage name="lin5_rv_icon" x="0" y="4" width="28" height="28">
+                                <Image resource="[COMPLICATION.MONOCHROMATIC_IMAGE]"
+                                       tintColor="[CONFIGURATION.themeColor.0]" />
+                            </PartImage>
+                        </Compare>
+                    </Condition>
+                    <PartText name="lin5_rv_label" x="35" y="4" width="140" height="30">
+                        <Text align="START">
+                            <Font family="google_sans_flex_700" size="32" color="#ffffffff">
+                                <Transform target="size"
+                                    value="[CONFIGURATION.layoutStyle] == 3 ? 28 : 32" />
+                                <Template><![CDATA[%s]]>
+                                    <Parameter expression="[COMPLICATION.TEXT]" />
+                                </Template>
+                            </Font>
+                        </Text>
+                    </PartText>
+                    <PartDraw name="lin5_rv_progress_track" x="0" y="0" width="180" height="42">
+                        <Transform target="width"
+                            value="[CONFIGURATION.layoutStyle] == 3 ? 160 : 180" />
+                        <Transform target="height"
+                            value="[CONFIGURATION.layoutStyle] == 3 ? 35 : 42" />
+                        <Line startX="35" startY="40" endX="180" endY="40">
+                            <Transform target="endX"
+                                value="[CONFIGURATION.layoutStyle] == 3 ? 160 : 180" />
+                            <Transform target="startY"
+                                value="[CONFIGURATION.layoutStyle] == 3 ? 33 : 40" />
+                            <Transform target="endY"
+                                value="[CONFIGURATION.layoutStyle] == 3 ? 33 : 40" />
+                            <Stroke color="[CONFIGURATION.themeColor.2]" thickness="4" cap="ROUND" />
+                        </Line>
+                    </PartDraw>
+                    <PartDraw name="lin5_rv_progress_fill" x="0" y="0" width="180" height="42">
+                        <Transform target="width"
+                            value="[CONFIGURATION.layoutStyle] == 3 ? 160 : 180" />
+                        <Transform target="height"
+                            value="[CONFIGURATION.layoutStyle] == 3 ? 35 : 42" />
+                        <Line startX="35" startY="40" endX="35" endY="40">
+                            <Transform target="endX"
+                                value="[COMPLICATION.RANGED_VALUE_MAX] &gt; 0 ? (35 + ([CONFIGURATION.layoutStyle] == 3 ? 125 : 145) * ([COMPLICATION.RANGED_VALUE_VALUE] / [COMPLICATION.RANGED_VALUE_MAX])) : 35" />
+                            <Transform target="startY"
+                                value="[CONFIGURATION.layoutStyle] == 3 ? 33 : 40" />
+                            <Transform target="endY"
+                                value="[CONFIGURATION.layoutStyle] == 3 ? 33 : 40" />
+                            <Stroke color="[CONFIGURATION.themeColor.0]" thickness="4" cap="ROUND" />
+                        </Line>
+                    </PartDraw>
+                    <!-- Samsung One UI 8 AOD refresh workaround -->
+                    <PartText name="lin5_rv_aod_refresh" x="0" y="0" width="1" height="1" alpha="0">
+                        <Text align="START">
+                            <Font family="google_sans_flex_450" size="1" color="#00000000">
+                                <Template><![CDATA[%d]]>
+                                    <Parameter expression="[COMPLICATION.LAST_UPDATE_TIME]" />
+                                </Template>
+                            </Font>
+                        </Text>
+                    </PartText>
+                </Group>
+            </Complication>
+
+            <!-- LINEAR: SMALL_IMAGE row2 -->
+            <Complication type="SMALL_IMAGE">
+                <Group name="linear5_small_image" x="246" y="184" width="180" height="42" alpha="255">
+                    <Variant mode="AMBIENT" target="alpha" value="0" />
+                    <Transform target="alpha"
+                        value="[CONFIGURATION.layoutStyle] == 2 || [CONFIGURATION.layoutStyle] == 3 ? 255 : 0" />
+                    <Transform target="x"
+                        value="[CONFIGURATION.layoutStyle] == 3 ? 242 : 246" />
+                    <Transform target="y"
+                        value="[CONFIGURATION.layoutStyle] == 3 ? 193 : 184" />
+                    <Transform target="width"
+                        value="[CONFIGURATION.layoutStyle] == 3 ? 160 : 180" />
+                    <Transform target="height"
+                        value="[CONFIGURATION.layoutStyle] == 3 ? 35 : 42" />
+                    <PartImage name="lin5_si_img" x="0" y="4" width="28" height="28">
+                        <Image resource="[COMPLICATION.SMALL_IMAGE]" />
+                    </PartImage>
+                    <PartText name="lin5_si_label" x="35" y="4" width="140" height="30">
+                        <Text align="START">
+                            <Font family="google_sans_flex_700" size="32" color="#ffffffff">
+                                <Transform target="size"
+                                    value="[CONFIGURATION.layoutStyle] == 3 ? 28 : 32" />
+                                <Template><![CDATA[%s]]>
+                                    <Parameter expression="[COMPLICATION.TITLE]" />
+                                </Template>
+                            </Font>
+                        </Text>
+                    </PartText>
+                    <!-- Samsung One UI 8 AOD refresh workaround -->
+                    <PartText name="lin5_si_aod_refresh" x="0" y="0" width="1" height="1" alpha="0">
+                        <Text align="START">
+                            <Font family="google_sans_flex_450" size="1" color="#00000000">
+                                <Template><![CDATA[%d]]>
+                                    <Parameter expression="[COMPLICATION.LAST_UPDATE_TIME]" />
+                                </Template>
                             </Font>
                         </Text>
                     </PartText>
@@ -1417,186 +1377,269 @@
         </ComplicationSlot>
 
 
-        <!-- Complication Slot 6 — Bulb Bottom-Right / Linear Row 3.
-             Provenance: base_0.apk → ComplicationBulb#complication-2/9 and
-             ComplicationLinear#complication-12/20.
-             slotId:          6
-             displayName:     @string/bottom_right_complication
-             supportedTypes:  SHORT_TEXT, RANGED_VALUE, SMALL_IMAGE, EMPTY
-             defaultProvider: HEART_RATE (SHORT_TEXT)
-             Base slot bounds: x=320, y=263, width=120, height=120 (bulb mode).
-             BoundingRoundBox: x=0, y=0, width=120, height=120, cornerRadius=18.
-             Layout overrides, icon/text positions, and stroke thicknesses are
-             identical to Slot 4. See Slot 4 documentation above.
-             Provenance: base_0.apk → ComplicationBulb#complication-2 { x:320; y:263; width:120; height:120; } -->
-        <ComplicationSlot slotId="6" x="320" y="263" width="120" height="120"
-                          supportedTypes="SHORT_TEXT RANGED_VALUE SMALL_IMAGE EMPTY"
-                          displayName="@string/bottom_right_complication">
-            <!-- Provenance: base_0.apk → default HEART_RATE SHORT_TEXT for bottom-right bulb. -->
+        <!-- ============================================================
+             COMPLICATION SLOT 6 — Bottom-Right Bulb / Linear Row 3.
+             Provenance: base_0.apk → res/fD.xml slot6.
+             Bulb (Default/Arcs): x=320, y=263, w=120, h=120.
+             Linear row3: x=246, y=241, w=180, h=42.
+             Linear Arcs row3: x=242, y=244, w=160, h=35.
+             Default: HEART_RATE.
+             ============================================================ -->
+        <ComplicationSlot slotId="6" name="bottom_right_complication"
+            x="320" y="263" width="120" height="120"
+            supportedTypes="SHORT_TEXT RANGED_VALUE SMALL_IMAGE EMPTY"
+            displayName="@string/bottom_right_complication">
             <DefaultProviderPolicy defaultSystemProvider="HEART_RATE"
                                    defaultSystemProviderType="SHORT_TEXT" />
-            <!-- Provenance: base_0.apk → BoundingRoundBox matches slot base size 120×120. cornerRadius=18. -->
-            <BoundingRoundBox x="0" y="0" width="120" height="120" cornerRadius="18" />
 
+            <!-- BULB: SHORT_TEXT -->
             <Complication type="SHORT_TEXT">
-                <Group name="bulb_interactive" alpha="255" x="0" y="0" width="120" height="120">
-                    <Variant mode="AMBIENT" target="alpha" value="0" duration="0.0" />
-                    <Transform target="alpha" value="[CONFIGURATION.layoutStyle] == 0 || [CONFIGURATION.layoutStyle] == 1 ? 255 : 0" />
-                    <!-- Provenance: base_0.apk → slot 6 bulb text x=0 y=78 w=120 h=36. -->
-                    <PartText x="0" y="78" width="120" height="36">
+                <Group name="bulb6_short_text" x="320" y="263" width="120" height="120" alpha="255">
+                    <Variant mode="AMBIENT" target="alpha" value="0" />
+                    <Transform target="alpha"
+                        value="[CONFIGURATION.layoutStyle] == 0 || [CONFIGURATION.layoutStyle] == 1 ? 255 : 0" />
+                    <PartDraw name="bulb6_st_ring" x="0" y="0" width="120" height="120">
+                        <Arc centerX="60" centerY="60" width="120" height="120"
+                             startAngle="0" endAngle="360" direction="CLOCKWISE">
+                            <Stroke color="[CONFIGURATION.themeColor.2]" thickness="6" cap="ROUND" />
+                        </Arc>
+                    </PartDraw>
+                    <Condition>
+                        <Expressions>
+                            <Expression name="bulb6_st_has_icon"><![CDATA[[COMPLICATION.MONOCHROMATIC_IMAGE] != null]]></Expression>
+                        </Expressions>
+                        <Compare expression="bulb6_st_has_icon">
+                            <PartImage name="bulb6_st_icon" x="24" y="6" width="72" height="72">
+                                <Image resource="[COMPLICATION.MONOCHROMATIC_IMAGE]"
+                                       tintColor="[CONFIGURATION.themeColor.0]" />
+                            </PartImage>
+                        </Compare>
+                    </Condition>
+                    <PartText name="bulb6_st_label" x="0" y="78" width="120" height="36">
                         <Text align="CENTER">
-                            <Font family="google_sans_flex_450" size="16" color="#ffffffff">
-                                <Template><![CDATA[%s]]><Parameter expression="[COMPLICATION.TEXT]" /></Template>
+                            <Font family="google_sans_flex_700" size="36" color="#ffffffff">
+                                <Template><![CDATA[%s]]>
+                                    <Parameter expression="[COMPLICATION.TEXT]" />
+                                </Template>
                             </Font>
                         </Text>
                     </PartText>
-                    <Condition>
-                        <Expressions>
-                            <Expression name="has_img"><![CDATA[[COMPLICATION.ICON] != null]]></Expression>
-                        </Expressions>
-                        <Compare expression="has_img">
-                            <!-- Provenance: base_0.apk → slot 6 bulb icon x=24 y=6 w=72 h=72. -->
-                            <PartImage x="24" y="6" width="72" height="72">
-                                <Image resource="[COMPLICATION.ICON]" tintColor="[CONFIGURATION.themeColor.0]" />
-                            </PartImage>
-                        </Compare>
-                    </Condition>
-                    <!-- Samsung One UI 8 AOD refresh workaround. -->
-                    <PartText x="0" y="0" width="0" height="0" alpha="0">
+                    <!-- Samsung One UI 8 AOD refresh workaround -->
+                    <PartText name="bulb6_st_aod_refresh" x="0" y="0" width="1" height="1" alpha="0">
                         <Text align="START">
                             <Font family="google_sans_flex_450" size="1" color="#00000000">
-                                <Template><![CDATA[%d]]><Parameter expression="[COMPLICATION.LAST_UPDATE_TIME]" /></Template>
-                            </Font>
-                        </Text>
-                    </PartText>
-                </Group>
-                <Group name="linear_interactive" alpha="255" x="0" y="0" width="120" height="120">
-                    <Variant mode="AMBIENT" target="alpha" value="0" duration="0.0" />
-                    <Transform target="alpha" value="[CONFIGURATION.layoutStyle] == 2 || [CONFIGURATION.layoutStyle] == 3 ? 255 : 0" />
-                    <!-- Provenance: base_0.apk → slot 6 linear text x=35 y=4 w=140 h=30. -->
-                    <PartText x="35" y="4" width="140" height="30">
-                        <Text align="START">
-                            <Font family="google_sans_flex_450" size="20" color="#ffffffff">
-                                <Template><![CDATA[%s]]><Parameter expression="[COMPLICATION.TEXT]" /></Template>
-                            </Font>
-                        </Text>
-                    </PartText>
-                    <Condition>
-                        <Expressions>
-                            <Expression name="has_img"><![CDATA[[COMPLICATION.ICON] != null]]></Expression>
-                        </Expressions>
-                        <Compare expression="has_img">
-                            <!-- Provenance: base_0.apk → slot 6 linear icon x=0 y=4 w=28 h=28. -->
-                            <PartImage x="0" y="4" width="28" height="28">
-                                <Image resource="[COMPLICATION.ICON]" tintColor="[CONFIGURATION.themeColor.0]" />
-                            </PartImage>
-                        </Compare>
-                    </Condition>
-                    <!-- Samsung One UI 8 AOD refresh workaround. -->
-                    <PartText x="0" y="0" width="0" height="0" alpha="0">
-                        <Text align="START">
-                            <Font family="google_sans_flex_450" size="1" color="#00000000">
-                                <Template><![CDATA[%d]]><Parameter expression="[COMPLICATION.LAST_UPDATE_TIME]" /></Template>
+                                <Template><![CDATA[%d]]>
+                                    <Parameter expression="[COMPLICATION.LAST_UPDATE_TIME]" />
+                                </Template>
                             </Font>
                         </Text>
                     </PartText>
                 </Group>
             </Complication>
 
+            <!-- BULB: RANGED_VALUE -->
             <Complication type="RANGED_VALUE">
-                <Group name="bulb_interactive" alpha="255" x="0" y="0" width="120" height="120">
-                    <Variant mode="AMBIENT" target="alpha" value="0" duration="0.0" />
-                    <Transform target="alpha" value="[CONFIGURATION.layoutStyle] == 0 || [CONFIGURATION.layoutStyle] == 1 ? 255 : 0" />
-                    <!-- Provenance: base_0.apk → slot 6 bulb text x=0 y=78 w=120 h=36. -->
-                    <PartText x="0" y="78" width="120" height="36">
-                        <Text align="CENTER">
-                            <Font family="google_sans_flex_450" size="16" color="#ffffffff">
-                                <Template><![CDATA[%s]]><Parameter expression="[COMPLICATION.TEXT]" /></Template>
-                            </Font>
-                        </Text>
-                    </PartText>
-                    <Condition>
-                        <Expressions>
-                            <Expression name="has_img"><![CDATA[[COMPLICATION.ICON] != null]]></Expression>
-                        </Expressions>
-                        <Compare expression="has_img">
-                            <!-- Provenance: base_0.apk → slot 6 bulb icon x=24 y=6 w=72 h=72. -->
-                            <PartImage x="24" y="6" width="72" height="72">
-                                <Image resource="[COMPLICATION.ICON]" tintColor="[CONFIGURATION.themeColor.0]" />
-                            </PartImage>
-                        </Compare>
-                    </Condition>
-                    <!-- Provenance: base_0.apk → slot 6 bulb progress ring centerX=60 centerY=60 thickness=6. -->
-                    <PartDraw x="0" y="0" width="120" height="120">
+                <Group name="bulb6_ranged" x="320" y="263" width="120" height="120" alpha="255">
+                    <Variant mode="AMBIENT" target="alpha" value="0" />
+                    <Transform target="alpha"
+                        value="[CONFIGURATION.layoutStyle] == 0 || [CONFIGURATION.layoutStyle] == 1 ? 255 : 0" />
+                    <PartDraw name="bulb6_rv_ring_track" x="0" y="0" width="120" height="120">
                         <Arc centerX="60" centerY="60" width="120" height="120"
-                             startAngle="0" endAngle="0" direction="CLOCKWISE">
+                             startAngle="0" endAngle="360" direction="CLOCKWISE">
+                            <Stroke color="[CONFIGURATION.themeColor.2]" thickness="6" cap="ROUND" />
+                        </Arc>
+                    </PartDraw>
+                    <PartDraw name="bulb6_rv_ring_fill" x="0" y="0" width="120" height="120">
+                        <Arc centerX="60" centerY="60" width="120" height="120"
+                             startAngle="270" endAngle="270" direction="CLOCKWISE">
                             <Transform target="endAngle"
-                                       value="[COMPLICATION.RANGED_VALUE_MAX] &gt; 0 ? (360 * ([COMPLICATION.RANGED_VALUE_VALUE] / [COMPLICATION.RANGED_VALUE_MAX])) : 0" />
+                                value="[COMPLICATION.RANGED_VALUE_MAX] &gt; 0 ? (270 + 360 * ([COMPLICATION.RANGED_VALUE_VALUE] / [COMPLICATION.RANGED_VALUE_MAX])) : 270" />
                             <Stroke color="[CONFIGURATION.themeColor.0]" thickness="6" cap="ROUND" />
                         </Arc>
                     </PartDraw>
-                    <!-- Samsung One UI 8 AOD refresh workaround. -->
-                    <PartText x="0" y="0" width="0" height="0" alpha="0">
-                        <Text align="START">
-                            <Font family="google_sans_flex_450" size="1" color="#00000000">
-                                <Template><![CDATA[%d]]><Parameter expression="[COMPLICATION.LAST_UPDATE_TIME]" /></Template>
-                            </Font>
-                        </Text>
-                    </PartText>
-                </Group>
-                <Group name="linear_interactive" alpha="255" x="0" y="0" width="120" height="120">
-                    <Variant mode="AMBIENT" target="alpha" value="0" duration="0.0" />
-                    <Transform target="alpha" value="[CONFIGURATION.layoutStyle] == 2 || [CONFIGURATION.layoutStyle] == 3 ? 255 : 0" />
-                    <!-- Provenance: base_0.apk → slot 6 linear text x=35 y=4 w=140 h=30. -->
-                    <PartText x="35" y="4" width="140" height="30">
-                        <Text align="START">
-                            <Font family="google_sans_flex_450" size="20" color="#ffffffff">
-                                <Template><![CDATA[%s]]><Parameter expression="[COMPLICATION.TEXT]" /></Template>
-                            </Font>
-                        </Text>
-                    </PartText>
                     <Condition>
                         <Expressions>
-                            <Expression name="has_img"><![CDATA[[COMPLICATION.ICON] != null]]></Expression>
+                            <Expression name="bulb6_rv_has_icon"><![CDATA[[COMPLICATION.MONOCHROMATIC_IMAGE] != null]]></Expression>
                         </Expressions>
-                        <Compare expression="has_img">
-                            <!-- Provenance: base_0.apk → slot 6 linear icon x=0 y=4 w=28 h=28. -->
-                            <PartImage x="0" y="4" width="28" height="28">
-                                <Image resource="[COMPLICATION.ICON]" tintColor="[CONFIGURATION.themeColor.0]" />
+                        <Compare expression="bulb6_rv_has_icon">
+                            <PartImage name="bulb6_rv_icon" x="24" y="6" width="72" height="72">
+                                <Image resource="[COMPLICATION.MONOCHROMATIC_IMAGE]"
+                                       tintColor="[CONFIGURATION.themeColor.0]" />
                             </PartImage>
                         </Compare>
                     </Condition>
-                    <!-- Provenance: base_0.apk → slot 6 linear progress line startX=35 startY=40 thickness=4. -->
-                    <PartDraw x="0" y="0" width="180" height="42">
-                        <Line startX="35" startY="40" endX="35" endY="40">
-                            <Transform target="endX"
-                                       value="[COMPLICATION.RANGED_VALUE_MAX] &gt; 0 ? (35 + 140 * ([COMPLICATION.RANGED_VALUE_VALUE] / [COMPLICATION.RANGED_VALUE_MAX])) : 35" />
-                            <Stroke color="[CONFIGURATION.themeColor.0]" thickness="4" cap="ROUND" />
-                        </Line>
-                    </PartDraw>
-                    <!-- Samsung One UI 8 AOD refresh workaround. -->
-                    <PartText x="0" y="0" width="0" height="0" alpha="0">
+                    <PartText name="bulb6_rv_label" x="0" y="78" width="120" height="36">
+                        <Text align="CENTER">
+                            <Font family="google_sans_flex_700" size="36" color="#ffffffff">
+                                <Template><![CDATA[%s]]>
+                                    <Parameter expression="[COMPLICATION.TEXT]" />
+                                </Template>
+                            </Font>
+                        </Text>
+                    </PartText>
+                    <!-- Samsung One UI 8 AOD refresh workaround -->
+                    <PartText name="bulb6_rv_aod_refresh" x="0" y="0" width="1" height="1" alpha="0">
                         <Text align="START">
                             <Font family="google_sans_flex_450" size="1" color="#00000000">
-                                <Template><![CDATA[%d]]><Parameter expression="[COMPLICATION.LAST_UPDATE_TIME]" /></Template>
+                                <Template><![CDATA[%d]]>
+                                    <Parameter expression="[COMPLICATION.LAST_UPDATE_TIME]" />
+                                </Template>
                             </Font>
                         </Text>
                     </PartText>
                 </Group>
             </Complication>
 
+            <!-- BULB: SMALL_IMAGE -->
             <Complication type="SMALL_IMAGE">
-                <Group name="small_image_content" alpha="255" x="0" y="0" width="120" height="120">
-                    <Variant mode="AMBIENT" target="alpha" value="0" duration="0.0" />
-                    <!-- Provenance: base_0.apk → slot 6 small image x=18 y=18 w=84 h=84. -->
-                    <PartImage x="18" y="18" width="84" height="84">
+                <Group name="bulb6_small_image" x="320" y="263" width="120" height="120" alpha="255">
+                    <Variant mode="AMBIENT" target="alpha" value="0" />
+                    <Transform target="alpha"
+                        value="[CONFIGURATION.layoutStyle] == 0 || [CONFIGURATION.layoutStyle] == 1 ? 255 : 0" />
+                    <PartDraw name="bulb6_si_ring" x="0" y="0" width="120" height="120">
+                        <Arc centerX="60" centerY="60" width="120" height="120"
+                             startAngle="0" endAngle="360" direction="CLOCKWISE">
+                            <Stroke color="[CONFIGURATION.themeColor.2]" thickness="6" cap="ROUND" />
+                        </Arc>
+                    </PartDraw>
+                    <PartImage name="bulb6_si_img" x="24" y="6" width="72" height="72">
                         <Image resource="[COMPLICATION.SMALL_IMAGE]" />
                     </PartImage>
-                    <!-- Samsung One UI 8 AOD refresh workaround. -->
-                    <PartText x="0" y="0" width="0" height="0" alpha="0">
+                    <!-- Samsung One UI 8 AOD refresh workaround -->
+                    <PartText name="bulb6_si_aod_refresh" x="0" y="0" width="1" height="1" alpha="0">
                         <Text align="START">
                             <Font family="google_sans_flex_450" size="1" color="#00000000">
-                                <Template><![CDATA[%d]]><Parameter expression="[COMPLICATION.LAST_UPDATE_TIME]" /></Template>
+                                <Template><![CDATA[%d]]>
+                                    <Parameter expression="[COMPLICATION.LAST_UPDATE_TIME]" />
+                                </Template>
+                            </Font>
+                        </Text>
+                    </PartText>
+                </Group>
+            </Complication>
+
+            <!-- LINEAR: SHORT_TEXT row3 -->
+            <Complication type="SHORT_TEXT">
+                <Group name="linear6_short_text" x="246" y="241" width="180" height="42" alpha="255">
+                    <Variant mode="AMBIENT" target="alpha" value="0" />
+                    <Transform target="alpha"
+                        value="[CONFIGURATION.layoutStyle] == 2 || [CONFIGURATION.layoutStyle] == 3 ? 255 : 0" />
+                    <Transform target="x"
+                        value="[CONFIGURATION.layoutStyle] == 3 ? 242 : 246" />
+                    <Transform target="y"
+                        value="[CONFIGURATION.layoutStyle] == 3 ? 244 : 241" />
+                    <Transform target="width"
+                        value="[CONFIGURATION.layoutStyle] == 3 ? 160 : 180" />
+                    <Transform target="height"
+                        value="[CONFIGURATION.layoutStyle] == 3 ? 35 : 42" />
+                    <Condition>
+                        <Expressions>
+                            <Expression name="lin6_st_has_icon"><![CDATA[[COMPLICATION.MONOCHROMATIC_IMAGE] != null]]></Expression>
+                        </Expressions>
+                        <Compare expression="lin6_st_has_icon">
+                            <PartImage name="lin6_st_icon" x="0" y="4" width="28" height="28">
+                                <Image resource="[COMPLICATION.MONOCHROMATIC_IMAGE]"
+                                       tintColor="[CONFIGURATION.themeColor.0]" />
+                            </PartImage>
+                        </Compare>
+                    </Condition>
+                    <PartText name="lin6_st_label" x="35" y="4" width="140" height="30">
+                        <Text align="START">
+                            <Font family="google_sans_flex_700" size="32" color="#ffffffff">
+                                <Transform target="size"
+                                    value="[CONFIGURATION.layoutStyle] == 3 ? 28 : 32" />
+                                <Template><![CDATA[%s]]>
+                                    <Parameter expression="[COMPLICATION.TEXT]" />
+                                </Template>
+                            </Font>
+                        </Text>
+                    </PartText>
+                    <!-- Samsung One UI 8 AOD refresh workaround -->
+                    <PartText name="lin6_st_aod_refresh" x="0" y="0" width="1" height="1" alpha="0">
+                        <Text align="START">
+                            <Font family="google_sans_flex_450" size="1" color="#00000000">
+                                <Template><![CDATA[%d]]>
+                                    <Parameter expression="[COMPLICATION.LAST_UPDATE_TIME]" />
+                                </Template>
+                            </Font>
+                        </Text>
+                    </PartText>
+                </Group>
+            </Complication>
+
+            <!-- LINEAR: RANGED_VALUE row3 -->
+            <Complication type="RANGED_VALUE">
+                <Group name="linear6_ranged" x="246" y="241" width="180" height="42" alpha="255">
+                    <Variant mode="AMBIENT" target="alpha" value="0" />
+                    <Transform target="alpha"
+                        value="[CONFIGURATION.layoutStyle] == 2 || [CONFIGURATION.layoutStyle] == 3 ? 255 : 0" />
+                    <Transform target="x"
+                        value="[CONFIGURATION.layoutStyle] == 3 ? 242 : 246" />
+                    <Transform target="y"
+                        value="[CONFIGURATION.layoutStyle] == 3 ? 244 : 241" />
+                    <Transform target="width"
+                        value="[CONFIGURATION.layoutStyle] == 3 ? 160 : 180" />
+                    <Transform target="height"
+                        value="[CONFIGURATION.layoutStyle] == 3 ? 35 : 42" />
+                    <Condition>
+                        <Expressions>
+                            <Expression name="lin6_rv_has_icon"><![CDATA[[COMPLICATION.MONOCHROMATIC_IMAGE] != null]]></Expression>
+                        </Expressions>
+                        <Compare expression="lin6_rv_has_icon">
+                            <PartImage name="lin6_rv_icon" x="0" y="4" width="28" height="28">
+                                <Image resource="[COMPLICATION.MONOCHROMATIC_IMAGE]"
+                                       tintColor="[CONFIGURATION.themeColor.0]" />
+                            </PartImage>
+                        </Compare>
+                    </Condition>
+                    <PartText name="lin6_rv_label" x="35" y="4" width="140" height="30">
+                        <Text align="START">
+                            <Font family="google_sans_flex_700" size="32" color="#ffffffff">
+                                <Transform target="size"
+                                    value="[CONFIGURATION.layoutStyle] == 3 ? 28 : 32" />
+                                <Template><![CDATA[%s]]>
+                                    <Parameter expression="[COMPLICATION.TEXT]" />
+                                </Template>
+                            </Font>
+                        </Text>
+                    </PartText>
+                    <PartDraw name="lin6_rv_progress_track" x="0" y="0" width="180" height="42">
+                        <Transform target="width"
+                            value="[CONFIGURATION.layoutStyle] == 3 ? 160 : 180" />
+                        <Transform target="height"
+                            value="[CONFIGURATION.layoutStyle] == 3 ? 35 : 42" />
+                        <Line startX="35" startY="40" endX="180" endY="40">
+                            <Transform target="endX"
+                                value="[CONFIGURATION.layoutStyle] == 3 ? 160 : 180" />
+                            <Transform target="startY"
+                                value="[CONFIGURATION.layoutStyle] == 3 ? 33 : 40" />
+                            <Transform target="endY"
+                                value="[CONFIGURATION.layoutStyle] == 3 ? 33 : 40" />
+                            <Stroke color="[CONFIGURATION.themeColor.2]" thickness="4" cap="ROUND" />
+                        </Line>
+                    </PartDraw>
+                    <PartDraw name="lin6_rv_progress_fill" x="0" y="0" width="180" height="42">
+                        <Transform target="width"
+                            value="[CONFIGURATION.layoutStyle] == 3 ? 160 : 180" />
+                        <Transform target="height"
+                            value="[CONFIGURATION.layoutStyle] == 3 ? 35 : 42" />
+                        <Line startX="35" startY="40" endX="35" endY="40">
+                            <Transform target="endX"
+                                value="[COMPLICATION.RANGED_VALUE_MAX] &gt; 0 ? (35 + ([CONFIGURATION.layoutStyle] == 3 ? 125 : 145) * ([COMPLICATION.RANGED_VALUE_VALUE] / [COMPLICATION.RANGED_VALUE_MAX])) : 35" />
+                            <Transform target="startY"
+                                value="[CONFIGURATION.layoutStyle] == 3 ? 33 : 40" />
+                            <Transform target="endY"
+                                value="[CONFIGURATION.layoutStyle] == 3 ? 33 : 40" />
+                            <Stroke color="[CONFIGURATION.themeColor.0]" thickness="4" cap="ROUND" />
+                        </Line>
+                    </PartDraw>
+                    <!-- Samsung One UI 8 AOD refresh workaround -->
+                    <PartText name="lin6_rv_aod_refresh" x="0" y="0" width="1" height="1" alpha="0">
+                        <Text align="START">
+                            <Font family="google_sans_flex_450" size="1" color="#00000000">
+                                <Template><![CDATA[%d]]>
+                                    <Parameter expression="[COMPLICATION.LAST_UPDATE_TIME]" />
+                                </Template>
                             </Font>
                         </Text>
                     </PartText>
@@ -1604,98 +1647,143 @@
             </Complication>
         </ComplicationSlot>
 
-        <!-- Complication Slot 7 — Linear Row 4 (Linear layouts only).
-             Provenance: base_0.apk → ComplicationLinear#complication-13/21.
-             slotId:          7
-             displayName:     @string/linear_complication_4 ("Linear 4")
-             supportedTypes:  SHORT_TEXT, RANGED_VALUE, EMPTY
-             defaultProvider: WATCH_BATTERY (RANGED_VALUE)
-             Base slot bounds: x=246, y=298, width=180, height=42.
-             In Linear Arcs layout the slot is positioned at x=242, y=295, w=160, h=35
-             via the Condition-driven x/y/width/height expressions in the Scene.
-             BoundingRoundBox: x=0, y=0, width=180, height=42, cornerRadius=19.
-             Visible only in layoutStyle 2 (Linear) and 3 (Linear Arcs) — disabled in 0 and 1.
-             Icon position: x=0, y=4, w=28, h=28.
-             Text area: x=35, y=4, w=140, h=30.
-             Progress line: startX=35, startY=40, endX computed, thickness=4.
-             Provenance: base_0.apk → ComplicationLinear#complication-13 { x:246; y:298; width:180; height:42; } -->
-        <ComplicationSlot slotId="7" x="246" y="298" width="180" height="42"
-                          supportedTypes="SHORT_TEXT RANGED_VALUE EMPTY"
-                          displayName="@string/linear_complication_4">
-            <!-- Provenance: base_0.apk → default WATCH_BATTERY RANGED_VALUE for linear row 4. -->
+        <!-- ============================================================
+             COMPLICATION SLOT 7 — Linear Row 4 only.
+             Provenance: base_0.apk → res/fD.xml slot7.
+             Linear row4: x=246, y=298, w=180, h=42.
+             Linear Arcs row4: x=242, y=295, w=160, h=35.
+             Default: WATCH_BATTERY. Not shown in bulb layouts.
+             ============================================================ -->
+        <ComplicationSlot slotId="7" name="linear_complication_4"
+            x="246" y="298" width="180" height="42"
+            supportedTypes="SHORT_TEXT RANGED_VALUE EMPTY"
+            displayName="@string/linear_complication_4">
             <DefaultProviderPolicy defaultSystemProvider="WATCH_BATTERY"
                                    defaultSystemProviderType="RANGED_VALUE" />
-            <!-- Provenance: base_0.apk → BoundingRoundBox matches slot size 180×42. cornerRadius=19. -->
-            <BoundingRoundBox x="0" y="0" width="180" height="42" cornerRadius="19" />
 
+            <!-- LINEAR: SHORT_TEXT row4 -->
             <Complication type="SHORT_TEXT">
-                <Group name="linear_row4_interactive" alpha="255" x="0" y="0" width="180" height="42">
-                    <Variant mode="AMBIENT" target="alpha" value="0" duration="0.0" />
-                    <!-- Provenance: base_0.apk → slot 7 text x=35 y=4 w=140 h=30. -->
-                    <PartText x="35" y="4" width="140" height="30">
-                        <Text align="START">
-                            <Font family="google_sans_flex_450" size="20" color="#ffffffff">
-                                <Template><![CDATA[%s]]><Parameter expression="[COMPLICATION.TEXT]" /></Template>
-                            </Font>
-                        </Text>
-                    </PartText>
+                <Group name="linear7_short_text" x="246" y="298" width="180" height="42" alpha="255">
+                    <Variant mode="AMBIENT" target="alpha" value="0" />
+                    <!-- Only visible in linear layouts (2,3) -->
+                    <Transform target="alpha"
+                        value="[CONFIGURATION.layoutStyle] == 2 || [CONFIGURATION.layoutStyle] == 3 ? 255 : 0" />
+                    <Transform target="x"
+                        value="[CONFIGURATION.layoutStyle] == 3 ? 242 : 246" />
+                    <Transform target="y"
+                        value="[CONFIGURATION.layoutStyle] == 3 ? 295 : 298" />
+                    <Transform target="width"
+                        value="[CONFIGURATION.layoutStyle] == 3 ? 160 : 180" />
+                    <Transform target="height"
+                        value="[CONFIGURATION.layoutStyle] == 3 ? 35 : 42" />
                     <Condition>
                         <Expressions>
-                            <Expression name="has_img"><![CDATA[[COMPLICATION.ICON] != null]]></Expression>
+                            <Expression name="lin7_st_has_icon"><![CDATA[[COMPLICATION.MONOCHROMATIC_IMAGE] != null]]></Expression>
                         </Expressions>
-                        <Compare expression="has_img">
-                            <!-- Provenance: base_0.apk → slot 7 icon x=0 y=4 w=28 h=28. -->
-                            <PartImage x="0" y="4" width="28" height="28">
-                                <Image resource="[COMPLICATION.ICON]" tintColor="[CONFIGURATION.themeColor.0]" />
+                        <Compare expression="lin7_st_has_icon">
+                            <PartImage name="lin7_st_icon" x="0" y="4" width="28" height="28">
+                                <Image resource="[COMPLICATION.MONOCHROMATIC_IMAGE]"
+                                       tintColor="[CONFIGURATION.themeColor.0]" />
                             </PartImage>
                         </Compare>
                     </Condition>
-                    <!-- Samsung One UI 8 AOD refresh workaround. -->
-                    <PartText x="0" y="0" width="0" height="0" alpha="0">
+                    <PartText name="lin7_st_label" x="35" y="4" width="140" height="30">
+                        <Text align="START">
+                            <Font family="google_sans_flex_700" size="32" color="#ffffffff">
+                                <Transform target="size"
+                                    value="[CONFIGURATION.layoutStyle] == 3 ? 28 : 32" />
+                                <Template><![CDATA[%s]]>
+                                    <Parameter expression="[COMPLICATION.TEXT]" />
+                                </Template>
+                            </Font>
+                        </Text>
+                    </PartText>
+                    <!-- Samsung One UI 8 AOD refresh workaround -->
+                    <PartText name="lin7_st_aod_refresh" x="0" y="0" width="1" height="1" alpha="0">
                         <Text align="START">
                             <Font family="google_sans_flex_450" size="1" color="#00000000">
-                                <Template><![CDATA[%d]]><Parameter expression="[COMPLICATION.LAST_UPDATE_TIME]" /></Template>
+                                <Template><![CDATA[%d]]>
+                                    <Parameter expression="[COMPLICATION.LAST_UPDATE_TIME]" />
+                                </Template>
                             </Font>
                         </Text>
                     </PartText>
                 </Group>
             </Complication>
 
+            <!-- LINEAR: RANGED_VALUE row4 -->
             <Complication type="RANGED_VALUE">
-                <Group name="linear_row4_interactive" alpha="255" x="0" y="0" width="180" height="42">
-                    <Variant mode="AMBIENT" target="alpha" value="0" duration="0.0" />
-                    <!-- Provenance: base_0.apk → slot 7 text x=35 y=4 w=140 h=30. -->
-                    <PartText x="35" y="4" width="140" height="30">
-                        <Text align="START">
-                            <Font family="google_sans_flex_450" size="20" color="#ffffffff">
-                                <Template><![CDATA[%s]]><Parameter expression="[COMPLICATION.TEXT]" /></Template>
-                            </Font>
-                        </Text>
-                    </PartText>
+                <Group name="linear7_ranged" x="246" y="298" width="180" height="42" alpha="255">
+                    <Variant mode="AMBIENT" target="alpha" value="0" />
+                    <Transform target="alpha"
+                        value="[CONFIGURATION.layoutStyle] == 2 || [CONFIGURATION.layoutStyle] == 3 ? 255 : 0" />
+                    <Transform target="x"
+                        value="[CONFIGURATION.layoutStyle] == 3 ? 242 : 246" />
+                    <Transform target="y"
+                        value="[CONFIGURATION.layoutStyle] == 3 ? 295 : 298" />
+                    <Transform target="width"
+                        value="[CONFIGURATION.layoutStyle] == 3 ? 160 : 180" />
+                    <Transform target="height"
+                        value="[CONFIGURATION.layoutStyle] == 3 ? 35 : 42" />
                     <Condition>
                         <Expressions>
-                            <Expression name="has_img"><![CDATA[[COMPLICATION.ICON] != null]]></Expression>
+                            <Expression name="lin7_rv_has_icon"><![CDATA[[COMPLICATION.MONOCHROMATIC_IMAGE] != null]]></Expression>
                         </Expressions>
-                        <Compare expression="has_img">
-                            <!-- Provenance: base_0.apk → slot 7 icon x=0 y=4 w=28 h=28. -->
-                            <PartImage x="0" y="4" width="28" height="28">
-                                <Image resource="[COMPLICATION.ICON]" tintColor="[CONFIGURATION.themeColor.0]" />
+                        <Compare expression="lin7_rv_has_icon">
+                            <PartImage name="lin7_rv_icon" x="0" y="4" width="28" height="28">
+                                <Image resource="[COMPLICATION.MONOCHROMATIC_IMAGE]"
+                                       tintColor="[CONFIGURATION.themeColor.0]" />
                             </PartImage>
                         </Compare>
                     </Condition>
-                    <!-- Provenance: base_0.apk → slot 7 linear progress line startX=35 startY=40 thickness=4. -->
-                    <PartDraw x="0" y="0" width="180" height="42">
+                    <PartText name="lin7_rv_label" x="35" y="4" width="140" height="30">
+                        <Text align="START">
+                            <Font family="google_sans_flex_700" size="32" color="#ffffffff">
+                                <Transform target="size"
+                                    value="[CONFIGURATION.layoutStyle] == 3 ? 28 : 32" />
+                                <Template><![CDATA[%s]]>
+                                    <Parameter expression="[COMPLICATION.TEXT]" />
+                                </Template>
+                            </Font>
+                        </Text>
+                    </PartText>
+                    <PartDraw name="lin7_rv_progress_track" x="0" y="0" width="180" height="42">
+                        <Transform target="width"
+                            value="[CONFIGURATION.layoutStyle] == 3 ? 160 : 180" />
+                        <Transform target="height"
+                            value="[CONFIGURATION.layoutStyle] == 3 ? 35 : 42" />
+                        <Line startX="35" startY="40" endX="180" endY="40">
+                            <Transform target="endX"
+                                value="[CONFIGURATION.layoutStyle] == 3 ? 160 : 180" />
+                            <Transform target="startY"
+                                value="[CONFIGURATION.layoutStyle] == 3 ? 33 : 40" />
+                            <Transform target="endY"
+                                value="[CONFIGURATION.layoutStyle] == 3 ? 33 : 40" />
+                            <Stroke color="[CONFIGURATION.themeColor.2]" thickness="4" cap="ROUND" />
+                        </Line>
+                    </PartDraw>
+                    <PartDraw name="lin7_rv_progress_fill" x="0" y="0" width="180" height="42">
+                        <Transform target="width"
+                            value="[CONFIGURATION.layoutStyle] == 3 ? 160 : 180" />
+                        <Transform target="height"
+                            value="[CONFIGURATION.layoutStyle] == 3 ? 35 : 42" />
                         <Line startX="35" startY="40" endX="35" endY="40">
                             <Transform target="endX"
-                                       value="[COMPLICATION.RANGED_VALUE_MAX] &gt; 0 ? (35 + 140 * ([COMPLICATION.RANGED_VALUE_VALUE] / [COMPLICATION.RANGED_VALUE_MAX])) : 35" />
+                                value="[COMPLICATION.RANGED_VALUE_MAX] &gt; 0 ? (35 + ([CONFIGURATION.layoutStyle] == 3 ? 125 : 145) * ([COMPLICATION.RANGED_VALUE_VALUE] / [COMPLICATION.RANGED_VALUE_MAX])) : 35" />
+                            <Transform target="startY"
+                                value="[CONFIGURATION.layoutStyle] == 3 ? 33 : 40" />
+                            <Transform target="endY"
+                                value="[CONFIGURATION.layoutStyle] == 3 ? 33 : 40" />
                             <Stroke color="[CONFIGURATION.themeColor.0]" thickness="4" cap="ROUND" />
                         </Line>
                     </PartDraw>
-                    <!-- Samsung One UI 8 AOD refresh workaround. -->
-                    <PartText x="0" y="0" width="0" height="0" alpha="0">
+                    <!-- Samsung One UI 8 AOD refresh workaround -->
+                    <PartText name="lin7_rv_aod_refresh" x="0" y="0" width="1" height="1" alpha="0">
                         <Text align="START">
                             <Font family="google_sans_flex_450" size="1" color="#00000000">
-                                <Template><![CDATA[%d]]><Parameter expression="[COMPLICATION.LAST_UPDATE_TIME]" /></Template>
+                                <Template><![CDATA[%d]]>
+                                    <Parameter expression="[COMPLICATION.LAST_UPDATE_TIME]" />
+                                </Template>
                             </Font>
                         </Text>
                     </PartText>
@@ -1704,4 +1792,5 @@
         </ComplicationSlot>
 
     </Scene>
+
 </WatchFace>

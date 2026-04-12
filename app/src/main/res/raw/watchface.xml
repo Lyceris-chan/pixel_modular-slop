@@ -383,7 +383,7 @@
                     <PartText name="arc0_st_text" x="0" y="0" width="480" height="480">
                         <TextCircular centerX="240" centerY="240" width="440" height="440"
                                       startAngle="285" endAngle="345"
-                                      direction="CLOCKWISE" align="START">
+                                      direction="CLOCKWISE" align="CENTER">
                             <Font family="google_sans_flex_700" size="24" color="#ffffffff">
                                 <Template><![CDATA[%s]]>
                                     <Parameter expression="[COMPLICATION.TEXT]" />
@@ -401,9 +401,15 @@
                                        tintColor="[CONFIGURATION.themeColor.0]" />
                             </PartImage>
                         </Compare>
+                        <Default>
+                            <PartImage name="arc0_st_icon_fb" x="80" y="80" width="22" height="22">
+                                <Image resource="@drawable/ic_footstep"
+                                       tintColor="[CONFIGURATION.themeColor.0]" />
+                            </PartImage>
+                        </Default>
                     </Condition>
                     <!-- Samsung One UI 8 AOD refresh workaround -->
-                    <PartText name="arc0_st_aod_refresh" x="0" y="0" width="1" height="1" alpha="0">
+                    <PartText name="arc0_st_aod_refresh" x="0" y="0" width="0" height="0" alpha="0">
                         <Text align="START">
                             <Font family="google_sans_flex_450" size="1" color="#00000000">
                                 <Template><![CDATA[%d]]>
@@ -423,7 +429,7 @@
                     <PartText name="arc0_rv_text" x="0" y="0" width="480" height="480">
                         <TextCircular centerX="240" centerY="240" width="440" height="440"
                                       startAngle="285" endAngle="345"
-                                      direction="CLOCKWISE" align="START">
+                                      direction="CLOCKWISE" align="CENTER">
                             <Font family="google_sans_flex_700" size="24" color="#ffffffff">
                                 <Template><![CDATA[%s]]>
                                     <Parameter expression="[COMPLICATION.TEXT]" />
@@ -450,9 +456,15 @@
                                        tintColor="[CONFIGURATION.themeColor.0]" />
                             </PartImage>
                         </Compare>
+                        <Default>
+                            <PartImage name="arc0_rv_icon_fb" x="80" y="80" width="22" height="22">
+                                <Image resource="@drawable/ic_footstep"
+                                       tintColor="[CONFIGURATION.themeColor.0]" />
+                            </PartImage>
+                        </Default>
                     </Condition>
                     <!-- Samsung One UI 8 AOD refresh workaround -->
-                    <PartText name="arc0_rv_aod_refresh" x="0" y="0" width="1" height="1" alpha="0">
+                    <PartText name="arc0_rv_aod_refresh" x="0" y="0" width="0" height="0" alpha="0">
                         <Text align="START">
                             <Font family="google_sans_flex_450" size="1" color="#00000000">
                                 <Template><![CDATA[%d]]>
@@ -487,7 +499,7 @@
                     <PartText name="arc1_st_text" x="0" y="0" width="480" height="480">
                         <TextCircular centerX="240" centerY="240" width="440" height="440"
                                       startAngle="15" endAngle="75"
-                                      direction="CLOCKWISE" align="END">
+                                      direction="CLOCKWISE" align="CENTER">
                             <Font family="google_sans_flex_700" size="24" color="#ffffffff">
                                 <Template><![CDATA[%s]]>
                                     <Parameter expression="[COMPLICATION.TEXT]" />
@@ -505,9 +517,15 @@
                                        tintColor="[CONFIGURATION.themeColor.0]" />
                             </PartImage>
                         </Compare>
+                        <Default>
+                            <PartImage name="arc1_st_icon_fb" x="375" y="80" width="22" height="22">
+                                <Image resource="@drawable/ic_zigzag"
+                                       tintColor="[CONFIGURATION.themeColor.0]" />
+                            </PartImage>
+                        </Default>
                     </Condition>
                     <!-- Samsung One UI 8 AOD refresh workaround -->
-                    <PartText name="arc1_st_aod_refresh" x="0" y="0" width="1" height="1" alpha="0">
+                    <PartText name="arc1_st_aod_refresh" x="0" y="0" width="0" height="0" alpha="0">
                         <Text align="START">
                             <Font family="google_sans_flex_450" size="1" color="#00000000">
                                 <Template><![CDATA[%d]]>
@@ -527,7 +545,7 @@
                     <PartText name="arc1_rv_text" x="0" y="0" width="480" height="480">
                         <TextCircular centerX="240" centerY="240" width="440" height="440"
                                       startAngle="15" endAngle="75"
-                                      direction="CLOCKWISE" align="END">
+                                      direction="CLOCKWISE" align="CENTER">
                             <Font family="google_sans_flex_700" size="24" color="#ffffffff">
                                 <Template><![CDATA[%s]]>
                                     <Parameter expression="[COMPLICATION.TEXT]" />
@@ -554,9 +572,15 @@
                                        tintColor="[CONFIGURATION.themeColor.0]" />
                             </PartImage>
                         </Compare>
+                        <Default>
+                            <PartImage name="arc1_rv_icon_fb" x="375" y="80" width="22" height="22">
+                                <Image resource="@drawable/ic_zigzag"
+                                       tintColor="[CONFIGURATION.themeColor.0]" />
+                            </PartImage>
+                        </Default>
                     </Condition>
                     <!-- Samsung One UI 8 AOD refresh workaround -->
-                    <PartText name="arc1_rv_aod_refresh" x="0" y="0" width="1" height="1" alpha="0">
+                    <PartText name="arc1_rv_aod_refresh" x="0" y="0" width="0" height="0" alpha="0">
                         <Text align="START">
                             <Font family="google_sans_flex_450" size="1" color="#00000000">
                                 <Template><![CDATA[%d]]>
@@ -593,7 +617,7 @@
                         <!-- Provenance: base_0.apk → q3 text COUNTER_CLOCKWISE 255°→195° (flipped) -->
                         <TextCircular centerX="240" centerY="240" width="440" height="440"
                                       startAngle="255" endAngle="195"
-                                      direction="COUNTER_CLOCKWISE" align="START">
+                                      direction="COUNTER_CLOCKWISE" align="CENTER">
                             <Font family="google_sans_flex_700" size="24" color="#ffffffff">
                                 <Template><![CDATA[%s]]>
                                     <Parameter expression="[COMPLICATION.TEXT]" />
@@ -611,9 +635,15 @@
                                        tintColor="[CONFIGURATION.themeColor.0]" />
                             </PartImage>
                         </Compare>
+                        <Default>
+                            <PartImage name="arc2_st_icon_fb" x="190" y="390" width="22" height="22">
+                                <Image resource="@drawable/ic_pin"
+                                       tintColor="[CONFIGURATION.themeColor.0]" />
+                            </PartImage>
+                        </Default>
                     </Condition>
                     <!-- Samsung One UI 8 AOD refresh workaround -->
-                    <PartText name="arc2_st_aod_refresh" x="0" y="0" width="1" height="1" alpha="0">
+                    <PartText name="arc2_st_aod_refresh" x="0" y="0" width="0" height="0" alpha="0">
                         <Text align="START">
                             <Font family="google_sans_flex_450" size="1" color="#00000000">
                                 <Template><![CDATA[%d]]>
@@ -633,7 +663,7 @@
                     <PartText name="arc2_rv_text" x="0" y="0" width="480" height="480">
                         <TextCircular centerX="240" centerY="240" width="440" height="440"
                                       startAngle="255" endAngle="195"
-                                      direction="COUNTER_CLOCKWISE" align="START">
+                                      direction="COUNTER_CLOCKWISE" align="CENTER">
                             <Font family="google_sans_flex_700" size="24" color="#ffffffff">
                                 <Template><![CDATA[%s]]>
                                     <Parameter expression="[COMPLICATION.TEXT]" />
@@ -660,9 +690,15 @@
                                        tintColor="[CONFIGURATION.themeColor.0]" />
                             </PartImage>
                         </Compare>
+                        <Default>
+                            <PartImage name="arc2_rv_icon_fb" x="190" y="390" width="22" height="22">
+                                <Image resource="@drawable/ic_pin"
+                                       tintColor="[CONFIGURATION.themeColor.0]" />
+                            </PartImage>
+                        </Default>
                     </Condition>
                     <!-- Samsung One UI 8 AOD refresh workaround -->
-                    <PartText name="arc2_rv_aod_refresh" x="0" y="0" width="1" height="1" alpha="0">
+                    <PartText name="arc2_rv_aod_refresh" x="0" y="0" width="0" height="0" alpha="0">
                         <Text align="START">
                             <Font family="google_sans_flex_450" size="1" color="#00000000">
                                 <Template><![CDATA[%d]]>
@@ -699,7 +735,7 @@
                         <!-- Provenance: base_0.apk → q2 text COUNTER_CLOCKWISE 165°→105° (flipped) -->
                         <TextCircular centerX="240" centerY="240" width="440" height="440"
                                       startAngle="165" endAngle="105"
-                                      direction="COUNTER_CLOCKWISE" align="START">
+                                      direction="COUNTER_CLOCKWISE" align="CENTER">
                             <Font family="google_sans_flex_700" size="24" color="#ffffffff">
                                 <Template><![CDATA[%s]]>
                                     <Parameter expression="[COMPLICATION.TEXT]" />
@@ -717,9 +753,15 @@
                                        tintColor="[CONFIGURATION.themeColor.0]" />
                             </PartImage>
                         </Compare>
+                        <Default>
+                            <PartImage name="arc3_st_icon_fb" x="290" y="390" width="22" height="22">
+                                <Image resource="@drawable/ic_zigzag"
+                                       tintColor="[CONFIGURATION.themeColor.0]" />
+                            </PartImage>
+                        </Default>
                     </Condition>
                     <!-- Samsung One UI 8 AOD refresh workaround -->
-                    <PartText name="arc3_st_aod_refresh" x="0" y="0" width="1" height="1" alpha="0">
+                    <PartText name="arc3_st_aod_refresh" x="0" y="0" width="0" height="0" alpha="0">
                         <Text align="START">
                             <Font family="google_sans_flex_450" size="1" color="#00000000">
                                 <Template><![CDATA[%d]]>
@@ -739,7 +781,7 @@
                     <PartText name="arc3_rv_text" x="0" y="0" width="480" height="480">
                         <TextCircular centerX="240" centerY="240" width="440" height="440"
                                       startAngle="165" endAngle="105"
-                                      direction="COUNTER_CLOCKWISE" align="START">
+                                      direction="COUNTER_CLOCKWISE" align="CENTER">
                             <Font family="google_sans_flex_700" size="24" color="#ffffffff">
                                 <Template><![CDATA[%s]]>
                                     <Parameter expression="[COMPLICATION.TEXT]" />
@@ -766,9 +808,15 @@
                                        tintColor="[CONFIGURATION.themeColor.0]" />
                             </PartImage>
                         </Compare>
+                        <Default>
+                            <PartImage name="arc3_rv_icon_fb" x="290" y="390" width="22" height="22">
+                                <Image resource="@drawable/ic_zigzag"
+                                       tintColor="[CONFIGURATION.themeColor.0]" />
+                            </PartImage>
+                        </Default>
                     </Condition>
                     <!-- Samsung One UI 8 AOD refresh workaround -->
-                    <PartText name="arc3_rv_aod_refresh" x="0" y="0" width="1" height="1" alpha="0">
+                    <PartText name="arc3_rv_aod_refresh" x="0" y="0" width="0" height="0" alpha="0">
                         <Text align="START">
                             <Font family="google_sans_flex_450" size="1" color="#00000000">
                                 <Template><![CDATA[%d]]>
@@ -799,12 +847,12 @@
              ============================================================ -->
         <!-- Complication Slot 4 — Bottom-Left Bulb / Linear Row 1. -->
         <ComplicationSlot slotId="4" name="slot4"
-            x="39" y="263" width="120" height="120"
+            x="0" y="0" width="480" height="480"
             supportedTypes="SHORT_TEXT RANGED_VALUE SMALL_IMAGE EMPTY"
             displayName="@string/bottom_left_complication">
             <DefaultProviderPolicy defaultSystemProvider="WATCH_BATTERY"
                                    defaultSystemProviderType="RANGED_VALUE" />
-            <BoundingRoundBox x="0" y="0" width="120" height="120" cornerRadius="18" />
+            <BoundingRoundBox x="39" y="263" width="120" height="120" cornerRadius="18" />
 
             <!-- SHORT_TEXT: bulb (layouts 0,1) + linear (layouts 2,3) -->
             <Complication type="SHORT_TEXT">
@@ -828,6 +876,12 @@
                                        tintColor="[CONFIGURATION.themeColor.0]" />
                             </PartImage>
                         </Compare>
+                        <Default>
+                            <PartImage name="bulb4_st_icon_fb" x="24" y="6" width="72" height="72">
+                                <Image resource="@drawable/ic_zigzag"
+                                       tintColor="[CONFIGURATION.themeColor.0]" />
+                            </PartImage>
+                        </Default>
                     </Condition>
                     <PartText name="bulb4_st_label" x="0" y="78" width="120" height="36">
                         <Text align="CENTER">
@@ -839,7 +893,7 @@
                         </Text>
                     </PartText>
                     <!-- Samsung One UI 8 AOD refresh workaround -->
-                    <PartText name="bulb4_st_aod" x="0" y="0" width="1" height="1" alpha="0">
+                    <PartText name="bulb4_st_aod" x="0" y="0" width="0" height="0" alpha="0">
                         <Text align="START">
                             <Font family="google_sans_flex_450" size="1" color="#00000000">
                                 <Template><![CDATA[%d]]>
@@ -871,6 +925,12 @@
                                        tintColor="[CONFIGURATION.themeColor.0]" />
                             </PartImage>
                         </Compare>
+                        <Default>
+                            <PartImage name="lin4_st_icon_fb" x="0" y="4" width="28" height="28">
+                                <Image resource="@drawable/ic_zigzag"
+                                       tintColor="[CONFIGURATION.themeColor.0]" />
+                            </PartImage>
+                        </Default>
                     </Condition>
                     <PartText name="lin4_st_label" x="35" y="4" width="140" height="30">
                         <Text align="START">
@@ -884,7 +944,7 @@
                         </Text>
                     </PartText>
                     <!-- Samsung One UI 8 AOD refresh workaround -->
-                    <PartText name="lin4_st_aod" x="0" y="0" width="1" height="1" alpha="0">
+                    <PartText name="lin4_st_aod" x="0" y="0" width="0" height="0" alpha="0">
                         <Text align="START">
                             <Font family="google_sans_flex_450" size="1" color="#00000000">
                                 <Template><![CDATA[%d]]>
@@ -926,6 +986,12 @@
                                        tintColor="[CONFIGURATION.themeColor.0]" />
                             </PartImage>
                         </Compare>
+                        <Default>
+                            <PartImage name="bulb4_rv_icon_fb" x="24" y="6" width="72" height="72">
+                                <Image resource="@drawable/ic_zigzag"
+                                       tintColor="[CONFIGURATION.themeColor.0]" />
+                            </PartImage>
+                        </Default>
                     </Condition>
                     <PartText name="bulb4_rv_label" x="0" y="78" width="120" height="36">
                         <Text align="CENTER">
@@ -937,7 +1003,7 @@
                         </Text>
                     </PartText>
                     <!-- Samsung One UI 8 AOD refresh workaround -->
-                    <PartText name="bulb4_rv_aod" x="0" y="0" width="1" height="1" alpha="0">
+                    <PartText name="bulb4_rv_aod" x="0" y="0" width="0" height="0" alpha="0">
                         <Text align="START">
                             <Font family="google_sans_flex_450" size="1" color="#00000000">
                                 <Template><![CDATA[%d]]>
@@ -969,6 +1035,12 @@
                                        tintColor="[CONFIGURATION.themeColor.0]" />
                             </PartImage>
                         </Compare>
+                        <Default>
+                            <PartImage name="lin4_rv_icon_fb" x="0" y="4" width="28" height="28">
+                                <Image resource="@drawable/ic_zigzag"
+                                       tintColor="[CONFIGURATION.themeColor.0]" />
+                            </PartImage>
+                        </Default>
                     </Condition>
                     <PartText name="lin4_rv_label" x="35" y="4" width="140" height="30">
                         <Text align="START">
@@ -1013,7 +1085,7 @@
                         </Line>
                     </PartDraw>
                     <!-- Samsung One UI 8 AOD refresh workaround -->
-                    <PartText name="lin4_rv_aod" x="0" y="0" width="1" height="1" alpha="0">
+                    <PartText name="lin4_rv_aod" x="0" y="0" width="0" height="0" alpha="0">
                         <Text align="START">
                             <Font family="google_sans_flex_450" size="1" color="#00000000">
                                 <Template><![CDATA[%d]]>
@@ -1041,7 +1113,7 @@
                         <Image resource="[COMPLICATION.SMALL_IMAGE]" />
                     </PartImage>
                     <!-- Samsung One UI 8 AOD refresh workaround -->
-                    <PartText name="bulb4_si_aod" x="0" y="0" width="1" height="1" alpha="0">
+                    <PartText name="bulb4_si_aod" x="0" y="0" width="0" height="0" alpha="0">
                         <Text align="START">
                             <Font family="google_sans_flex_450" size="1" color="#00000000">
                                 <Template><![CDATA[%d]]>
@@ -1057,12 +1129,12 @@
 
         <!-- Complication Slot 5 — Bottom-Center Bulb / Linear Row 2. -->
         <ComplicationSlot slotId="5" name="slot5"
-            x="180" y="329" width="120" height="120"
+            x="0" y="0" width="480" height="480"
             supportedTypes="SHORT_TEXT RANGED_VALUE SMALL_IMAGE EMPTY"
             displayName="@string/bottom_center_shortcut">
             <DefaultProviderPolicy defaultSystemProvider="APP_SHORTCUT"
                                    defaultSystemProviderType="SMALL_IMAGE" />
-            <BoundingRoundBox x="0" y="0" width="120" height="120" cornerRadius="18" />
+            <BoundingRoundBox x="180" y="329" width="120" height="120" cornerRadius="18" />
 
             <!-- SHORT_TEXT: bulb (layouts 0,1) + linear (layouts 2,3) -->
             <Complication type="SHORT_TEXT">
@@ -1086,6 +1158,12 @@
                                        tintColor="[CONFIGURATION.themeColor.0]" />
                             </PartImage>
                         </Compare>
+                        <Default>
+                            <PartImage name="bulb5_st_icon_fb" x="24" y="6" width="72" height="72">
+                                <Image resource="@drawable/ic_star"
+                                       tintColor="[CONFIGURATION.themeColor.0]" />
+                            </PartImage>
+                        </Default>
                     </Condition>
                     <PartText name="bulb5_st_label" x="0" y="78" width="120" height="36">
                         <Text align="CENTER">
@@ -1097,7 +1175,7 @@
                         </Text>
                     </PartText>
                     <!-- Samsung One UI 8 AOD refresh workaround -->
-                    <PartText name="bulb5_st_aod" x="0" y="0" width="1" height="1" alpha="0">
+                    <PartText name="bulb5_st_aod" x="0" y="0" width="0" height="0" alpha="0">
                         <Text align="START">
                             <Font family="google_sans_flex_450" size="1" color="#00000000">
                                 <Template><![CDATA[%d]]>
@@ -1129,6 +1207,12 @@
                                        tintColor="[CONFIGURATION.themeColor.0]" />
                             </PartImage>
                         </Compare>
+                        <Default>
+                            <PartImage name="lin5_st_icon_fb" x="0" y="4" width="28" height="28">
+                                <Image resource="@drawable/ic_star"
+                                       tintColor="[CONFIGURATION.themeColor.0]" />
+                            </PartImage>
+                        </Default>
                     </Condition>
                     <PartText name="lin5_st_label" x="35" y="4" width="140" height="30">
                         <Text align="START">
@@ -1142,7 +1226,7 @@
                         </Text>
                     </PartText>
                     <!-- Samsung One UI 8 AOD refresh workaround -->
-                    <PartText name="lin5_st_aod" x="0" y="0" width="1" height="1" alpha="0">
+                    <PartText name="lin5_st_aod" x="0" y="0" width="0" height="0" alpha="0">
                         <Text align="START">
                             <Font family="google_sans_flex_450" size="1" color="#00000000">
                                 <Template><![CDATA[%d]]>
@@ -1184,6 +1268,12 @@
                                        tintColor="[CONFIGURATION.themeColor.0]" />
                             </PartImage>
                         </Compare>
+                        <Default>
+                            <PartImage name="bulb5_rv_icon_fb" x="24" y="6" width="72" height="72">
+                                <Image resource="@drawable/ic_star"
+                                       tintColor="[CONFIGURATION.themeColor.0]" />
+                            </PartImage>
+                        </Default>
                     </Condition>
                     <PartText name="bulb5_rv_label" x="0" y="78" width="120" height="36">
                         <Text align="CENTER">
@@ -1195,7 +1285,7 @@
                         </Text>
                     </PartText>
                     <!-- Samsung One UI 8 AOD refresh workaround -->
-                    <PartText name="bulb5_rv_aod" x="0" y="0" width="1" height="1" alpha="0">
+                    <PartText name="bulb5_rv_aod" x="0" y="0" width="0" height="0" alpha="0">
                         <Text align="START">
                             <Font family="google_sans_flex_450" size="1" color="#00000000">
                                 <Template><![CDATA[%d]]>
@@ -1227,6 +1317,12 @@
                                        tintColor="[CONFIGURATION.themeColor.0]" />
                             </PartImage>
                         </Compare>
+                        <Default>
+                            <PartImage name="lin5_rv_icon_fb" x="0" y="4" width="28" height="28">
+                                <Image resource="@drawable/ic_star"
+                                       tintColor="[CONFIGURATION.themeColor.0]" />
+                            </PartImage>
+                        </Default>
                     </Condition>
                     <PartText name="lin5_rv_label" x="35" y="4" width="140" height="30">
                         <Text align="START">
@@ -1271,7 +1367,7 @@
                         </Line>
                     </PartDraw>
                     <!-- Samsung One UI 8 AOD refresh workaround -->
-                    <PartText name="lin5_rv_aod" x="0" y="0" width="1" height="1" alpha="0">
+                    <PartText name="lin5_rv_aod" x="0" y="0" width="0" height="0" alpha="0">
                         <Text align="START">
                             <Font family="google_sans_flex_450" size="1" color="#00000000">
                                 <Template><![CDATA[%d]]>
@@ -1299,7 +1395,7 @@
                         <Image resource="[COMPLICATION.SMALL_IMAGE]" />
                     </PartImage>
                     <!-- Samsung One UI 8 AOD refresh workaround -->
-                    <PartText name="bulb5_si_aod" x="0" y="0" width="1" height="1" alpha="0">
+                    <PartText name="bulb5_si_aod" x="0" y="0" width="0" height="0" alpha="0">
                         <Text align="START">
                             <Font family="google_sans_flex_450" size="1" color="#00000000">
                                 <Template><![CDATA[%d]]>
@@ -1315,12 +1411,12 @@
 
         <!-- Complication Slot 6 — Bottom-Right Bulb / Linear Row 3. -->
         <ComplicationSlot slotId="6" name="slot6"
-            x="320" y="263" width="120" height="120"
+            x="0" y="0" width="480" height="480"
             supportedTypes="SHORT_TEXT RANGED_VALUE SMALL_IMAGE EMPTY"
             displayName="@string/bottom_right_complication">
             <DefaultProviderPolicy defaultSystemProvider="HEART_RATE"
                                    defaultSystemProviderType="SHORT_TEXT" />
-            <BoundingRoundBox x="0" y="0" width="120" height="120" cornerRadius="18" />
+            <BoundingRoundBox x="320" y="263" width="120" height="120" cornerRadius="18" />
 
             <!-- SHORT_TEXT: bulb (layouts 0,1) + linear (layouts 2,3) -->
             <Complication type="SHORT_TEXT">
@@ -1344,6 +1440,12 @@
                                        tintColor="[CONFIGURATION.themeColor.0]" />
                             </PartImage>
                         </Compare>
+                        <Default>
+                            <PartImage name="bulb6_st_icon_fb" x="24" y="6" width="72" height="72">
+                                <Image resource="@drawable/ic_heart"
+                                       tintColor="[CONFIGURATION.themeColor.0]" />
+                            </PartImage>
+                        </Default>
                     </Condition>
                     <PartText name="bulb6_st_label" x="0" y="78" width="120" height="36">
                         <Text align="CENTER">
@@ -1355,7 +1457,7 @@
                         </Text>
                     </PartText>
                     <!-- Samsung One UI 8 AOD refresh workaround -->
-                    <PartText name="bulb6_st_aod" x="0" y="0" width="1" height="1" alpha="0">
+                    <PartText name="bulb6_st_aod" x="0" y="0" width="0" height="0" alpha="0">
                         <Text align="START">
                             <Font family="google_sans_flex_450" size="1" color="#00000000">
                                 <Template><![CDATA[%d]]>
@@ -1387,6 +1489,12 @@
                                        tintColor="[CONFIGURATION.themeColor.0]" />
                             </PartImage>
                         </Compare>
+                        <Default>
+                            <PartImage name="lin6_st_icon_fb" x="0" y="4" width="28" height="28">
+                                <Image resource="@drawable/ic_heart"
+                                       tintColor="[CONFIGURATION.themeColor.0]" />
+                            </PartImage>
+                        </Default>
                     </Condition>
                     <PartText name="lin6_st_label" x="35" y="4" width="140" height="30">
                         <Text align="START">
@@ -1400,7 +1508,7 @@
                         </Text>
                     </PartText>
                     <!-- Samsung One UI 8 AOD refresh workaround -->
-                    <PartText name="lin6_st_aod" x="0" y="0" width="1" height="1" alpha="0">
+                    <PartText name="lin6_st_aod" x="0" y="0" width="0" height="0" alpha="0">
                         <Text align="START">
                             <Font family="google_sans_flex_450" size="1" color="#00000000">
                                 <Template><![CDATA[%d]]>
@@ -1442,6 +1550,12 @@
                                        tintColor="[CONFIGURATION.themeColor.0]" />
                             </PartImage>
                         </Compare>
+                        <Default>
+                            <PartImage name="bulb6_rv_icon_fb" x="24" y="6" width="72" height="72">
+                                <Image resource="@drawable/ic_heart"
+                                       tintColor="[CONFIGURATION.themeColor.0]" />
+                            </PartImage>
+                        </Default>
                     </Condition>
                     <PartText name="bulb6_rv_label" x="0" y="78" width="120" height="36">
                         <Text align="CENTER">
@@ -1453,7 +1567,7 @@
                         </Text>
                     </PartText>
                     <!-- Samsung One UI 8 AOD refresh workaround -->
-                    <PartText name="bulb6_rv_aod" x="0" y="0" width="1" height="1" alpha="0">
+                    <PartText name="bulb6_rv_aod" x="0" y="0" width="0" height="0" alpha="0">
                         <Text align="START">
                             <Font family="google_sans_flex_450" size="1" color="#00000000">
                                 <Template><![CDATA[%d]]>
@@ -1485,6 +1599,12 @@
                                        tintColor="[CONFIGURATION.themeColor.0]" />
                             </PartImage>
                         </Compare>
+                        <Default>
+                            <PartImage name="lin6_rv_icon_fb" x="0" y="4" width="28" height="28">
+                                <Image resource="@drawable/ic_heart"
+                                       tintColor="[CONFIGURATION.themeColor.0]" />
+                            </PartImage>
+                        </Default>
                     </Condition>
                     <PartText name="lin6_rv_label" x="35" y="4" width="140" height="30">
                         <Text align="START">
@@ -1529,7 +1649,7 @@
                         </Line>
                     </PartDraw>
                     <!-- Samsung One UI 8 AOD refresh workaround -->
-                    <PartText name="lin6_rv_aod" x="0" y="0" width="1" height="1" alpha="0">
+                    <PartText name="lin6_rv_aod" x="0" y="0" width="0" height="0" alpha="0">
                         <Text align="START">
                             <Font family="google_sans_flex_450" size="1" color="#00000000">
                                 <Template><![CDATA[%d]]>
@@ -1557,7 +1677,7 @@
                         <Image resource="[COMPLICATION.SMALL_IMAGE]" />
                     </PartImage>
                     <!-- Samsung One UI 8 AOD refresh workaround -->
-                    <PartText name="bulb6_si_aod" x="0" y="0" width="1" height="1" alpha="0">
+                    <PartText name="bulb6_si_aod" x="0" y="0" width="0" height="0" alpha="0">
                         <Text align="START">
                             <Font family="google_sans_flex_450" size="1" color="#00000000">
                                 <Template><![CDATA[%d]]>
@@ -1573,12 +1693,12 @@
 
         <!-- Complication Slot 7 — Linear Row 4 only (no bulb). -->
         <ComplicationSlot slotId="7" name="slot7"
-            x="246" y="298" width="180" height="42"
+            x="0" y="0" width="480" height="480"
             supportedTypes="SHORT_TEXT RANGED_VALUE EMPTY"
             displayName="@string/linear_complication_4">
             <DefaultProviderPolicy defaultSystemProvider="WATCH_BATTERY"
                                    defaultSystemProviderType="RANGED_VALUE" />
-            <BoundingRoundBox x="0" y="0" width="180" height="42" cornerRadius="19" />
+            <BoundingRoundBox x="246" y="298" width="180" height="42" cornerRadius="19" />
 
             <Complication type="SHORT_TEXT">
                 <Group name="lin7_st" x="246" y="298" width="180" height="42" alpha="255">
@@ -1603,6 +1723,12 @@
                                        tintColor="[CONFIGURATION.themeColor.0]" />
                             </PartImage>
                         </Compare>
+                        <Default>
+                            <PartImage name="lin7_st_icon_fb" x="0" y="4" width="28" height="28">
+                                <Image resource="@drawable/ic_zigzag"
+                                       tintColor="[CONFIGURATION.themeColor.0]" />
+                            </PartImage>
+                        </Default>
                     </Condition>
                     <PartText name="lin7_st_label" x="35" y="4" width="140" height="30">
                         <Text align="START">
@@ -1616,7 +1742,7 @@
                         </Text>
                     </PartText>
                     <!-- Samsung One UI 8 AOD refresh workaround -->
-                    <PartText name="lin7_st_aod" x="0" y="0" width="1" height="1" alpha="0">
+                    <PartText name="lin7_st_aod" x="0" y="0" width="0" height="0" alpha="0">
                         <Text align="START">
                             <Font family="google_sans_flex_450" size="1" color="#00000000">
                                 <Template><![CDATA[%d]]>
@@ -1651,6 +1777,12 @@
                                        tintColor="[CONFIGURATION.themeColor.0]" />
                             </PartImage>
                         </Compare>
+                        <Default>
+                            <PartImage name="lin7_rv_icon_fb" x="0" y="4" width="28" height="28">
+                                <Image resource="@drawable/ic_zigzag"
+                                       tintColor="[CONFIGURATION.themeColor.0]" />
+                            </PartImage>
+                        </Default>
                     </Condition>
                     <PartText name="lin7_rv_label" x="35" y="4" width="140" height="30">
                         <Text align="START">
@@ -1694,7 +1826,7 @@
                         </Line>
                     </PartDraw>
                     <!-- Samsung One UI 8 AOD refresh workaround -->
-                    <PartText name="lin7_rv_aod" x="0" y="0" width="1" height="1" alpha="0">
+                    <PartText name="lin7_rv_aod" x="0" y="0" width="0" height="0" alpha="0">
                         <Text align="START">
                             <Font family="google_sans_flex_450" size="1" color="#00000000">
                                 <Template><![CDATA[%d]]>

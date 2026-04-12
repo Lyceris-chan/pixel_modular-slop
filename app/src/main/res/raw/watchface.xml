@@ -180,7 +180,11 @@
                 value="[CONFIGURATION.layoutStyle] == 1 || [CONFIGURATION.layoutStyle] == 3 ? 52 : 59" />
             <Transform target="height"
                 value="[CONFIGURATION.layoutStyle] == 1 || [CONFIGURATION.layoutStyle] == 3 ? 40 : 42" />
-            <RoundRectangle x="0" y="0" width="52" height="40" cornerRadiusX="8" cornerRadiusY="8">
+            <RoundRectangle x="0" y="0" width="59" height="42" cornerRadiusX="8" cornerRadiusY="8">
+                <Transform target="width"
+                    value="[CONFIGURATION.layoutStyle] == 1 || [CONFIGURATION.layoutStyle] == 3 ? 52 : 59" />
+                <Transform target="height"
+                    value="[CONFIGURATION.layoutStyle] == 1 || [CONFIGURATION.layoutStyle] == 3 ? 40 : 42" />
                 <Fill color="[CONFIGURATION.themeColor.1]" />
             </RoundRectangle>
         </PartDraw>
@@ -196,7 +200,11 @@
                 value="[CONFIGURATION.layoutStyle] == 1 || [CONFIGURATION.layoutStyle] == 3 ? 46 : 53" />
             <Transform target="height"
                 value="[CONFIGURATION.layoutStyle] == 1 || [CONFIGURATION.layoutStyle] == 3 ? 34 : 36" />
-            <RoundRectangle x="0" y="0" width="46" height="34" cornerRadiusX="5" cornerRadiusY="5">
+            <RoundRectangle x="0" y="0" width="53" height="36" cornerRadiusX="5" cornerRadiusY="5">
+                <Transform target="width"
+                    value="[CONFIGURATION.layoutStyle] == 1 || [CONFIGURATION.layoutStyle] == 3 ? 46 : 53" />
+                <Transform target="height"
+                    value="[CONFIGURATION.layoutStyle] == 1 || [CONFIGURATION.layoutStyle] == 3 ? 34 : 36" />
                 <Fill color="#FF000000" />
             </RoundRectangle>
         </PartDraw>
@@ -417,7 +425,7 @@
                             <Expression name="arc0_st_has_icon"><![CDATA[[COMPLICATION.MONOCHROMATIC_IMAGE] != null]]></Expression>
                         </Expressions>
                         <Compare expression="arc0_st_has_icon">
-                            <PartImage name="arc0_st_icon" x="84" y="84" width="22" height="22">
+                            <PartImage name="arc0_st_icon" x="17" y="172" width="22" height="22">
                                 <Image resource="[COMPLICATION.MONOCHROMATIC_IMAGE]"
                                        tintColor="[CONFIGURATION.themeColor.0]" />
                             </PartImage>
@@ -519,7 +527,7 @@
                             <Expression name="arc1_st_has_icon"><![CDATA[[COMPLICATION.MONOCHROMATIC_IMAGE] != null]]></Expression>
                         </Expressions>
                         <Compare expression="arc1_st_has_icon">
-                            <PartImage name="arc1_st_icon" x="385" y="84" width="22" height="22">
+                            <PartImage name="arc1_st_icon" x="286" y="17" width="22" height="22">
                                 <Image resource="[COMPLICATION.MONOCHROMATIC_IMAGE]"
                                        tintColor="[CONFIGURATION.themeColor.0]" />
                             </PartImage>
@@ -608,7 +616,7 @@
                         value="[CONFIGURATION.layoutStyle] == 1 || [CONFIGURATION.layoutStyle] == 3 ? 255 : 0" />
                     <PartText name="arc2_st_text" x="0" y="0" width="480" height="480">
                         <!-- Provenance: base_0.apk → q3 text COUNTER_CLOCKWISE 255°→195° (flipped) -->
-                        <TextCircular centerX="240" centerY="240" width="440" height="440"
+                        <TextCircular centerX="240" centerY="240" width="420" height="420"
                                       startAngle="255" endAngle="195"
                                       direction="COUNTER_CLOCKWISE" align="CENTER">
                             <Font family="google_sans_flex_700" size="24" color="#ffffffff">
@@ -623,7 +631,7 @@
                             <Expression name="arc2_st_has_icon"><![CDATA[[COMPLICATION.MONOCHROMATIC_IMAGE] != null]]></Expression>
                         </Expressions>
                         <Compare expression="arc2_st_has_icon">
-                            <PartImage name="arc2_st_icon" x="84" y="385" width="22" height="22">
+                            <PartImage name="arc2_st_icon" x="17" y="286" width="22" height="22">
                                 <Image resource="[COMPLICATION.MONOCHROMATIC_IMAGE]"
                                        tintColor="[CONFIGURATION.themeColor.0]" />
                             </PartImage>
@@ -648,7 +656,7 @@
                     <Transform target="alpha"
                         value="[CONFIGURATION.layoutStyle] == 1 || [CONFIGURATION.layoutStyle] == 3 ? 255 : 0" />
                     <PartText name="arc2_rv_text" x="0" y="0" width="480" height="480">
-                        <TextCircular centerX="240" centerY="240" width="440" height="440"
+                        <TextCircular centerX="240" centerY="240" width="420" height="420"
                                       startAngle="255" endAngle="195"
                                       direction="COUNTER_CLOCKWISE" align="CENTER">
                             <Font family="google_sans_flex_700" size="24" color="#ffffffff">
@@ -715,7 +723,7 @@
                         value="[CONFIGURATION.layoutStyle] == 1 || [CONFIGURATION.layoutStyle] == 3 ? 255 : 0" />
                     <PartText name="arc3_st_text" x="0" y="0" width="480" height="480">
                         <!-- Provenance: base_0.apk → q2 text COUNTER_CLOCKWISE 165°→105° (flipped) -->
-                        <TextCircular centerX="240" centerY="240" width="440" height="440"
+                        <TextCircular centerX="240" centerY="240" width="420" height="420"
                                       startAngle="165" endAngle="105"
                                       direction="COUNTER_CLOCKWISE" align="CENTER">
                             <Font family="google_sans_flex_700" size="24" color="#ffffffff">
@@ -730,7 +738,7 @@
                             <Expression name="arc3_st_has_icon"><![CDATA[[COMPLICATION.MONOCHROMATIC_IMAGE] != null]]></Expression>
                         </Expressions>
                         <Compare expression="arc3_st_has_icon">
-                            <PartImage name="arc3_st_icon" x="385" y="385" width="22" height="22">
+                            <PartImage name="arc3_st_icon" x="286" y="440" width="22" height="22">
                                 <Image resource="[COMPLICATION.MONOCHROMATIC_IMAGE]"
                                        tintColor="[CONFIGURATION.themeColor.0]" />
                             </PartImage>
@@ -755,7 +763,7 @@
                     <Transform target="alpha"
                         value="[CONFIGURATION.layoutStyle] == 1 || [CONFIGURATION.layoutStyle] == 3 ? 255 : 0" />
                     <PartText name="arc3_rv_text" x="0" y="0" width="480" height="480">
-                        <TextCircular centerX="240" centerY="240" width="440" height="440"
+                        <TextCircular centerX="240" centerY="240" width="420" height="420"
                                       startAngle="165" endAngle="105"
                                       direction="COUNTER_CLOCKWISE" align="CENTER">
                             <Font family="google_sans_flex_700" size="24" color="#ffffffff">
@@ -828,7 +836,7 @@
                         value="[CONFIGURATION.layoutStyle] == 0 || [CONFIGURATION.layoutStyle] == 1 ? 255 : 0" />
                     <PartDraw name="bulb4_st_ring" x="0" y="0" width="120" height="120">
                         <Arc centerX="60" centerY="60" width="120" height="120"
-                             startAngle="0" endAngle="360" direction="CLOCKWISE">
+                             startAngle="0" endAngle="359.9" direction="CLOCKWISE">
                             <Stroke color="[CONFIGURATION.themeColor.2]" thickness="6" cap="ROUND" />
                         </Arc>
                     </PartDraw>
@@ -930,7 +938,7 @@
                         value="[CONFIGURATION.layoutStyle] == 0 || [CONFIGURATION.layoutStyle] == 1 ? 255 : 0" />
                     <PartDraw name="bulb4_rv_track" x="0" y="0" width="120" height="120">
                         <Arc centerX="60" centerY="60" width="120" height="120"
-                             startAngle="0" endAngle="360" direction="CLOCKWISE">
+                             startAngle="0" endAngle="359.9" direction="CLOCKWISE">
                             <Stroke color="[CONFIGURATION.themeColor.2]" thickness="6" cap="ROUND" />
                         </Arc>
                     </PartDraw>
@@ -1073,7 +1081,7 @@
                         value="[CONFIGURATION.layoutStyle] == 0 || [CONFIGURATION.layoutStyle] == 1 ? 255 : 0" />
                     <PartDraw name="bulb4_si_ring" x="0" y="0" width="120" height="120">
                         <Arc centerX="60" centerY="60" width="120" height="120"
-                             startAngle="0" endAngle="360" direction="CLOCKWISE">
+                             startAngle="0" endAngle="359.9" direction="CLOCKWISE">
                             <Stroke color="[CONFIGURATION.themeColor.2]" thickness="6" cap="ROUND" />
                         </Arc>
                     </PartDraw>
@@ -1133,7 +1141,7 @@
                         value="[CONFIGURATION.layoutStyle] == 0 || [CONFIGURATION.layoutStyle] == 1 ? 255 : 0" />
                     <PartDraw name="bulb5_st_ring" x="0" y="0" width="120" height="120">
                         <Arc centerX="60" centerY="60" width="120" height="120"
-                             startAngle="0" endAngle="360" direction="CLOCKWISE">
+                             startAngle="0" endAngle="359.9" direction="CLOCKWISE">
                             <Stroke color="[CONFIGURATION.themeColor.2]" thickness="6" cap="ROUND" />
                         </Arc>
                     </PartDraw>
@@ -1235,7 +1243,7 @@
                         value="[CONFIGURATION.layoutStyle] == 0 || [CONFIGURATION.layoutStyle] == 1 ? 255 : 0" />
                     <PartDraw name="bulb5_rv_track" x="0" y="0" width="120" height="120">
                         <Arc centerX="60" centerY="60" width="120" height="120"
-                             startAngle="0" endAngle="360" direction="CLOCKWISE">
+                             startAngle="0" endAngle="359.9" direction="CLOCKWISE">
                             <Stroke color="[CONFIGURATION.themeColor.2]" thickness="6" cap="ROUND" />
                         </Arc>
                     </PartDraw>
@@ -1378,7 +1386,7 @@
                         value="[CONFIGURATION.layoutStyle] == 0 || [CONFIGURATION.layoutStyle] == 1 ? 255 : 0" />
                     <PartDraw name="bulb5_si_ring" x="0" y="0" width="120" height="120">
                         <Arc centerX="60" centerY="60" width="120" height="120"
-                             startAngle="0" endAngle="360" direction="CLOCKWISE">
+                             startAngle="0" endAngle="359.9" direction="CLOCKWISE">
                             <Stroke color="[CONFIGURATION.themeColor.2]" thickness="6" cap="ROUND" />
                         </Arc>
                     </PartDraw>
@@ -1438,7 +1446,7 @@
                         value="[CONFIGURATION.layoutStyle] == 0 || [CONFIGURATION.layoutStyle] == 1 ? 255 : 0" />
                     <PartDraw name="bulb6_st_ring" x="0" y="0" width="120" height="120">
                         <Arc centerX="60" centerY="60" width="120" height="120"
-                             startAngle="0" endAngle="360" direction="CLOCKWISE">
+                             startAngle="0" endAngle="359.9" direction="CLOCKWISE">
                             <Stroke color="[CONFIGURATION.themeColor.2]" thickness="6" cap="ROUND" />
                         </Arc>
                     </PartDraw>
@@ -1540,7 +1548,7 @@
                         value="[CONFIGURATION.layoutStyle] == 0 || [CONFIGURATION.layoutStyle] == 1 ? 255 : 0" />
                     <PartDraw name="bulb6_rv_track" x="0" y="0" width="120" height="120">
                         <Arc centerX="60" centerY="60" width="120" height="120"
-                             startAngle="0" endAngle="360" direction="CLOCKWISE">
+                             startAngle="0" endAngle="359.9" direction="CLOCKWISE">
                             <Stroke color="[CONFIGURATION.themeColor.2]" thickness="6" cap="ROUND" />
                         </Arc>
                     </PartDraw>
@@ -1683,7 +1691,7 @@
                         value="[CONFIGURATION.layoutStyle] == 0 || [CONFIGURATION.layoutStyle] == 1 ? 255 : 0" />
                     <PartDraw name="bulb6_si_ring" x="0" y="0" width="120" height="120">
                         <Arc centerX="60" centerY="60" width="120" height="120"
-                             startAngle="0" endAngle="360" direction="CLOCKWISE">
+                             startAngle="0" endAngle="359.9" direction="CLOCKWISE">
                             <Stroke color="[CONFIGURATION.themeColor.2]" thickness="6" cap="ROUND" />
                         </Arc>
                     </PartDraw>

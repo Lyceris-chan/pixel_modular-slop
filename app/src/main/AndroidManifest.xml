@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <uses-feature android:name="android.hardware.type.watch" />
+    <uses-feature android:name="android.hardware.type.watch" android:required="true" />
 
     <!-- WAKE_LOCK: Required by the Wear OS watch face service to keep the CPU awake
          during complication data updates. Provenance: base_0.apk → uses-permission. -->

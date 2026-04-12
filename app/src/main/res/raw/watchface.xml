@@ -397,10 +397,17 @@
         -->
         <ComplicationSlot slotId="0" name="top_left_arc"
             x="0" y="0" width="480" height="480"
-            supportedTypes="RANGED_VALUE SHORT_TEXT EMPTY"
+            supportedTypes="RANGED_VALUE SHORT_TEXT LONG_TEXT EMPTY"
             displayName="@string/top_left_complication">
-            <DefaultProviderPolicy defaultSystemProvider="STEP_COUNT"
-                                   defaultSystemProviderType="RANGED_VALUE" />
+            <DefaultProviderPolicy
+                defaultSystemProvider="STEP_COUNT"
+                defaultSystemProviderType="RANGED_VALUE"
+                primaryDataSource="com.fitbit.FitbitMobile/com.fitbit.complications.offloadable.steps.OffloadableStepsComplicationDataSourceService"
+                primaryDataSourceDefaultType="SHORT_TEXT"
+                secondaryDataSource="com.fitbit.FitbitMobile/com.fitbit.complications.steps.StepsComplicationDataSourceService"
+                secondaryDataSourceDefaultType="SHORT_TEXT"
+                systemDataSourceFallback="STEP_COUNT"
+                systemDataSourceFallbackDefaultType="RANGED_VALUE" />
             <BoundingArc centerX="240" centerY="240" width="480" height="480"
                          thickness="30" startAngle="285" endAngle="345" />
 
@@ -409,6 +416,13 @@
                     <Variant mode="AMBIENT" target="alpha" value="0" />
                     <Transform target="alpha"
                         value="[CONFIGURATION.layoutStyle] == 1 || [CONFIGURATION.layoutStyle] == 3 ? 255 : 0" />
+                    <PartDraw name="arc0_st_bg" x="0" y="0" width="480" height="480">
+                        <!-- Provenance: base_0.apk → q4 short-text background arc track CLOCKWISE 285°–345° -->
+                        <Arc centerX="240" centerY="240" width="480" height="480"
+                             startAngle="285" endAngle="345" direction="CLOCKWISE">
+                            <Stroke color="[CONFIGURATION.themeColor.2]" thickness="12" cap="ROUND" />
+                        </Arc>
+                    </PartDraw>
                     <PartText name="arc0_st_text" x="0" y="0" width="480" height="480">
                         <TextCircular centerX="240" centerY="240" width="440" height="440"
                                       startAngle="285" endAngle="345"
@@ -444,11 +458,72 @@
                 </Group>
             </Complication>
 
+            <Complication type="LONG_TEXT">
+                <Group name="arc_slot0_long_text" x="0" y="0" width="480" height="480" alpha="255">
+                    <Variant mode="AMBIENT" target="alpha" value="0" />
+                    <Transform target="alpha"
+                        value="[CONFIGURATION.layoutStyle] == 1 || [CONFIGURATION.layoutStyle] == 3 ? 255 : 0" />
+                    <PartDraw name="arc0_lt_bg" x="0" y="0" width="480" height="480">
+                        <Arc centerX="240" centerY="240" width="480" height="480"
+                             startAngle="285" endAngle="345" direction="CLOCKWISE">
+                            <Stroke color="[CONFIGURATION.themeColor.2]" thickness="12" cap="ROUND" />
+                        </Arc>
+                    </PartDraw>
+                    <PartText name="arc0_lt_text" x="0" y="0" width="480" height="480">
+                        <TextCircular centerX="240" centerY="240" width="440" height="440"
+                                      startAngle="285" endAngle="345"
+                                      direction="CLOCKWISE" align="CENTER">
+                            <Font family="google_sans_flex_700" size="24" color="#ffffffff">
+                                <Template><![CDATA[%s]]>
+                                    <Parameter expression="[COMPLICATION.TEXT]" />
+                                </Template>
+                            </Font>
+                        </TextCircular>
+                    </PartText>
+                    <Condition>
+                        <Expressions>
+                            <Expression name="arc0_lt_has_icon"><![CDATA[[COMPLICATION.MONOCHROMATIC_IMAGE] != null]]></Expression>
+                        </Expressions>
+                        <Compare expression="arc0_lt_has_icon">
+                            <PartImage name="arc0_lt_icon" x="17" y="172" width="22" height="22">
+                                <Image resource="[COMPLICATION.MONOCHROMATIC_IMAGE]"
+                                       tintColor="[CONFIGURATION.themeColor.0]" />
+                            </PartImage>
+                        </Compare>
+                    </Condition>
+                    <PartText name="arc0_lt_aod_refresh" x="479" y="479" width="1" height="1" alpha="0">
+                        <Text align="START">
+                            <Font family="google_sans_flex_450" size="1" color="#00000000">
+                                <Template><![CDATA[%d]]>
+                                    <Parameter expression="[COMPLICATION.LAST_UPDATE_TIME]" />
+                                </Template>
+                            </Font>
+                        </Text>
+                    </PartText>
+                </Group>
+            </Complication>
+
             <Complication type="RANGED_VALUE">
                 <Group name="arc_slot0_ranged" x="0" y="0" width="480" height="480" alpha="255">
                     <Variant mode="AMBIENT" target="alpha" value="0" />
                     <Transform target="alpha"
                         value="[CONFIGURATION.layoutStyle] == 1 || [CONFIGURATION.layoutStyle] == 3 ? 255 : 0" />
+                    <PartDraw name="arc0_rv_bg" x="0" y="0" width="480" height="480">
+                        <!-- Provenance: base_0.apk → q4 background arc track CLOCKWISE 285°–345° -->
+                        <Arc centerX="240" centerY="240" width="480" height="480"
+                             startAngle="285" endAngle="345" direction="CLOCKWISE">
+                            <Stroke color="[CONFIGURATION.themeColor.2]" thickness="12" cap="ROUND" />
+                        </Arc>
+                    </PartDraw>
+                    <PartDraw name="arc0_rv_fill" x="0" y="0" width="480" height="480">
+                        <!-- Provenance: base_0.apk → q4 ranged fill CLOCKWISE from 285° -->
+                        <Arc centerX="240" centerY="240" width="480" height="480"
+                             startAngle="285" endAngle="285" direction="CLOCKWISE">
+                            <Transform target="endAngle"
+                                value="[COMPLICATION.RANGED_VALUE_MAX] &gt; 0 ? (285 + 60 * ([COMPLICATION.RANGED_VALUE_VALUE] / [COMPLICATION.RANGED_VALUE_MAX])) : 285" />
+                            <Stroke color="[CONFIGURATION.themeColor.0]" thickness="12" cap="ROUND" />
+                        </Arc>
+                    </PartDraw>
                     <PartText name="arc0_rv_text" x="0" y="0" width="480" height="480">
                         <TextCircular centerX="240" centerY="240" width="440" height="440"
                                       startAngle="285" endAngle="345"
@@ -460,15 +535,6 @@
                             </Font>
                         </TextCircular>
                     </PartText>
-                    <PartDraw name="arc0_rv_fill" x="0" y="0" width="480" height="480">
-                        <!-- Provenance: base_0.apk → q4 ranged fill CLOCKWISE from 285° -->
-                        <Arc centerX="240" centerY="240" width="480" height="480"
-                             startAngle="285" endAngle="285" direction="CLOCKWISE">
-                            <Transform target="endAngle"
-                                value="[COMPLICATION.RANGED_VALUE_MAX] &gt; 0 ? (285 + 60 * ([COMPLICATION.RANGED_VALUE_VALUE] / [COMPLICATION.RANGED_VALUE_MAX])) : 285" />
-                            <Stroke color="[CONFIGURATION.themeColor.0]" thickness="8" cap="ROUND" />
-                        </Arc>
-                    </PartDraw>
                     <!-- Samsung One UI 8 AOD refresh workaround -->
                     <PartText name="arc0_rv_aod_refresh" x="479" y="479" width="1" height="1" alpha="0">
                         <Text align="START">
@@ -499,10 +565,17 @@
         -->
         <ComplicationSlot slotId="1" name="top_right_arc"
             x="0" y="0" width="480" height="480"
-            supportedTypes="RANGED_VALUE SHORT_TEXT EMPTY"
+            supportedTypes="RANGED_VALUE SHORT_TEXT LONG_TEXT EMPTY"
             displayName="@string/top_right_complication">
-            <DefaultProviderPolicy defaultSystemProvider="WATCH_BATTERY"
-                                   defaultSystemProviderType="RANGED_VALUE" />
+            <DefaultProviderPolicy
+                defaultSystemProvider="STEP_COUNT"
+                defaultSystemProviderType="RANGED_VALUE"
+                primaryDataSource="com.fitbit.FitbitMobile/com.google.android.wearable.fitbit.mainapp.complications.offloadable.floors.OffloadableFloorsComplicationDataSourceService"
+                primaryDataSourceDefaultType="SHORT_TEXT"
+                secondaryDataSource="com.fitbit.FitbitMobile/com.fitbit.complications.floors.FloorsComplicationDataSourceService"
+                secondaryDataSourceDefaultType="RANGED_VALUE"
+                systemDataSourceFallback="STEP_COUNT"
+                systemDataSourceFallbackDefaultType="RANGED_VALUE" />
             <BoundingArc centerX="240" centerY="240" width="480" height="480"
                          thickness="30" startAngle="15" endAngle="75" />
 
@@ -511,6 +584,13 @@
                     <Variant mode="AMBIENT" target="alpha" value="0" />
                     <Transform target="alpha"
                         value="[CONFIGURATION.layoutStyle] == 1 || [CONFIGURATION.layoutStyle] == 3 ? 255 : 0" />
+                    <PartDraw name="arc1_st_bg" x="0" y="0" width="480" height="480">
+                        <!-- Provenance: base_0.apk → q1 short-text background arc track CLOCKWISE 15°–75° -->
+                        <Arc centerX="240" centerY="240" width="480" height="480"
+                             startAngle="15" endAngle="75" direction="CLOCKWISE">
+                            <Stroke color="[CONFIGURATION.themeColor.2]" thickness="12" cap="ROUND" />
+                        </Arc>
+                    </PartDraw>
                     <PartText name="arc1_st_text" x="0" y="0" width="480" height="480">
                         <TextCircular centerX="240" centerY="240" width="440" height="440"
                                       startAngle="15" endAngle="75"
@@ -546,11 +626,72 @@
                 </Group>
             </Complication>
 
+            <Complication type="LONG_TEXT">
+                <Group name="arc_slot1_long_text" x="0" y="0" width="480" height="480" alpha="255">
+                    <Variant mode="AMBIENT" target="alpha" value="0" />
+                    <Transform target="alpha"
+                        value="[CONFIGURATION.layoutStyle] == 1 || [CONFIGURATION.layoutStyle] == 3 ? 255 : 0" />
+                    <PartDraw name="arc1_lt_bg" x="0" y="0" width="480" height="480">
+                        <Arc centerX="240" centerY="240" width="480" height="480"
+                             startAngle="15" endAngle="75" direction="CLOCKWISE">
+                            <Stroke color="[CONFIGURATION.themeColor.2]" thickness="12" cap="ROUND" />
+                        </Arc>
+                    </PartDraw>
+                    <PartText name="arc1_lt_text" x="0" y="0" width="480" height="480">
+                        <TextCircular centerX="240" centerY="240" width="440" height="440"
+                                      startAngle="15" endAngle="75"
+                                      direction="CLOCKWISE" align="CENTER">
+                            <Font family="google_sans_flex_700" size="24" color="#ffffffff">
+                                <Template><![CDATA[%s]]>
+                                    <Parameter expression="[COMPLICATION.TEXT]" />
+                                </Template>
+                            </Font>
+                        </TextCircular>
+                    </PartText>
+                    <Condition>
+                        <Expressions>
+                            <Expression name="arc1_lt_has_icon"><![CDATA[[COMPLICATION.MONOCHROMATIC_IMAGE] != null]]></Expression>
+                        </Expressions>
+                        <Compare expression="arc1_lt_has_icon">
+                            <PartImage name="arc1_lt_icon" x="286" y="17" width="22" height="22">
+                                <Image resource="[COMPLICATION.MONOCHROMATIC_IMAGE]"
+                                       tintColor="[CONFIGURATION.themeColor.0]" />
+                            </PartImage>
+                        </Compare>
+                    </Condition>
+                    <PartText name="arc1_lt_aod_refresh" x="479" y="479" width="1" height="1" alpha="0">
+                        <Text align="START">
+                            <Font family="google_sans_flex_450" size="1" color="#00000000">
+                                <Template><![CDATA[%d]]>
+                                    <Parameter expression="[COMPLICATION.LAST_UPDATE_TIME]" />
+                                </Template>
+                            </Font>
+                        </Text>
+                    </PartText>
+                </Group>
+            </Complication>
+
             <Complication type="RANGED_VALUE">
                 <Group name="arc_slot1_ranged" x="0" y="0" width="480" height="480" alpha="255">
                     <Variant mode="AMBIENT" target="alpha" value="0" />
                     <Transform target="alpha"
                         value="[CONFIGURATION.layoutStyle] == 1 || [CONFIGURATION.layoutStyle] == 3 ? 255 : 0" />
+                    <PartDraw name="arc1_rv_bg" x="0" y="0" width="480" height="480">
+                        <!-- Provenance: base_0.apk → q1 background arc track CLOCKWISE 15°–75° -->
+                        <Arc centerX="240" centerY="240" width="480" height="480"
+                             startAngle="15" endAngle="75" direction="CLOCKWISE">
+                            <Stroke color="[CONFIGURATION.themeColor.2]" thickness="12" cap="ROUND" />
+                        </Arc>
+                    </PartDraw>
+                    <PartDraw name="arc1_rv_fill" x="0" y="0" width="480" height="480">
+                        <!-- Provenance: base_0.apk → q1 ranged fill CLOCKWISE from 15° -->
+                        <Arc centerX="240" centerY="240" width="480" height="480"
+                             startAngle="15" endAngle="15" direction="CLOCKWISE">
+                            <Transform target="endAngle"
+                                value="[COMPLICATION.RANGED_VALUE_MAX] &gt; 0 ? (15 + 60 * ([COMPLICATION.RANGED_VALUE_VALUE] / [COMPLICATION.RANGED_VALUE_MAX])) : 15" />
+                            <Stroke color="[CONFIGURATION.themeColor.0]" thickness="12" cap="ROUND" />
+                        </Arc>
+                    </PartDraw>
                     <PartText name="arc1_rv_text" x="0" y="0" width="480" height="480">
                         <TextCircular centerX="240" centerY="240" width="440" height="440"
                                       startAngle="15" endAngle="75"
@@ -562,15 +703,6 @@
                             </Font>
                         </TextCircular>
                     </PartText>
-                    <PartDraw name="arc1_rv_fill" x="0" y="0" width="480" height="480">
-                        <!-- Provenance: base_0.apk → q1 ranged fill CLOCKWISE from 15° -->
-                        <Arc centerX="240" centerY="240" width="480" height="480"
-                             startAngle="15" endAngle="15" direction="CLOCKWISE">
-                            <Transform target="endAngle"
-                                value="[COMPLICATION.RANGED_VALUE_MAX] &gt; 0 ? (15 + 60 * ([COMPLICATION.RANGED_VALUE_VALUE] / [COMPLICATION.RANGED_VALUE_MAX])) : 15" />
-                            <Stroke color="[CONFIGURATION.themeColor.0]" thickness="8" cap="ROUND" />
-                        </Arc>
-                    </PartDraw>
                     <!-- Samsung One UI 8 AOD refresh workaround -->
                     <PartText name="arc1_rv_aod_refresh" x="479" y="479" width="1" height="1" alpha="0">
                         <Text align="START">
@@ -602,10 +734,17 @@
         -->
         <ComplicationSlot slotId="2" name="bottom_left_arc"
             x="0" y="0" width="480" height="480"
-            supportedTypes="RANGED_VALUE SHORT_TEXT EMPTY"
+            supportedTypes="RANGED_VALUE SHORT_TEXT LONG_TEXT EMPTY"
             displayName="@string/arc_bottom_left">
-            <DefaultProviderPolicy defaultSystemProvider="DAY_AND_DATE"
-                                   defaultSystemProviderType="SHORT_TEXT" />
+            <DefaultProviderPolicy
+                defaultSystemProvider="DAY_AND_DATE"
+                defaultSystemProviderType="SHORT_TEXT"
+                primaryDataSource="com.fitbit.FitbitMobile/com.google.android.wearable.fitbit.mainapp.complications.offloadable.calories.OffloadableCaloriesComplicationDataSourceService"
+                primaryDataSourceDefaultType="SHORT_TEXT"
+                secondaryDataSource="com.fitbit.FitbitMobile/com.fitbit.complications.calories.CaloriesComplicationDataSourceService"
+                secondaryDataSourceDefaultType="RANGED_VALUE"
+                systemDataSourceFallback="DAY_AND_DATE"
+                systemDataSourceFallbackDefaultType="SHORT_TEXT" />
             <BoundingArc centerX="240" centerY="240" width="480" height="480"
                          thickness="30" startAngle="195" endAngle="255" />
 
@@ -614,9 +753,16 @@
                     <Variant mode="AMBIENT" target="alpha" value="0" />
                     <Transform target="alpha"
                         value="[CONFIGURATION.layoutStyle] == 1 || [CONFIGURATION.layoutStyle] == 3 ? 255 : 0" />
+                    <PartDraw name="arc2_st_bg" x="0" y="0" width="480" height="480">
+                        <!-- Provenance: base_0.apk → q3 short-text background arc track CLOCKWISE 195°–255° -->
+                        <Arc centerX="240" centerY="240" width="480" height="480"
+                             startAngle="195" endAngle="255" direction="CLOCKWISE">
+                            <Stroke color="[CONFIGURATION.themeColor.2]" thickness="12" cap="ROUND" />
+                        </Arc>
+                    </PartDraw>
                     <PartText name="arc2_st_text" x="0" y="0" width="480" height="480">
                         <!-- Provenance: base_0.apk → q3 text COUNTER_CLOCKWISE 255°→195° (flipped) -->
-                        <TextCircular centerX="240" centerY="240" width="420" height="420"
+                        <TextCircular centerX="240" centerY="240" width="400" height="400"
                                       startAngle="255" endAngle="195"
                                       direction="COUNTER_CLOCKWISE" align="CENTER">
                             <Font family="google_sans_flex_700" size="24" color="#ffffffff">
@@ -650,13 +796,19 @@
                 </Group>
             </Complication>
 
-            <Complication type="RANGED_VALUE">
-                <Group name="arc_slot2_ranged" x="0" y="0" width="480" height="480" alpha="255">
+            <Complication type="LONG_TEXT">
+                <Group name="arc_slot2_long_text" x="0" y="0" width="480" height="480" alpha="255">
                     <Variant mode="AMBIENT" target="alpha" value="0" />
                     <Transform target="alpha"
                         value="[CONFIGURATION.layoutStyle] == 1 || [CONFIGURATION.layoutStyle] == 3 ? 255 : 0" />
-                    <PartText name="arc2_rv_text" x="0" y="0" width="480" height="480">
-                        <TextCircular centerX="240" centerY="240" width="420" height="420"
+                    <PartDraw name="arc2_lt_bg" x="0" y="0" width="480" height="480">
+                        <Arc centerX="240" centerY="240" width="480" height="480"
+                             startAngle="195" endAngle="255" direction="CLOCKWISE">
+                            <Stroke color="[CONFIGURATION.themeColor.2]" thickness="12" cap="ROUND" />
+                        </Arc>
+                    </PartDraw>
+                    <PartText name="arc2_lt_text" x="0" y="0" width="480" height="480">
+                        <TextCircular centerX="240" centerY="240" width="400" height="400"
                                       startAngle="255" endAngle="195"
                                       direction="COUNTER_CLOCKWISE" align="CENTER">
                             <Font family="google_sans_flex_700" size="24" color="#ffffffff">
@@ -666,15 +818,61 @@
                             </Font>
                         </TextCircular>
                     </PartText>
+                    <Condition>
+                        <Expressions>
+                            <Expression name="arc2_lt_has_icon"><![CDATA[[COMPLICATION.MONOCHROMATIC_IMAGE] != null]]></Expression>
+                        </Expressions>
+                        <Compare expression="arc2_lt_has_icon">
+                            <PartImage name="arc2_lt_icon" x="17" y="286" width="22" height="22">
+                                <Image resource="[COMPLICATION.MONOCHROMATIC_IMAGE]"
+                                       tintColor="[CONFIGURATION.themeColor.0]" />
+                            </PartImage>
+                        </Compare>
+                    </Condition>
+                    <PartText name="arc2_lt_aod_refresh" x="479" y="479" width="1" height="1" alpha="0">
+                        <Text align="START">
+                            <Font family="google_sans_flex_450" size="1" color="#00000000">
+                                <Template><![CDATA[%d]]>
+                                    <Parameter expression="[COMPLICATION.LAST_UPDATE_TIME]" />
+                                </Template>
+                            </Font>
+                        </Text>
+                    </PartText>
+                </Group>
+            </Complication>
+
+            <Complication type="RANGED_VALUE">
+                <Group name="arc_slot2_ranged" x="0" y="0" width="480" height="480" alpha="255">
+                    <Variant mode="AMBIENT" target="alpha" value="0" />
+                    <Transform target="alpha"
+                        value="[CONFIGURATION.layoutStyle] == 1 || [CONFIGURATION.layoutStyle] == 3 ? 255 : 0" />
+                    <PartDraw name="arc2_rv_bg" x="0" y="0" width="480" height="480">
+                        <!-- Provenance: base_0.apk → q3 background arc track CLOCKWISE 195°–255° -->
+                        <Arc centerX="240" centerY="240" width="480" height="480"
+                             startAngle="195" endAngle="255" direction="CLOCKWISE">
+                            <Stroke color="[CONFIGURATION.themeColor.2]" thickness="12" cap="ROUND" />
+                        </Arc>
+                    </PartDraw>
                     <PartDraw name="arc2_rv_fill" x="0" y="0" width="480" height="480">
                         <!-- Provenance: base_0.apk → q3 ranged fill CLOCKWISE from 195° -->
                         <Arc centerX="240" centerY="240" width="480" height="480"
                              startAngle="195" endAngle="195" direction="CLOCKWISE">
                             <Transform target="endAngle"
                                 value="[COMPLICATION.RANGED_VALUE_MAX] &gt; 0 ? (195 + 60 * ([COMPLICATION.RANGED_VALUE_VALUE] / [COMPLICATION.RANGED_VALUE_MAX])) : 195" />
-                            <Stroke color="[CONFIGURATION.themeColor.0]" thickness="8" cap="ROUND" />
+                            <Stroke color="[CONFIGURATION.themeColor.0]" thickness="12" cap="ROUND" />
                         </Arc>
                     </PartDraw>
+                    <PartText name="arc2_rv_text" x="0" y="0" width="480" height="480">
+                        <TextCircular centerX="240" centerY="240" width="400" height="400"
+                                      startAngle="255" endAngle="195"
+                                      direction="COUNTER_CLOCKWISE" align="CENTER">
+                            <Font family="google_sans_flex_700" size="24" color="#ffffffff">
+                                <Template><![CDATA[%s]]>
+                                    <Parameter expression="[COMPLICATION.TEXT]" />
+                                </Template>
+                            </Font>
+                        </TextCircular>
+                    </PartText>
                     <!-- Samsung One UI 8 AOD refresh workaround -->
                     <PartText name="arc2_rv_aod_refresh" x="479" y="479" width="1" height="1" alpha="0">
                         <Text align="START">
@@ -709,10 +907,17 @@
         -->
         <ComplicationSlot slotId="3" name="bottom_right_arc"
             x="0" y="0" width="480" height="480"
-            supportedTypes="RANGED_VALUE SHORT_TEXT EMPTY"
+            supportedTypes="RANGED_VALUE SHORT_TEXT LONG_TEXT EMPTY"
             displayName="@string/arc_bottom_right">
-            <DefaultProviderPolicy defaultSystemProvider="WATCH_BATTERY"
-                                   defaultSystemProviderType="RANGED_VALUE" />
+            <DefaultProviderPolicy
+                defaultSystemProvider="WATCH_BATTERY"
+                defaultSystemProviderType="RANGED_VALUE"
+                primaryDataSource="com.fitbit.FitbitMobile/com.google.android.wearable.fitbit.mainapp.complications.offloadable.distance.OffloadableDistanceComplicationDataSourceService"
+                primaryDataSourceDefaultType="SHORT_TEXT"
+                secondaryDataSource="com.fitbit.FitbitMobile/com.fitbit.complications.distance.DistanceComplicationDataSourceService"
+                secondaryDataSourceDefaultType="RANGED_VALUE"
+                systemDataSourceFallback="WATCH_BATTERY"
+                systemDataSourceFallbackDefaultType="RANGED_VALUE" />
             <BoundingArc centerX="240" centerY="240" width="480" height="480"
                          thickness="30" startAngle="105" endAngle="165" />
 
@@ -721,9 +926,16 @@
                     <Variant mode="AMBIENT" target="alpha" value="0" />
                     <Transform target="alpha"
                         value="[CONFIGURATION.layoutStyle] == 1 || [CONFIGURATION.layoutStyle] == 3 ? 255 : 0" />
+                    <PartDraw name="arc3_st_bg" x="0" y="0" width="480" height="480">
+                        <!-- Provenance: base_0.apk → q2 short-text background arc track CLOCKWISE 105°–165° -->
+                        <Arc centerX="240" centerY="240" width="480" height="480"
+                             startAngle="105" endAngle="165" direction="CLOCKWISE">
+                            <Stroke color="[CONFIGURATION.themeColor.2]" thickness="12" cap="ROUND" />
+                        </Arc>
+                    </PartDraw>
                     <PartText name="arc3_st_text" x="0" y="0" width="480" height="480">
                         <!-- Provenance: base_0.apk → q2 text COUNTER_CLOCKWISE 165°→105° (flipped) -->
-                        <TextCircular centerX="240" centerY="240" width="420" height="420"
+                        <TextCircular centerX="240" centerY="240" width="400" height="400"
                                       startAngle="165" endAngle="105"
                                       direction="COUNTER_CLOCKWISE" align="CENTER">
                             <Font family="google_sans_flex_700" size="24" color="#ffffffff">
@@ -757,13 +969,19 @@
                 </Group>
             </Complication>
 
-            <Complication type="RANGED_VALUE">
-                <Group name="arc_slot3_ranged" x="0" y="0" width="480" height="480" alpha="255">
+            <Complication type="LONG_TEXT">
+                <Group name="arc_slot3_long_text" x="0" y="0" width="480" height="480" alpha="255">
                     <Variant mode="AMBIENT" target="alpha" value="0" />
                     <Transform target="alpha"
                         value="[CONFIGURATION.layoutStyle] == 1 || [CONFIGURATION.layoutStyle] == 3 ? 255 : 0" />
-                    <PartText name="arc3_rv_text" x="0" y="0" width="480" height="480">
-                        <TextCircular centerX="240" centerY="240" width="420" height="420"
+                    <PartDraw name="arc3_lt_bg" x="0" y="0" width="480" height="480">
+                        <Arc centerX="240" centerY="240" width="480" height="480"
+                             startAngle="105" endAngle="165" direction="CLOCKWISE">
+                            <Stroke color="[CONFIGURATION.themeColor.2]" thickness="12" cap="ROUND" />
+                        </Arc>
+                    </PartDraw>
+                    <PartText name="arc3_lt_text" x="0" y="0" width="480" height="480">
+                        <TextCircular centerX="240" centerY="240" width="400" height="400"
                                       startAngle="165" endAngle="105"
                                       direction="COUNTER_CLOCKWISE" align="CENTER">
                             <Font family="google_sans_flex_700" size="24" color="#ffffffff">
@@ -773,15 +991,61 @@
                             </Font>
                         </TextCircular>
                     </PartText>
+                    <Condition>
+                        <Expressions>
+                            <Expression name="arc3_lt_has_icon"><![CDATA[[COMPLICATION.MONOCHROMATIC_IMAGE] != null]]></Expression>
+                        </Expressions>
+                        <Compare expression="arc3_lt_has_icon">
+                            <PartImage name="arc3_lt_icon" x="286" y="440" width="22" height="22">
+                                <Image resource="[COMPLICATION.MONOCHROMATIC_IMAGE]"
+                                       tintColor="[CONFIGURATION.themeColor.0]" />
+                            </PartImage>
+                        </Compare>
+                    </Condition>
+                    <PartText name="arc3_lt_aod_refresh" x="479" y="479" width="1" height="1" alpha="0">
+                        <Text align="START">
+                            <Font family="google_sans_flex_450" size="1" color="#00000000">
+                                <Template><![CDATA[%d]]>
+                                    <Parameter expression="[COMPLICATION.LAST_UPDATE_TIME]" />
+                                </Template>
+                            </Font>
+                        </Text>
+                    </PartText>
+                </Group>
+            </Complication>
+
+            <Complication type="RANGED_VALUE">
+                <Group name="arc_slot3_ranged" x="0" y="0" width="480" height="480" alpha="255">
+                    <Variant mode="AMBIENT" target="alpha" value="0" />
+                    <Transform target="alpha"
+                        value="[CONFIGURATION.layoutStyle] == 1 || [CONFIGURATION.layoutStyle] == 3 ? 255 : 0" />
+                    <PartDraw name="arc3_rv_bg" x="0" y="0" width="480" height="480">
+                        <!-- Provenance: base_0.apk → q2 background arc track CLOCKWISE 105°–165° -->
+                        <Arc centerX="240" centerY="240" width="480" height="480"
+                             startAngle="105" endAngle="165" direction="CLOCKWISE">
+                            <Stroke color="[CONFIGURATION.themeColor.2]" thickness="12" cap="ROUND" />
+                        </Arc>
+                    </PartDraw>
                     <PartDraw name="arc3_rv_fill" x="0" y="0" width="480" height="480">
                         <!-- Provenance: base_0.apk → q2 ranged fill CLOCKWISE from 105° -->
                         <Arc centerX="240" centerY="240" width="480" height="480"
                              startAngle="105" endAngle="105" direction="CLOCKWISE">
                             <Transform target="endAngle"
                                 value="[COMPLICATION.RANGED_VALUE_MAX] &gt; 0 ? (105 + 60 * ([COMPLICATION.RANGED_VALUE_VALUE] / [COMPLICATION.RANGED_VALUE_MAX])) : 105" />
-                            <Stroke color="[CONFIGURATION.themeColor.0]" thickness="8" cap="ROUND" />
+                            <Stroke color="[CONFIGURATION.themeColor.0]" thickness="12" cap="ROUND" />
                         </Arc>
                     </PartDraw>
+                    <PartText name="arc3_rv_text" x="0" y="0" width="480" height="480">
+                        <TextCircular centerX="240" centerY="240" width="400" height="400"
+                                      startAngle="165" endAngle="105"
+                                      direction="COUNTER_CLOCKWISE" align="CENTER">
+                            <Font family="google_sans_flex_700" size="24" color="#ffffffff">
+                                <Template><![CDATA[%s]]>
+                                    <Parameter expression="[COMPLICATION.TEXT]" />
+                                </Template>
+                            </Font>
+                        </TextCircular>
+                    </PartText>
                     <!-- Samsung One UI 8 AOD refresh workaround -->
                     <PartText name="arc3_rv_aod_refresh" x="479" y="479" width="1" height="1" alpha="0">
                         <Text align="START">
@@ -822,10 +1086,17 @@
         -->
         <ComplicationSlot slotId="4" name="slot4"
             x="0" y="0" width="480" height="480"
-            supportedTypes="SHORT_TEXT RANGED_VALUE SMALL_IMAGE EMPTY"
+            supportedTypes="SHORT_TEXT RANGED_VALUE GOAL_PROGRESS SMALL_IMAGE EMPTY"
             displayName="@string/bottom_left_complication">
-            <DefaultProviderPolicy defaultSystemProvider="WATCH_BATTERY"
-                                   defaultSystemProviderType="RANGED_VALUE" />
+            <DefaultProviderPolicy
+                defaultSystemProvider="WATCH_BATTERY"
+                defaultSystemProviderType="RANGED_VALUE"
+                primaryDataSource="com.google.android.apps.weather/com.google.android.wearable.weather.pixel.ui.complications.currentweather.CWComplicationService"
+                primaryDataSourceDefaultType="RANGED_VALUE"
+                secondaryDataSource="com.google.android.wearable.weather/com.google.android.wearable.weather.complications.WeatherProviderService"
+                secondaryDataSourceDefaultType="RANGED_VALUE"
+                systemDataSourceFallback="WATCH_BATTERY"
+                systemDataSourceFallbackDefaultType="RANGED_VALUE" />
             <BoundingRoundRect x="39" y="263" width="120" height="120" cornerRadiusX="18" cornerRadiusY="18" />
 
             <!-- SHORT_TEXT: bulb (layouts 0,1) + linear (layouts 2,3) -->
@@ -834,15 +1105,14 @@
                     <Variant mode="AMBIENT" target="alpha" value="0" />
                     <Transform target="alpha"
                         value="[CONFIGURATION.layoutStyle] == 0 || [CONFIGURATION.layoutStyle] == 1 ? 255 : 0" />
+                    <Transform target="x" value="[CONFIGURATION.layoutStyle] == 1 ? 68 : 39" />
+                    <Transform target="y" value="[CONFIGURATION.layoutStyle] == 1 ? 261 : 263" />
+                    <Transform target="width" value="[CONFIGURATION.layoutStyle] == 1 ? 100 : 120" />
+                    <Transform target="height" value="[CONFIGURATION.layoutStyle] == 1 ? 100 : 120" />
                     <PartDraw name="bulb4_st_bg" x="0" y="0" width="120" height="120">
-                        <RoundRectangle x="3" y="3" width="114" height="114" cornerRadiusX="57" cornerRadiusY="57">
-                            <Fill color="[CONFIGURATION.themeColor.1]" />
-                        </RoundRectangle>
-                    </PartDraw>
-                    <PartDraw name="bulb4_st_ring" x="0" y="0" width="120" height="120">
                         <Arc centerX="60" centerY="60" width="120" height="120"
                              startAngle="0" endAngle="359.9" direction="CLOCKWISE">
-                            <Stroke color="[CONFIGURATION.themeColor.2]" thickness="6" cap="ROUND" />
+                            <Fill color="[CONFIGURATION.themeColor.1]" />
                         </Arc>
                     </PartDraw>
                     <Condition>
@@ -850,19 +1120,19 @@
                             <Expression name="bulb4_st_has_icon"><![CDATA[[COMPLICATION.MONOCHROMATIC_IMAGE] != null]]></Expression>
                         </Expressions>
                         <Compare expression="bulb4_st_has_icon">
-                            <PartImage name="bulb4_st_icon" x="45" y="24" width="31" height="31">
+                            <PartImage name="bulb4_st_icon" x="45" y="17" width="31" height="31">
                                 <Image resource="[COMPLICATION.MONOCHROMATIC_IMAGE]"
                                        tintColor="[CONFIGURATION.themeColor.0]" />
                             </PartImage>
                         </Compare>
                         <Default>
-                            <PartImage name="bulb4_st_icon_fb" x="45" y="24" width="31" height="31">
-                                <Image resource="@drawable/ic_zigzag"
+                            <PartImage name="bulb4_st_icon_fb" x="45" y="17" width="31" height="31">
+                                <Image resource="@drawable/ic_weather"
                                        tintColor="[CONFIGURATION.themeColor.0]" />
                             </PartImage>
                         </Default>
                     </Condition>
-                    <PartText name="bulb4_st_label" x="0" y="72" width="120" height="42">
+                    <PartText name="bulb4_st_label" x="0" y="54" width="120" height="41">
                         <Text align="CENTER">
                             <Font family="google_sans_flex_700" size="36" color="#ffffffff">
                                 <Template><![CDATA[%s]]>
@@ -906,7 +1176,7 @@
                         </Compare>
                         <Default>
                             <PartImage name="lin4_st_icon_fb" x="0" y="4" width="28" height="28">
-                                <Image resource="@drawable/ic_zigzag"
+                                <Image resource="@drawable/ic_weather"
                                        tintColor="[CONFIGURATION.themeColor.0]" />
                             </PartImage>
                         </Default>
@@ -941,23 +1211,28 @@
                     <Variant mode="AMBIENT" target="alpha" value="0" />
                     <Transform target="alpha"
                         value="[CONFIGURATION.layoutStyle] == 0 || [CONFIGURATION.layoutStyle] == 1 ? 255 : 0" />
+                    <Transform target="x" value="[CONFIGURATION.layoutStyle] == 1 ? 68 : 39" />
+                    <Transform target="y" value="[CONFIGURATION.layoutStyle] == 1 ? 261 : 263" />
+                    <Transform target="width" value="[CONFIGURATION.layoutStyle] == 1 ? 100 : 120" />
+                    <Transform target="height" value="[CONFIGURATION.layoutStyle] == 1 ? 100 : 120" />
                     <PartDraw name="bulb4_rv_bg" x="0" y="0" width="120" height="120">
-                        <RoundRectangle x="3" y="3" width="114" height="114" cornerRadiusX="57" cornerRadiusY="57">
-                            <Fill color="[CONFIGURATION.themeColor.1]" />
-                        </RoundRectangle>
-                    </PartDraw>
-                    <PartDraw name="bulb4_rv_track" x="0" y="0" width="120" height="120">
                         <Arc centerX="60" centerY="60" width="120" height="120"
                              startAngle="0" endAngle="359.9" direction="CLOCKWISE">
-                            <Stroke color="[CONFIGURATION.themeColor.2]" thickness="6" cap="ROUND" />
+                            <Fill color="[CONFIGURATION.themeColor.1]" />
+                        </Arc>
+                    </PartDraw>
+                    <PartDraw name="bulb4_rv_track" x="0" y="0" width="120" height="120">
+                        <Arc centerX="60" centerY="60" width="114" height="114"
+                             startAngle="210" endAngle="510" direction="CLOCKWISE">
+                            <Stroke color="[CONFIGURATION.themeColor.2]" thickness="12" cap="ROUND" />
                         </Arc>
                     </PartDraw>
                     <PartDraw name="bulb4_rv_fill" x="0" y="0" width="120" height="120">
-                        <Arc centerX="60" centerY="60" width="120" height="120"
-                             startAngle="270" endAngle="270" direction="CLOCKWISE">
+                        <Arc centerX="60" centerY="60" width="114" height="114"
+                             startAngle="210" endAngle="210" direction="CLOCKWISE">
                             <Transform target="endAngle"
-                                value="[COMPLICATION.RANGED_VALUE_MAX] &gt; 0 ? (270 + 360 * ([COMPLICATION.RANGED_VALUE_VALUE] / [COMPLICATION.RANGED_VALUE_MAX])) : 270" />
-                            <Stroke color="[CONFIGURATION.themeColor.0]" thickness="6" cap="ROUND" />
+                                value="[COMPLICATION.RANGED_VALUE_MAX] &gt; 0 ? (210 + 300 * ([COMPLICATION.RANGED_VALUE_VALUE] / [COMPLICATION.RANGED_VALUE_MAX])) : 210" />
+                            <Stroke color="[CONFIGURATION.themeColor.0]" thickness="12" cap="ROUND" />
                         </Arc>
                     </PartDraw>
                     <Condition>
@@ -965,19 +1240,19 @@
                             <Expression name="bulb4_rv_has_icon"><![CDATA[[COMPLICATION.MONOCHROMATIC_IMAGE] != null]]></Expression>
                         </Expressions>
                         <Compare expression="bulb4_rv_has_icon">
-                            <PartImage name="bulb4_rv_icon" x="44" y="20" width="32" height="32">
+                            <PartImage name="bulb4_rv_icon" x="46" y="97" width="29" height="29">
                                 <Image resource="[COMPLICATION.MONOCHROMATIC_IMAGE]"
                                        tintColor="[CONFIGURATION.themeColor.0]" />
                             </PartImage>
                         </Compare>
                         <Default>
-                            <PartImage name="bulb4_rv_icon_fb" x="44" y="20" width="32" height="32">
-                                <Image resource="@drawable/ic_zigzag"
+                            <PartImage name="bulb4_rv_icon_fb" x="46" y="97" width="29" height="29">
+                                <Image resource="@drawable/ic_weather"
                                        tintColor="[CONFIGURATION.themeColor.0]" />
                             </PartImage>
                         </Default>
                     </Condition>
-                    <PartText name="bulb4_rv_label" x="0" y="72" width="120" height="42">
+                    <PartText name="bulb4_rv_label" x="0" y="44" width="120" height="36">
                         <Text align="CENTER">
                             <Font family="google_sans_flex_700" size="36" color="#ffffffff">
                                 <Template><![CDATA[%s]]>
@@ -1021,7 +1296,7 @@
                         </Compare>
                         <Default>
                             <PartImage name="lin4_rv_icon_fb" x="0" y="4" width="28" height="28">
-                                <Image resource="@drawable/ic_zigzag"
+                                <Image resource="@drawable/ic_weather"
                                        tintColor="[CONFIGURATION.themeColor.0]" />
                             </PartImage>
                         </Default>
@@ -1081,6 +1356,156 @@
                 </Group>
             </Complication>
 
+            <!-- GOAL_PROGRESS: bulb (layouts 0,1) + linear (layouts 2,3).
+                 Visually identical to RANGED_VALUE — progress arc with value/max.
+                 Provenance: base_0.apk → ComplicationBulb.goal-progress styling. -->
+            <Complication type="GOAL_PROGRESS">
+                <Group name="bulb4_gp" x="39" y="263" width="120" height="120" alpha="255">
+                    <Variant mode="AMBIENT" target="alpha" value="0" />
+                    <Transform target="alpha"
+                        value="[CONFIGURATION.layoutStyle] == 0 || [CONFIGURATION.layoutStyle] == 1 ? 255 : 0" />
+                    <Transform target="x" value="[CONFIGURATION.layoutStyle] == 1 ? 68 : 39" />
+                    <Transform target="y" value="[CONFIGURATION.layoutStyle] == 1 ? 261 : 263" />
+                    <Transform target="width" value="[CONFIGURATION.layoutStyle] == 1 ? 100 : 120" />
+                    <Transform target="height" value="[CONFIGURATION.layoutStyle] == 1 ? 100 : 120" />
+                    <PartDraw name="bulb4_gp_bg" x="0" y="0" width="120" height="120">
+                        <Arc centerX="60" centerY="60" width="120" height="120"
+                             startAngle="0" endAngle="359.9" direction="CLOCKWISE">
+                            <Fill color="[CONFIGURATION.themeColor.1]" />
+                        </Arc>
+                    </PartDraw>
+                    <PartDraw name="bulb4_gp_track" x="0" y="0" width="120" height="120">
+                        <Arc centerX="60" centerY="60" width="114" height="114"
+                             startAngle="210" endAngle="510" direction="CLOCKWISE">
+                            <Stroke color="[CONFIGURATION.themeColor.2]" thickness="12" cap="ROUND" />
+                        </Arc>
+                    </PartDraw>
+                    <PartDraw name="bulb4_gp_fill" x="0" y="0" width="120" height="120">
+                        <Arc centerX="60" centerY="60" width="114" height="114"
+                             startAngle="210" endAngle="210" direction="CLOCKWISE">
+                            <Transform target="endAngle"
+                                value="[COMPLICATION.RANGED_VALUE_MAX] &gt; 0 ? (210 + 300 * ([COMPLICATION.RANGED_VALUE_VALUE] / [COMPLICATION.RANGED_VALUE_MAX])) : 210" />
+                            <Stroke color="[CONFIGURATION.themeColor.0]" thickness="12" cap="ROUND" />
+                        </Arc>
+                    </PartDraw>
+                    <Condition>
+                        <Expressions>
+                            <Expression name="bulb4_gp_has_icon"><![CDATA[[COMPLICATION.MONOCHROMATIC_IMAGE] != null]]></Expression>
+                        </Expressions>
+                        <Compare expression="bulb4_gp_has_icon">
+                            <PartImage name="bulb4_gp_icon" x="46" y="97" width="29" height="29">
+                                <Image resource="[COMPLICATION.MONOCHROMATIC_IMAGE]"
+                                       tintColor="[CONFIGURATION.themeColor.0]" />
+                            </PartImage>
+                        </Compare>
+                        <Default>
+                            <PartImage name="bulb4_gp_icon_fb" x="46" y="97" width="29" height="29">
+                                <Image resource="@drawable/ic_weather"
+                                       tintColor="[CONFIGURATION.themeColor.0]" />
+                            </PartImage>
+                        </Default>
+                    </Condition>
+                    <PartText name="bulb4_gp_label" x="0" y="44" width="120" height="36">
+                        <Text align="CENTER">
+                            <Font family="google_sans_flex_700" size="36" color="#ffffffff">
+                                <Template><![CDATA[%s]]>
+                                    <Parameter expression="[COMPLICATION.TEXT]" />
+                                </Template>
+                            </Font>
+                        </Text>
+                    </PartText>
+                    <PartText name="bulb4_gp_aod" x="479" y="479" width="1" height="1" alpha="0">
+                        <Text align="START">
+                            <Font family="google_sans_flex_450" size="1" color="#00000000">
+                                <Template><![CDATA[%d]]>
+                                    <Parameter expression="[COMPLICATION.LAST_UPDATE_TIME]" />
+                                </Template>
+                            </Font>
+                        </Text>
+                    </PartText>
+                </Group>
+                <Group name="lin4_gp" x="246" y="127" width="180" height="42" alpha="255">
+                    <Variant mode="AMBIENT" target="alpha" value="0" />
+                    <Transform target="alpha"
+                        value="[CONFIGURATION.layoutStyle] == 2 || [CONFIGURATION.layoutStyle] == 3 ? 255 : 0" />
+                    <Transform target="x"
+                        value="[CONFIGURATION.layoutStyle] == 3 ? 242 : 246" />
+                    <Transform target="y"
+                        value="[CONFIGURATION.layoutStyle] == 3 ? 142 : 127" />
+                    <Transform target="width"
+                        value="[CONFIGURATION.layoutStyle] == 3 ? 160 : 180" />
+                    <Transform target="height"
+                        value="[CONFIGURATION.layoutStyle] == 3 ? 35 : 42" />
+                    <Condition>
+                        <Expressions>
+                            <Expression name="lin4_gp_has_icon"><![CDATA[[COMPLICATION.MONOCHROMATIC_IMAGE] != null]]></Expression>
+                        </Expressions>
+                        <Compare expression="lin4_gp_has_icon">
+                            <PartImage name="lin4_gp_icon" x="0" y="4" width="28" height="28">
+                                <Image resource="[COMPLICATION.MONOCHROMATIC_IMAGE]"
+                                       tintColor="[CONFIGURATION.themeColor.0]" />
+                            </PartImage>
+                        </Compare>
+                        <Default>
+                            <PartImage name="lin4_gp_icon_fb" x="0" y="4" width="28" height="28">
+                                <Image resource="@drawable/ic_weather"
+                                       tintColor="[CONFIGURATION.themeColor.0]" />
+                            </PartImage>
+                        </Default>
+                    </Condition>
+                    <PartText name="lin4_gp_label" x="35" y="3" width="140" height="36">
+                        <Text align="START">
+                            <Font family="google_sans_flex_700" size="32" color="#ffffffff">
+                                <Transform target="size"
+                                    value="[CONFIGURATION.layoutStyle] == 3 ? 28 : 32" />
+                                <Template><![CDATA[%s]]>
+                                    <Parameter expression="[COMPLICATION.TEXT]" />
+                                </Template>
+                            </Font>
+                        </Text>
+                    </PartText>
+                    <PartDraw name="lin4_gp_track" x="0" y="0" width="180" height="42">
+                        <Transform target="width"
+                            value="[CONFIGURATION.layoutStyle] == 3 ? 160 : 180" />
+                        <Transform target="height"
+                            value="[CONFIGURATION.layoutStyle] == 3 ? 35 : 42" />
+                        <Line startX="35" startY="40" endX="180" endY="40">
+                            <Transform target="endX"
+                                value="[CONFIGURATION.layoutStyle] == 3 ? 160 : 180" />
+                            <Transform target="startY"
+                                value="[CONFIGURATION.layoutStyle] == 3 ? 33 : 40" />
+                            <Transform target="endY"
+                                value="[CONFIGURATION.layoutStyle] == 3 ? 33 : 40" />
+                            <Stroke color="[CONFIGURATION.themeColor.2]" thickness="4" cap="ROUND" />
+                        </Line>
+                    </PartDraw>
+                    <PartDraw name="lin4_gp_fill" x="0" y="0" width="180" height="42">
+                        <Transform target="width"
+                            value="[CONFIGURATION.layoutStyle] == 3 ? 160 : 180" />
+                        <Transform target="height"
+                            value="[CONFIGURATION.layoutStyle] == 3 ? 35 : 42" />
+                        <Line startX="35" startY="40" endX="35" endY="40">
+                            <Transform target="endX"
+                                value="[COMPLICATION.RANGED_VALUE_MAX] &gt; 0 ? (35 + ([CONFIGURATION.layoutStyle] == 3 ? 125 : 145) * ([COMPLICATION.RANGED_VALUE_VALUE] / [COMPLICATION.RANGED_VALUE_MAX])) : 35" />
+                            <Transform target="startY"
+                                value="[CONFIGURATION.layoutStyle] == 3 ? 33 : 40" />
+                            <Transform target="endY"
+                                value="[CONFIGURATION.layoutStyle] == 3 ? 33 : 40" />
+                            <Stroke color="[CONFIGURATION.themeColor.0]" thickness="4" cap="ROUND" />
+                        </Line>
+                    </PartDraw>
+                    <PartText name="lin4_gp_aod" x="479" y="479" width="1" height="1" alpha="0">
+                        <Text align="START">
+                            <Font family="google_sans_flex_450" size="1" color="#00000000">
+                                <Template><![CDATA[%d]]>
+                                    <Parameter expression="[COMPLICATION.LAST_UPDATE_TIME]" />
+                                </Template>
+                            </Font>
+                        </Text>
+                    </PartText>
+                </Group>
+            </Complication>
+
             <!-- SMALL_IMAGE: bulb only (layouts 0,1).
                  Renders MONOCHROMATIC_IMAGE with theme tint (matching APK .comp-image { fill: color-a; }).
                  Falls back to our drawable icon if no monochromatic image is provided. -->
@@ -1089,15 +1514,14 @@
                     <Variant mode="AMBIENT" target="alpha" value="0" />
                     <Transform target="alpha"
                         value="[CONFIGURATION.layoutStyle] == 0 || [CONFIGURATION.layoutStyle] == 1 ? 255 : 0" />
+                    <Transform target="x" value="[CONFIGURATION.layoutStyle] == 1 ? 68 : 39" />
+                    <Transform target="y" value="[CONFIGURATION.layoutStyle] == 1 ? 261 : 263" />
+                    <Transform target="width" value="[CONFIGURATION.layoutStyle] == 1 ? 100 : 120" />
+                    <Transform target="height" value="[CONFIGURATION.layoutStyle] == 1 ? 100 : 120" />
                     <PartDraw name="bulb4_si_bg" x="0" y="0" width="120" height="120">
-                        <RoundRectangle x="3" y="3" width="114" height="114" cornerRadiusX="57" cornerRadiusY="57">
-                            <Fill color="[CONFIGURATION.themeColor.1]" />
-                        </RoundRectangle>
-                    </PartDraw>
-                    <PartDraw name="bulb4_si_ring" x="0" y="0" width="120" height="120">
                         <Arc centerX="60" centerY="60" width="120" height="120"
                              startAngle="0" endAngle="359.9" direction="CLOCKWISE">
-                            <Stroke color="[CONFIGURATION.themeColor.2]" thickness="6" cap="ROUND" />
+                            <Fill color="[CONFIGURATION.themeColor.1]" />
                         </Arc>
                     </PartDraw>
                     <Condition>
@@ -1105,13 +1529,13 @@
                             <Expression name="bulb4_si_has_mono"><![CDATA[[COMPLICATION.MONOCHROMATIC_IMAGE] != null]]></Expression>
                         </Expressions>
                         <Compare expression="bulb4_si_has_mono">
-                            <PartImage name="bulb4_si_mono" x="24" y="6" width="72" height="72">
+                            <PartImage name="bulb4_si_mono" x="26" y="26" width="67" height="67">
                                 <Image resource="[COMPLICATION.MONOCHROMATIC_IMAGE]"
                                        tintColor="[CONFIGURATION.themeColor.0]" />
                             </PartImage>
                         </Compare>
                         <Default>
-                            <PartImage name="bulb4_si_fb" x="24" y="6" width="72" height="72">
+                            <PartImage name="bulb4_si_fb" x="26" y="26" width="67" height="67">
                                 <Image resource="@drawable/ic_zigzag"
                                        tintColor="[CONFIGURATION.themeColor.0]" />
                             </PartImage>
@@ -1142,10 +1566,15 @@
         -->
         <ComplicationSlot slotId="5" name="slot5"
             x="0" y="0" width="480" height="480"
-            supportedTypes="SHORT_TEXT RANGED_VALUE SMALL_IMAGE EMPTY"
+            supportedTypes="SHORT_TEXT RANGED_VALUE GOAL_PROGRESS SMALL_IMAGE EMPTY"
             displayName="@string/bottom_center_shortcut">
-            <DefaultProviderPolicy defaultSystemProvider="APP_SHORTCUT"
-                                   defaultSystemProviderType="SMALL_IMAGE" />
+            <DefaultProviderPolicy
+                defaultSystemProvider="APP_SHORTCUT"
+                defaultSystemProviderType="SMALL_IMAGE"
+                primaryDataSource="com.google.android.wearable.assistant/com.google.android.wearable.assistant.complications.AssistantComplicationService"
+                primaryDataSourceDefaultType="SMALL_IMAGE"
+                systemDataSourceFallback="APP_SHORTCUT"
+                systemDataSourceFallbackDefaultType="SMALL_IMAGE" />
             <BoundingRoundRect x="180" y="329" width="120" height="120" cornerRadiusX="18" cornerRadiusY="18" />
 
             <!-- SHORT_TEXT: bulb (layouts 0,1) + linear (layouts 2,3) -->
@@ -1154,15 +1583,14 @@
                     <Variant mode="AMBIENT" target="alpha" value="0" />
                     <Transform target="alpha"
                         value="[CONFIGURATION.layoutStyle] == 0 || [CONFIGURATION.layoutStyle] == 1 ? 255 : 0" />
+                    <Transform target="x" value="[CONFIGURATION.layoutStyle] == 1 ? 190 : 180" />
+                    <Transform target="y" value="[CONFIGURATION.layoutStyle] == 1 ? 320 : 329" />
+                    <Transform target="width" value="[CONFIGURATION.layoutStyle] == 1 ? 100 : 120" />
+                    <Transform target="height" value="[CONFIGURATION.layoutStyle] == 1 ? 100 : 120" />
                     <PartDraw name="bulb5_st_bg" x="0" y="0" width="120" height="120">
-                        <RoundRectangle x="3" y="3" width="114" height="114" cornerRadiusX="57" cornerRadiusY="57">
-                            <Fill color="[CONFIGURATION.themeColor.1]" />
-                        </RoundRectangle>
-                    </PartDraw>
-                    <PartDraw name="bulb5_st_ring" x="0" y="0" width="120" height="120">
                         <Arc centerX="60" centerY="60" width="120" height="120"
                              startAngle="0" endAngle="359.9" direction="CLOCKWISE">
-                            <Stroke color="[CONFIGURATION.themeColor.2]" thickness="6" cap="ROUND" />
+                            <Fill color="[CONFIGURATION.themeColor.1]" />
                         </Arc>
                     </PartDraw>
                     <Condition>
@@ -1170,19 +1598,19 @@
                             <Expression name="bulb5_st_has_icon"><![CDATA[[COMPLICATION.MONOCHROMATIC_IMAGE] != null]]></Expression>
                         </Expressions>
                         <Compare expression="bulb5_st_has_icon">
-                            <PartImage name="bulb5_st_icon" x="45" y="24" width="31" height="31">
+                            <PartImage name="bulb5_st_icon" x="45" y="17" width="31" height="31">
                                 <Image resource="[COMPLICATION.MONOCHROMATIC_IMAGE]"
                                        tintColor="[CONFIGURATION.themeColor.0]" />
                             </PartImage>
                         </Compare>
                         <Default>
-                            <PartImage name="bulb5_st_icon_fb" x="45" y="24" width="31" height="31">
+                            <PartImage name="bulb5_st_icon_fb" x="45" y="17" width="31" height="31">
                                 <Image resource="@drawable/ic_star"
                                        tintColor="[CONFIGURATION.themeColor.0]" />
                             </PartImage>
                         </Default>
                     </Condition>
-                    <PartText name="bulb5_st_label" x="0" y="72" width="120" height="42">
+                    <PartText name="bulb5_st_label" x="0" y="54" width="120" height="41">
                         <Text align="CENTER">
                             <Font family="google_sans_flex_700" size="36" color="#ffffffff">
                                 <Template><![CDATA[%s]]>
@@ -1261,23 +1689,28 @@
                     <Variant mode="AMBIENT" target="alpha" value="0" />
                     <Transform target="alpha"
                         value="[CONFIGURATION.layoutStyle] == 0 || [CONFIGURATION.layoutStyle] == 1 ? 255 : 0" />
+                    <Transform target="x" value="[CONFIGURATION.layoutStyle] == 1 ? 190 : 180" />
+                    <Transform target="y" value="[CONFIGURATION.layoutStyle] == 1 ? 320 : 329" />
+                    <Transform target="width" value="[CONFIGURATION.layoutStyle] == 1 ? 100 : 120" />
+                    <Transform target="height" value="[CONFIGURATION.layoutStyle] == 1 ? 100 : 120" />
                     <PartDraw name="bulb5_rv_bg" x="0" y="0" width="120" height="120">
-                        <RoundRectangle x="3" y="3" width="114" height="114" cornerRadiusX="57" cornerRadiusY="57">
-                            <Fill color="[CONFIGURATION.themeColor.1]" />
-                        </RoundRectangle>
-                    </PartDraw>
-                    <PartDraw name="bulb5_rv_track" x="0" y="0" width="120" height="120">
                         <Arc centerX="60" centerY="60" width="120" height="120"
                              startAngle="0" endAngle="359.9" direction="CLOCKWISE">
-                            <Stroke color="[CONFIGURATION.themeColor.2]" thickness="6" cap="ROUND" />
+                            <Fill color="[CONFIGURATION.themeColor.1]" />
+                        </Arc>
+                    </PartDraw>
+                    <PartDraw name="bulb5_rv_track" x="0" y="0" width="120" height="120">
+                        <Arc centerX="60" centerY="60" width="114" height="114"
+                             startAngle="210" endAngle="510" direction="CLOCKWISE">
+                            <Stroke color="[CONFIGURATION.themeColor.2]" thickness="12" cap="ROUND" />
                         </Arc>
                     </PartDraw>
                     <PartDraw name="bulb5_rv_fill" x="0" y="0" width="120" height="120">
-                        <Arc centerX="60" centerY="60" width="120" height="120"
-                             startAngle="270" endAngle="270" direction="CLOCKWISE">
+                        <Arc centerX="60" centerY="60" width="114" height="114"
+                             startAngle="210" endAngle="210" direction="CLOCKWISE">
                             <Transform target="endAngle"
-                                value="[COMPLICATION.RANGED_VALUE_MAX] &gt; 0 ? (270 + 360 * ([COMPLICATION.RANGED_VALUE_VALUE] / [COMPLICATION.RANGED_VALUE_MAX])) : 270" />
-                            <Stroke color="[CONFIGURATION.themeColor.0]" thickness="6" cap="ROUND" />
+                                value="[COMPLICATION.RANGED_VALUE_MAX] &gt; 0 ? (210 + 300 * ([COMPLICATION.RANGED_VALUE_VALUE] / [COMPLICATION.RANGED_VALUE_MAX])) : 210" />
+                            <Stroke color="[CONFIGURATION.themeColor.0]" thickness="12" cap="ROUND" />
                         </Arc>
                     </PartDraw>
                     <Condition>
@@ -1285,19 +1718,19 @@
                             <Expression name="bulb5_rv_has_icon"><![CDATA[[COMPLICATION.MONOCHROMATIC_IMAGE] != null]]></Expression>
                         </Expressions>
                         <Compare expression="bulb5_rv_has_icon">
-                            <PartImage name="bulb5_rv_icon" x="44" y="20" width="32" height="32">
+                            <PartImage name="bulb5_rv_icon" x="46" y="97" width="29" height="29">
                                 <Image resource="[COMPLICATION.MONOCHROMATIC_IMAGE]"
                                        tintColor="[CONFIGURATION.themeColor.0]" />
                             </PartImage>
                         </Compare>
                         <Default>
-                            <PartImage name="bulb5_rv_icon_fb" x="44" y="20" width="32" height="32">
+                            <PartImage name="bulb5_rv_icon_fb" x="46" y="97" width="29" height="29">
                                 <Image resource="@drawable/ic_star"
                                        tintColor="[CONFIGURATION.themeColor.0]" />
                             </PartImage>
                         </Default>
                     </Condition>
-                    <PartText name="bulb5_rv_label" x="0" y="72" width="120" height="42">
+                    <PartText name="bulb5_rv_label" x="0" y="44" width="120" height="36">
                         <Text align="CENTER">
                             <Font family="google_sans_flex_700" size="36" color="#ffffffff">
                                 <Template><![CDATA[%s]]>
@@ -1401,6 +1834,156 @@
                 </Group>
             </Complication>
 
+            <!-- GOAL_PROGRESS: bulb (layouts 0,1) + linear (layouts 2,3).
+                 Visually identical to RANGED_VALUE — progress arc with value/max.
+                 Provenance: base_0.apk → ComplicationBulb.goal-progress styling. -->
+            <Complication type="GOAL_PROGRESS">
+                <Group name="bulb5_gp" x="180" y="329" width="120" height="120" alpha="255">
+                    <Variant mode="AMBIENT" target="alpha" value="0" />
+                    <Transform target="alpha"
+                        value="[CONFIGURATION.layoutStyle] == 0 || [CONFIGURATION.layoutStyle] == 1 ? 255 : 0" />
+                    <Transform target="x" value="[CONFIGURATION.layoutStyle] == 1 ? 190 : 180" />
+                    <Transform target="y" value="[CONFIGURATION.layoutStyle] == 1 ? 320 : 329" />
+                    <Transform target="width" value="[CONFIGURATION.layoutStyle] == 1 ? 100 : 120" />
+                    <Transform target="height" value="[CONFIGURATION.layoutStyle] == 1 ? 100 : 120" />
+                    <PartDraw name="bulb5_gp_bg" x="0" y="0" width="120" height="120">
+                        <Arc centerX="60" centerY="60" width="120" height="120"
+                             startAngle="0" endAngle="359.9" direction="CLOCKWISE">
+                            <Fill color="[CONFIGURATION.themeColor.1]" />
+                        </Arc>
+                    </PartDraw>
+                    <PartDraw name="bulb5_gp_track" x="0" y="0" width="120" height="120">
+                        <Arc centerX="60" centerY="60" width="114" height="114"
+                             startAngle="210" endAngle="510" direction="CLOCKWISE">
+                            <Stroke color="[CONFIGURATION.themeColor.2]" thickness="12" cap="ROUND" />
+                        </Arc>
+                    </PartDraw>
+                    <PartDraw name="bulb5_gp_fill" x="0" y="0" width="120" height="120">
+                        <Arc centerX="60" centerY="60" width="114" height="114"
+                             startAngle="210" endAngle="210" direction="CLOCKWISE">
+                            <Transform target="endAngle"
+                                value="[COMPLICATION.RANGED_VALUE_MAX] &gt; 0 ? (210 + 300 * ([COMPLICATION.RANGED_VALUE_VALUE] / [COMPLICATION.RANGED_VALUE_MAX])) : 210" />
+                            <Stroke color="[CONFIGURATION.themeColor.0]" thickness="12" cap="ROUND" />
+                        </Arc>
+                    </PartDraw>
+                    <Condition>
+                        <Expressions>
+                            <Expression name="bulb5_gp_has_icon"><![CDATA[[COMPLICATION.MONOCHROMATIC_IMAGE] != null]]></Expression>
+                        </Expressions>
+                        <Compare expression="bulb5_gp_has_icon">
+                            <PartImage name="bulb5_gp_icon" x="46" y="97" width="29" height="29">
+                                <Image resource="[COMPLICATION.MONOCHROMATIC_IMAGE]"
+                                       tintColor="[CONFIGURATION.themeColor.0]" />
+                            </PartImage>
+                        </Compare>
+                        <Default>
+                            <PartImage name="bulb5_gp_icon_fb" x="46" y="97" width="29" height="29">
+                                <Image resource="@drawable/ic_star"
+                                       tintColor="[CONFIGURATION.themeColor.0]" />
+                            </PartImage>
+                        </Default>
+                    </Condition>
+                    <PartText name="bulb5_gp_label" x="0" y="44" width="120" height="36">
+                        <Text align="CENTER">
+                            <Font family="google_sans_flex_700" size="36" color="#ffffffff">
+                                <Template><![CDATA[%s]]>
+                                    <Parameter expression="[COMPLICATION.TEXT]" />
+                                </Template>
+                            </Font>
+                        </Text>
+                    </PartText>
+                    <PartText name="bulb5_gp_aod" x="479" y="479" width="1" height="1" alpha="0">
+                        <Text align="START">
+                            <Font family="google_sans_flex_450" size="1" color="#00000000">
+                                <Template><![CDATA[%d]]>
+                                    <Parameter expression="[COMPLICATION.LAST_UPDATE_TIME]" />
+                                </Template>
+                            </Font>
+                        </Text>
+                    </PartText>
+                </Group>
+                <Group name="lin5_gp" x="246" y="184" width="180" height="42" alpha="255">
+                    <Variant mode="AMBIENT" target="alpha" value="0" />
+                    <Transform target="alpha"
+                        value="[CONFIGURATION.layoutStyle] == 2 || [CONFIGURATION.layoutStyle] == 3 ? 255 : 0" />
+                    <Transform target="x"
+                        value="[CONFIGURATION.layoutStyle] == 3 ? 242 : 246" />
+                    <Transform target="y"
+                        value="[CONFIGURATION.layoutStyle] == 3 ? 193 : 184" />
+                    <Transform target="width"
+                        value="[CONFIGURATION.layoutStyle] == 3 ? 160 : 180" />
+                    <Transform target="height"
+                        value="[CONFIGURATION.layoutStyle] == 3 ? 35 : 42" />
+                    <Condition>
+                        <Expressions>
+                            <Expression name="lin5_gp_has_icon"><![CDATA[[COMPLICATION.MONOCHROMATIC_IMAGE] != null]]></Expression>
+                        </Expressions>
+                        <Compare expression="lin5_gp_has_icon">
+                            <PartImage name="lin5_gp_icon" x="0" y="4" width="28" height="28">
+                                <Image resource="[COMPLICATION.MONOCHROMATIC_IMAGE]"
+                                       tintColor="[CONFIGURATION.themeColor.0]" />
+                            </PartImage>
+                        </Compare>
+                        <Default>
+                            <PartImage name="lin5_gp_icon_fb" x="0" y="4" width="28" height="28">
+                                <Image resource="@drawable/ic_star"
+                                       tintColor="[CONFIGURATION.themeColor.0]" />
+                            </PartImage>
+                        </Default>
+                    </Condition>
+                    <PartText name="lin5_gp_label" x="35" y="3" width="140" height="36">
+                        <Text align="START">
+                            <Font family="google_sans_flex_700" size="32" color="#ffffffff">
+                                <Transform target="size"
+                                    value="[CONFIGURATION.layoutStyle] == 3 ? 28 : 32" />
+                                <Template><![CDATA[%s]]>
+                                    <Parameter expression="[COMPLICATION.TEXT]" />
+                                </Template>
+                            </Font>
+                        </Text>
+                    </PartText>
+                    <PartDraw name="lin5_gp_track" x="0" y="0" width="180" height="42">
+                        <Transform target="width"
+                            value="[CONFIGURATION.layoutStyle] == 3 ? 160 : 180" />
+                        <Transform target="height"
+                            value="[CONFIGURATION.layoutStyle] == 3 ? 35 : 42" />
+                        <Line startX="35" startY="40" endX="180" endY="40">
+                            <Transform target="endX"
+                                value="[CONFIGURATION.layoutStyle] == 3 ? 160 : 180" />
+                            <Transform target="startY"
+                                value="[CONFIGURATION.layoutStyle] == 3 ? 33 : 40" />
+                            <Transform target="endY"
+                                value="[CONFIGURATION.layoutStyle] == 3 ? 33 : 40" />
+                            <Stroke color="[CONFIGURATION.themeColor.2]" thickness="4" cap="ROUND" />
+                        </Line>
+                    </PartDraw>
+                    <PartDraw name="lin5_gp_fill" x="0" y="0" width="180" height="42">
+                        <Transform target="width"
+                            value="[CONFIGURATION.layoutStyle] == 3 ? 160 : 180" />
+                        <Transform target="height"
+                            value="[CONFIGURATION.layoutStyle] == 3 ? 35 : 42" />
+                        <Line startX="35" startY="40" endX="35" endY="40">
+                            <Transform target="endX"
+                                value="[COMPLICATION.RANGED_VALUE_MAX] &gt; 0 ? (35 + ([CONFIGURATION.layoutStyle] == 3 ? 125 : 145) * ([COMPLICATION.RANGED_VALUE_VALUE] / [COMPLICATION.RANGED_VALUE_MAX])) : 35" />
+                            <Transform target="startY"
+                                value="[CONFIGURATION.layoutStyle] == 3 ? 33 : 40" />
+                            <Transform target="endY"
+                                value="[CONFIGURATION.layoutStyle] == 3 ? 33 : 40" />
+                            <Stroke color="[CONFIGURATION.themeColor.0]" thickness="4" cap="ROUND" />
+                        </Line>
+                    </PartDraw>
+                    <PartText name="lin5_gp_aod" x="479" y="479" width="1" height="1" alpha="0">
+                        <Text align="START">
+                            <Font family="google_sans_flex_450" size="1" color="#00000000">
+                                <Template><![CDATA[%d]]>
+                                    <Parameter expression="[COMPLICATION.LAST_UPDATE_TIME]" />
+                                </Template>
+                            </Font>
+                        </Text>
+                    </PartText>
+                </Group>
+            </Complication>
+
             <!-- SMALL_IMAGE: bulb only (layouts 0,1).
                  Renders MONOCHROMATIC_IMAGE with theme tint (matching APK .comp-image { fill: color-a; }).
                  Falls back to our drawable icon if no monochromatic image is provided. -->
@@ -1409,15 +1992,14 @@
                     <Variant mode="AMBIENT" target="alpha" value="0" />
                     <Transform target="alpha"
                         value="[CONFIGURATION.layoutStyle] == 0 || [CONFIGURATION.layoutStyle] == 1 ? 255 : 0" />
+                    <Transform target="x" value="[CONFIGURATION.layoutStyle] == 1 ? 190 : 180" />
+                    <Transform target="y" value="[CONFIGURATION.layoutStyle] == 1 ? 320 : 329" />
+                    <Transform target="width" value="[CONFIGURATION.layoutStyle] == 1 ? 100 : 120" />
+                    <Transform target="height" value="[CONFIGURATION.layoutStyle] == 1 ? 100 : 120" />
                     <PartDraw name="bulb5_si_bg" x="0" y="0" width="120" height="120">
-                        <RoundRectangle x="3" y="3" width="114" height="114" cornerRadiusX="57" cornerRadiusY="57">
-                            <Fill color="[CONFIGURATION.themeColor.1]" />
-                        </RoundRectangle>
-                    </PartDraw>
-                    <PartDraw name="bulb5_si_ring" x="0" y="0" width="120" height="120">
                         <Arc centerX="60" centerY="60" width="120" height="120"
                              startAngle="0" endAngle="359.9" direction="CLOCKWISE">
-                            <Stroke color="[CONFIGURATION.themeColor.2]" thickness="6" cap="ROUND" />
+                            <Fill color="[CONFIGURATION.themeColor.1]" />
                         </Arc>
                     </PartDraw>
                     <Condition>
@@ -1425,13 +2007,13 @@
                             <Expression name="bulb5_si_has_mono"><![CDATA[[COMPLICATION.MONOCHROMATIC_IMAGE] != null]]></Expression>
                         </Expressions>
                         <Compare expression="bulb5_si_has_mono">
-                            <PartImage name="bulb5_si_mono" x="24" y="6" width="72" height="72">
+                            <PartImage name="bulb5_si_mono" x="26" y="26" width="67" height="67">
                                 <Image resource="[COMPLICATION.MONOCHROMATIC_IMAGE]"
                                        tintColor="[CONFIGURATION.themeColor.0]" />
                             </PartImage>
                         </Compare>
                         <Default>
-                            <PartImage name="bulb5_si_fb" x="24" y="6" width="72" height="72">
+                            <PartImage name="bulb5_si_fb" x="26" y="26" width="67" height="67">
                                 <Image resource="@drawable/ic_star"
                                        tintColor="[CONFIGURATION.themeColor.0]" />
                             </PartImage>
@@ -1462,10 +2044,17 @@
         -->
         <ComplicationSlot slotId="6" name="slot6"
             x="0" y="0" width="480" height="480"
-            supportedTypes="SHORT_TEXT RANGED_VALUE SMALL_IMAGE EMPTY"
+            supportedTypes="SHORT_TEXT RANGED_VALUE GOAL_PROGRESS SMALL_IMAGE EMPTY"
             displayName="@string/bottom_right_complication">
-            <DefaultProviderPolicy defaultSystemProvider="HEART_RATE"
-                                   defaultSystemProviderType="SHORT_TEXT" />
+            <DefaultProviderPolicy
+                defaultSystemProvider="HEART_RATE"
+                defaultSystemProviderType="SHORT_TEXT"
+                primaryDataSource="com.fitbit.FitbitMobile/com.fitbit.complications.offloadable.heartrate.OffloadableHeartRateComplicationDataSourceService"
+                primaryDataSourceDefaultType="RANGED_VALUE"
+                secondaryDataSource="com.fitbit.FitbitMobile/com.fitbit.complications.heartrate.HeartRateComplicationDataSourceService"
+                secondaryDataSourceDefaultType="SHORT_TEXT"
+                systemDataSourceFallback="HEART_RATE"
+                systemDataSourceFallbackDefaultType="SHORT_TEXT" />
             <BoundingRoundRect x="320" y="263" width="120" height="120" cornerRadiusX="18" cornerRadiusY="18" />
 
             <!-- SHORT_TEXT: bulb (layouts 0,1) + linear (layouts 2,3) -->
@@ -1474,15 +2063,14 @@
                     <Variant mode="AMBIENT" target="alpha" value="0" />
                     <Transform target="alpha"
                         value="[CONFIGURATION.layoutStyle] == 0 || [CONFIGURATION.layoutStyle] == 1 ? 255 : 0" />
+                    <Transform target="x" value="[CONFIGURATION.layoutStyle] == 1 ? 313 : 320" />
+                    <Transform target="y" value="[CONFIGURATION.layoutStyle] == 1 ? 261 : 263" />
+                    <Transform target="width" value="[CONFIGURATION.layoutStyle] == 1 ? 100 : 120" />
+                    <Transform target="height" value="[CONFIGURATION.layoutStyle] == 1 ? 100 : 120" />
                     <PartDraw name="bulb6_st_bg" x="0" y="0" width="120" height="120">
-                        <RoundRectangle x="3" y="3" width="114" height="114" cornerRadiusX="57" cornerRadiusY="57">
-                            <Fill color="[CONFIGURATION.themeColor.1]" />
-                        </RoundRectangle>
-                    </PartDraw>
-                    <PartDraw name="bulb6_st_ring" x="0" y="0" width="120" height="120">
                         <Arc centerX="60" centerY="60" width="120" height="120"
                              startAngle="0" endAngle="359.9" direction="CLOCKWISE">
-                            <Stroke color="[CONFIGURATION.themeColor.2]" thickness="6" cap="ROUND" />
+                            <Fill color="[CONFIGURATION.themeColor.1]" />
                         </Arc>
                     </PartDraw>
                     <Condition>
@@ -1490,19 +2078,19 @@
                             <Expression name="bulb6_st_has_icon"><![CDATA[[COMPLICATION.MONOCHROMATIC_IMAGE] != null]]></Expression>
                         </Expressions>
                         <Compare expression="bulb6_st_has_icon">
-                            <PartImage name="bulb6_st_icon" x="45" y="24" width="31" height="31">
+                            <PartImage name="bulb6_st_icon" x="45" y="17" width="31" height="31">
                                 <Image resource="[COMPLICATION.MONOCHROMATIC_IMAGE]"
                                        tintColor="[CONFIGURATION.themeColor.0]" />
                             </PartImage>
                         </Compare>
                         <Default>
-                            <PartImage name="bulb6_st_icon_fb" x="45" y="24" width="31" height="31">
+                            <PartImage name="bulb6_st_icon_fb" x="45" y="17" width="31" height="31">
                                 <Image resource="@drawable/ic_heart"
                                        tintColor="[CONFIGURATION.themeColor.0]" />
                             </PartImage>
                         </Default>
                     </Condition>
-                    <PartText name="bulb6_st_label" x="0" y="72" width="120" height="42">
+                    <PartText name="bulb6_st_label" x="0" y="54" width="120" height="41">
                         <Text align="CENTER">
                             <Font family="google_sans_flex_700" size="36" color="#ffffffff">
                                 <Template><![CDATA[%s]]>
@@ -1581,23 +2169,28 @@
                     <Variant mode="AMBIENT" target="alpha" value="0" />
                     <Transform target="alpha"
                         value="[CONFIGURATION.layoutStyle] == 0 || [CONFIGURATION.layoutStyle] == 1 ? 255 : 0" />
+                    <Transform target="x" value="[CONFIGURATION.layoutStyle] == 1 ? 313 : 320" />
+                    <Transform target="y" value="[CONFIGURATION.layoutStyle] == 1 ? 261 : 263" />
+                    <Transform target="width" value="[CONFIGURATION.layoutStyle] == 1 ? 100 : 120" />
+                    <Transform target="height" value="[CONFIGURATION.layoutStyle] == 1 ? 100 : 120" />
                     <PartDraw name="bulb6_rv_bg" x="0" y="0" width="120" height="120">
-                        <RoundRectangle x="3" y="3" width="114" height="114" cornerRadiusX="57" cornerRadiusY="57">
-                            <Fill color="[CONFIGURATION.themeColor.1]" />
-                        </RoundRectangle>
-                    </PartDraw>
-                    <PartDraw name="bulb6_rv_track" x="0" y="0" width="120" height="120">
                         <Arc centerX="60" centerY="60" width="120" height="120"
                              startAngle="0" endAngle="359.9" direction="CLOCKWISE">
-                            <Stroke color="[CONFIGURATION.themeColor.2]" thickness="6" cap="ROUND" />
+                            <Fill color="[CONFIGURATION.themeColor.1]" />
+                        </Arc>
+                    </PartDraw>
+                    <PartDraw name="bulb6_rv_track" x="0" y="0" width="120" height="120">
+                        <Arc centerX="60" centerY="60" width="114" height="114"
+                             startAngle="210" endAngle="510" direction="CLOCKWISE">
+                            <Stroke color="[CONFIGURATION.themeColor.2]" thickness="12" cap="ROUND" />
                         </Arc>
                     </PartDraw>
                     <PartDraw name="bulb6_rv_fill" x="0" y="0" width="120" height="120">
-                        <Arc centerX="60" centerY="60" width="120" height="120"
-                             startAngle="270" endAngle="270" direction="CLOCKWISE">
+                        <Arc centerX="60" centerY="60" width="114" height="114"
+                             startAngle="210" endAngle="210" direction="CLOCKWISE">
                             <Transform target="endAngle"
-                                value="[COMPLICATION.RANGED_VALUE_MAX] &gt; 0 ? (270 + 360 * ([COMPLICATION.RANGED_VALUE_VALUE] / [COMPLICATION.RANGED_VALUE_MAX])) : 270" />
-                            <Stroke color="[CONFIGURATION.themeColor.0]" thickness="6" cap="ROUND" />
+                                value="[COMPLICATION.RANGED_VALUE_MAX] &gt; 0 ? (210 + 300 * ([COMPLICATION.RANGED_VALUE_VALUE] / [COMPLICATION.RANGED_VALUE_MAX])) : 210" />
+                            <Stroke color="[CONFIGURATION.themeColor.0]" thickness="12" cap="ROUND" />
                         </Arc>
                     </PartDraw>
                     <Condition>
@@ -1605,19 +2198,19 @@
                             <Expression name="bulb6_rv_has_icon"><![CDATA[[COMPLICATION.MONOCHROMATIC_IMAGE] != null]]></Expression>
                         </Expressions>
                         <Compare expression="bulb6_rv_has_icon">
-                            <PartImage name="bulb6_rv_icon" x="44" y="20" width="32" height="32">
+                            <PartImage name="bulb6_rv_icon" x="46" y="97" width="29" height="29">
                                 <Image resource="[COMPLICATION.MONOCHROMATIC_IMAGE]"
                                        tintColor="[CONFIGURATION.themeColor.0]" />
                             </PartImage>
                         </Compare>
                         <Default>
-                            <PartImage name="bulb6_rv_icon_fb" x="44" y="20" width="32" height="32">
+                            <PartImage name="bulb6_rv_icon_fb" x="46" y="97" width="29" height="29">
                                 <Image resource="@drawable/ic_heart"
                                        tintColor="[CONFIGURATION.themeColor.0]" />
                             </PartImage>
                         </Default>
                     </Condition>
-                    <PartText name="bulb6_rv_label" x="0" y="72" width="120" height="42">
+                    <PartText name="bulb6_rv_label" x="0" y="44" width="120" height="36">
                         <Text align="CENTER">
                             <Font family="google_sans_flex_700" size="36" color="#ffffffff">
                                 <Template><![CDATA[%s]]>
@@ -1721,6 +2314,156 @@
                 </Group>
             </Complication>
 
+            <!-- GOAL_PROGRESS: bulb (layouts 0,1) + linear (layouts 2,3).
+                 Visually identical to RANGED_VALUE — progress arc with value/max.
+                 Provenance: base_0.apk → ComplicationBulb.goal-progress styling. -->
+            <Complication type="GOAL_PROGRESS">
+                <Group name="bulb6_gp" x="320" y="263" width="120" height="120" alpha="255">
+                    <Variant mode="AMBIENT" target="alpha" value="0" />
+                    <Transform target="alpha"
+                        value="[CONFIGURATION.layoutStyle] == 0 || [CONFIGURATION.layoutStyle] == 1 ? 255 : 0" />
+                    <Transform target="x" value="[CONFIGURATION.layoutStyle] == 1 ? 313 : 320" />
+                    <Transform target="y" value="[CONFIGURATION.layoutStyle] == 1 ? 261 : 263" />
+                    <Transform target="width" value="[CONFIGURATION.layoutStyle] == 1 ? 100 : 120" />
+                    <Transform target="height" value="[CONFIGURATION.layoutStyle] == 1 ? 100 : 120" />
+                    <PartDraw name="bulb6_gp_bg" x="0" y="0" width="120" height="120">
+                        <Arc centerX="60" centerY="60" width="120" height="120"
+                             startAngle="0" endAngle="359.9" direction="CLOCKWISE">
+                            <Fill color="[CONFIGURATION.themeColor.1]" />
+                        </Arc>
+                    </PartDraw>
+                    <PartDraw name="bulb6_gp_track" x="0" y="0" width="120" height="120">
+                        <Arc centerX="60" centerY="60" width="114" height="114"
+                             startAngle="210" endAngle="510" direction="CLOCKWISE">
+                            <Stroke color="[CONFIGURATION.themeColor.2]" thickness="12" cap="ROUND" />
+                        </Arc>
+                    </PartDraw>
+                    <PartDraw name="bulb6_gp_fill" x="0" y="0" width="120" height="120">
+                        <Arc centerX="60" centerY="60" width="114" height="114"
+                             startAngle="210" endAngle="210" direction="CLOCKWISE">
+                            <Transform target="endAngle"
+                                value="[COMPLICATION.RANGED_VALUE_MAX] &gt; 0 ? (210 + 300 * ([COMPLICATION.RANGED_VALUE_VALUE] / [COMPLICATION.RANGED_VALUE_MAX])) : 210" />
+                            <Stroke color="[CONFIGURATION.themeColor.0]" thickness="12" cap="ROUND" />
+                        </Arc>
+                    </PartDraw>
+                    <Condition>
+                        <Expressions>
+                            <Expression name="bulb6_gp_has_icon"><![CDATA[[COMPLICATION.MONOCHROMATIC_IMAGE] != null]]></Expression>
+                        </Expressions>
+                        <Compare expression="bulb6_gp_has_icon">
+                            <PartImage name="bulb6_gp_icon" x="46" y="97" width="29" height="29">
+                                <Image resource="[COMPLICATION.MONOCHROMATIC_IMAGE]"
+                                       tintColor="[CONFIGURATION.themeColor.0]" />
+                            </PartImage>
+                        </Compare>
+                        <Default>
+                            <PartImage name="bulb6_gp_icon_fb" x="46" y="97" width="29" height="29">
+                                <Image resource="@drawable/ic_heart"
+                                       tintColor="[CONFIGURATION.themeColor.0]" />
+                            </PartImage>
+                        </Default>
+                    </Condition>
+                    <PartText name="bulb6_gp_label" x="0" y="44" width="120" height="36">
+                        <Text align="CENTER">
+                            <Font family="google_sans_flex_700" size="36" color="#ffffffff">
+                                <Template><![CDATA[%s]]>
+                                    <Parameter expression="[COMPLICATION.TEXT]" />
+                                </Template>
+                            </Font>
+                        </Text>
+                    </PartText>
+                    <PartText name="bulb6_gp_aod" x="479" y="479" width="1" height="1" alpha="0">
+                        <Text align="START">
+                            <Font family="google_sans_flex_450" size="1" color="#00000000">
+                                <Template><![CDATA[%d]]>
+                                    <Parameter expression="[COMPLICATION.LAST_UPDATE_TIME]" />
+                                </Template>
+                            </Font>
+                        </Text>
+                    </PartText>
+                </Group>
+                <Group name="lin6_gp" x="246" y="241" width="180" height="42" alpha="255">
+                    <Variant mode="AMBIENT" target="alpha" value="0" />
+                    <Transform target="alpha"
+                        value="[CONFIGURATION.layoutStyle] == 2 || [CONFIGURATION.layoutStyle] == 3 ? 255 : 0" />
+                    <Transform target="x"
+                        value="[CONFIGURATION.layoutStyle] == 3 ? 242 : 246" />
+                    <Transform target="y"
+                        value="[CONFIGURATION.layoutStyle] == 3 ? 244 : 241" />
+                    <Transform target="width"
+                        value="[CONFIGURATION.layoutStyle] == 3 ? 160 : 180" />
+                    <Transform target="height"
+                        value="[CONFIGURATION.layoutStyle] == 3 ? 35 : 42" />
+                    <Condition>
+                        <Expressions>
+                            <Expression name="lin6_gp_has_icon"><![CDATA[[COMPLICATION.MONOCHROMATIC_IMAGE] != null]]></Expression>
+                        </Expressions>
+                        <Compare expression="lin6_gp_has_icon">
+                            <PartImage name="lin6_gp_icon" x="0" y="4" width="28" height="28">
+                                <Image resource="[COMPLICATION.MONOCHROMATIC_IMAGE]"
+                                       tintColor="[CONFIGURATION.themeColor.0]" />
+                            </PartImage>
+                        </Compare>
+                        <Default>
+                            <PartImage name="lin6_gp_icon_fb" x="0" y="4" width="28" height="28">
+                                <Image resource="@drawable/ic_heart"
+                                       tintColor="[CONFIGURATION.themeColor.0]" />
+                            </PartImage>
+                        </Default>
+                    </Condition>
+                    <PartText name="lin6_gp_label" x="35" y="3" width="140" height="36">
+                        <Text align="START">
+                            <Font family="google_sans_flex_700" size="32" color="#ffffffff">
+                                <Transform target="size"
+                                    value="[CONFIGURATION.layoutStyle] == 3 ? 28 : 32" />
+                                <Template><![CDATA[%s]]>
+                                    <Parameter expression="[COMPLICATION.TEXT]" />
+                                </Template>
+                            </Font>
+                        </Text>
+                    </PartText>
+                    <PartDraw name="lin6_gp_track" x="0" y="0" width="180" height="42">
+                        <Transform target="width"
+                            value="[CONFIGURATION.layoutStyle] == 3 ? 160 : 180" />
+                        <Transform target="height"
+                            value="[CONFIGURATION.layoutStyle] == 3 ? 35 : 42" />
+                        <Line startX="35" startY="40" endX="180" endY="40">
+                            <Transform target="endX"
+                                value="[CONFIGURATION.layoutStyle] == 3 ? 160 : 180" />
+                            <Transform target="startY"
+                                value="[CONFIGURATION.layoutStyle] == 3 ? 33 : 40" />
+                            <Transform target="endY"
+                                value="[CONFIGURATION.layoutStyle] == 3 ? 33 : 40" />
+                            <Stroke color="[CONFIGURATION.themeColor.2]" thickness="4" cap="ROUND" />
+                        </Line>
+                    </PartDraw>
+                    <PartDraw name="lin6_gp_fill" x="0" y="0" width="180" height="42">
+                        <Transform target="width"
+                            value="[CONFIGURATION.layoutStyle] == 3 ? 160 : 180" />
+                        <Transform target="height"
+                            value="[CONFIGURATION.layoutStyle] == 3 ? 35 : 42" />
+                        <Line startX="35" startY="40" endX="35" endY="40">
+                            <Transform target="endX"
+                                value="[COMPLICATION.RANGED_VALUE_MAX] &gt; 0 ? (35 + ([CONFIGURATION.layoutStyle] == 3 ? 125 : 145) * ([COMPLICATION.RANGED_VALUE_VALUE] / [COMPLICATION.RANGED_VALUE_MAX])) : 35" />
+                            <Transform target="startY"
+                                value="[CONFIGURATION.layoutStyle] == 3 ? 33 : 40" />
+                            <Transform target="endY"
+                                value="[CONFIGURATION.layoutStyle] == 3 ? 33 : 40" />
+                            <Stroke color="[CONFIGURATION.themeColor.0]" thickness="4" cap="ROUND" />
+                        </Line>
+                    </PartDraw>
+                    <PartText name="lin6_gp_aod" x="479" y="479" width="1" height="1" alpha="0">
+                        <Text align="START">
+                            <Font family="google_sans_flex_450" size="1" color="#00000000">
+                                <Template><![CDATA[%d]]>
+                                    <Parameter expression="[COMPLICATION.LAST_UPDATE_TIME]" />
+                                </Template>
+                            </Font>
+                        </Text>
+                    </PartText>
+                </Group>
+            </Complication>
+
             <!-- SMALL_IMAGE: bulb only (layouts 0,1).
                  Renders MONOCHROMATIC_IMAGE with theme tint (matching APK .comp-image { fill: color-a; }).
                  Falls back to our drawable icon if no monochromatic image is provided. -->
@@ -1729,15 +2472,14 @@
                     <Variant mode="AMBIENT" target="alpha" value="0" />
                     <Transform target="alpha"
                         value="[CONFIGURATION.layoutStyle] == 0 || [CONFIGURATION.layoutStyle] == 1 ? 255 : 0" />
+                    <Transform target="x" value="[CONFIGURATION.layoutStyle] == 1 ? 313 : 320" />
+                    <Transform target="y" value="[CONFIGURATION.layoutStyle] == 1 ? 261 : 263" />
+                    <Transform target="width" value="[CONFIGURATION.layoutStyle] == 1 ? 100 : 120" />
+                    <Transform target="height" value="[CONFIGURATION.layoutStyle] == 1 ? 100 : 120" />
                     <PartDraw name="bulb6_si_bg" x="0" y="0" width="120" height="120">
-                        <RoundRectangle x="3" y="3" width="114" height="114" cornerRadiusX="57" cornerRadiusY="57">
-                            <Fill color="[CONFIGURATION.themeColor.1]" />
-                        </RoundRectangle>
-                    </PartDraw>
-                    <PartDraw name="bulb6_si_ring" x="0" y="0" width="120" height="120">
                         <Arc centerX="60" centerY="60" width="120" height="120"
                              startAngle="0" endAngle="359.9" direction="CLOCKWISE">
-                            <Stroke color="[CONFIGURATION.themeColor.2]" thickness="6" cap="ROUND" />
+                            <Fill color="[CONFIGURATION.themeColor.1]" />
                         </Arc>
                     </PartDraw>
                     <Condition>
@@ -1745,13 +2487,13 @@
                             <Expression name="bulb6_si_has_mono"><![CDATA[[COMPLICATION.MONOCHROMATIC_IMAGE] != null]]></Expression>
                         </Expressions>
                         <Compare expression="bulb6_si_has_mono">
-                            <PartImage name="bulb6_si_mono" x="24" y="6" width="72" height="72">
+                            <PartImage name="bulb6_si_mono" x="26" y="26" width="67" height="67">
                                 <Image resource="[COMPLICATION.MONOCHROMATIC_IMAGE]"
                                        tintColor="[CONFIGURATION.themeColor.0]" />
                             </PartImage>
                         </Compare>
                         <Default>
-                            <PartImage name="bulb6_si_fb" x="24" y="6" width="72" height="72">
+                            <PartImage name="bulb6_si_fb" x="26" y="26" width="67" height="67">
                                 <Image resource="@drawable/ic_heart"
                                        tintColor="[CONFIGURATION.themeColor.0]" />
                             </PartImage>
@@ -1784,8 +2526,15 @@
             x="0" y="0" width="480" height="480"
             supportedTypes="SHORT_TEXT RANGED_VALUE EMPTY"
             displayName="@string/linear_complication_4">
-            <DefaultProviderPolicy defaultSystemProvider="WATCH_BATTERY"
-                                   defaultSystemProviderType="RANGED_VALUE" />
+            <DefaultProviderPolicy
+                defaultSystemProvider="WATCH_BATTERY"
+                defaultSystemProviderType="RANGED_VALUE"
+                primaryDataSource="com.fitbit.FitbitMobile/com.fitbit.complications.offloadable.steps.OffloadableStepsComplicationDataSourceService"
+                primaryDataSourceDefaultType="SHORT_TEXT"
+                secondaryDataSource="com.fitbit.FitbitMobile/com.fitbit.complications.steps.StepsComplicationDataSourceService"
+                secondaryDataSourceDefaultType="SHORT_TEXT"
+                systemDataSourceFallback="WATCH_BATTERY"
+                systemDataSourceFallbackDefaultType="RANGED_VALUE" />
             <BoundingRoundRect x="246" y="298" width="180" height="42" cornerRadiusX="19" cornerRadiusY="19" />
 
             <Complication type="SHORT_TEXT">
@@ -1813,7 +2562,7 @@
                         </Compare>
                         <Default>
                             <PartImage name="lin7_st_icon_fb" x="0" y="4" width="28" height="28">
-                                <Image resource="@drawable/ic_zigzag"
+                                <Image resource="@drawable/ic_footstep"
                                        tintColor="[CONFIGURATION.themeColor.0]" />
                             </PartImage>
                         </Default>
@@ -1867,7 +2616,7 @@
                         </Compare>
                         <Default>
                             <PartImage name="lin7_rv_icon_fb" x="0" y="4" width="28" height="28">
-                                <Image resource="@drawable/ic_zigzag"
+                                <Image resource="@drawable/ic_footstep"
                                        tintColor="[CONFIGURATION.themeColor.0]" />
                             </PartImage>
                         </Default>

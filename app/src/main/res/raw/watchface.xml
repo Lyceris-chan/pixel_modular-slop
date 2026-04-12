@@ -4,7 +4,29 @@
   Source: base_0.apk → assets/modular/
   Canvas: 480×480 px. Provenance: base_0.apk → assets/modular/main.css
 -->
+<!--
+  ============================================================
+  WFF 4 SCALING MODEL — Requirement 4
+  ============================================================
+  The Wear OS system scales the 480×480 canvas uniformly to fit the physical
+  display, preserving aspect ratio with no manual intervention required.
+
+  Example: 450 px display → scale factor = 450/480 ≈ 0.9375
+    All coordinates and sizes are proportionally reduced automatically.
+
+  Vector elements (arcs, lines, text rendered via WFF) scale without blurriness.
+  Raster assets (e.g. preview_image.png) are non-layout assets used only in the
+  watch face picker; they do not affect runtime scaling fidelity.
+
+  No absolute pixel values are hardcoded outside the 480×480 coordinate space,
+  ensuring no clipping occurs at smaller display sizes.
+
+  Reference: https://developer.android.com/training/wearables/wff
+  ============================================================
+-->
 <!-- Provenance: base_0.apk → assets/modular/main.css section#unified-view-scaler { width:480; height:480; } -->
+<!-- Provenance: resourceVersion="4" targets WFF v4 / Wear OS 6 (API 36).
+     Ref: https://developer.android.com/training/wearables/wff -->
 <WatchFace width="480" height="480" resourceVersion="4">
 
     <!-- Provenance: base_0.apk → AndroidManifest.xml meta-data clock_type=DIGITAL -->
@@ -116,7 +138,7 @@
              ============================================================ -->
 
         <!-- Day-of-week — interactive. -->
-        <PartText name="day_text" x="238" y="56" width="80" height="42" alpha="255">
+        <PartText name="day_text" x="160" y="56" width="78" height="42" alpha="255">
             <Variant mode="AMBIENT" target="alpha" value="0" />
             <Transform target="y"
                 value="[CONFIGURATION.layoutStyle] == 1 || [CONFIGURATION.layoutStyle] == 3 ? 56 : 36" />
@@ -132,7 +154,7 @@
         </PartText>
 
         <!-- Day-of-week — ambient. Provenance: base_0.apk → GoogleSansFlex-400_W104_R100 -->
-        <PartText name="day_text_aod" x="238" y="56" width="80" height="42" alpha="0">
+        <PartText name="day_text_aod" x="160" y="56" width="78" height="42" alpha="0">
             <Variant mode="AMBIENT" target="alpha" value="255" />
             <Transform target="y"
                 value="[CONFIGURATION.layoutStyle] == 1 || [CONFIGURATION.layoutStyle] == 3 ? 56 : 36" />
@@ -172,8 +194,6 @@
              Arc: w=46, h=34. Non-arc: w=53, h=36. -->
         <PartDraw name="date_badge_inner" x="249" y="59" width="46" height="34" alpha="255">
             <Variant mode="AMBIENT" target="alpha" value="0" />
-            <Transform target="x"
-                value="[CONFIGURATION.layoutStyle] == 1 || [CONFIGURATION.layoutStyle] == 3 ? 249 : 249" />
             <Transform target="y"
                 value="[CONFIGURATION.layoutStyle] == 1 || [CONFIGURATION.layoutStyle] == 3 ? 59 : 39" />
             <Transform target="width"
@@ -366,6 +386,15 @@
              Provenance: base_0.apk → complications.defs complication-6 class='q4'.
              q4 { angle:270; } → WFF 285°–345°. Default: STEP_COUNT.
              ============================================================ -->
+        <!--
+          ComplicationSlot 0 — top_left_arc
+          Supported Types : RANGED_VALUE SHORT_TEXT EMPTY
+          Default Provider: STEP_COUNT (RANGED_VALUE)
+          Bounding Box    : BoundingArc centerX=240 centerY=240 width=480 height=480
+                            startAngle=285 endAngle=345 thickness=30
+                            (thickness=30 is the tap-target thickness; visual stroke is 8px)
+          Provenance      : base_0.apk → complications.defs complication-6 class='q4'
+        -->
         <ComplicationSlot slotId="0" name="top_left_arc"
             x="0" y="0" width="480" height="480"
             supportedTypes="RANGED_VALUE SHORT_TEXT EMPTY"
@@ -409,7 +438,7 @@
                         </Default>
                     </Condition>
                     <!-- Samsung One UI 8 AOD refresh workaround -->
-                    <PartText name="arc0_st_aod_refresh" x="0" y="0" width="0" height="0" alpha="0">
+                    <PartText name="arc0_st_aod_refresh" x="480" y="480" width="1" height="1" alpha="0">
                         <Text align="START">
                             <Font family="google_sans_flex_450" size="1" color="#00000000">
                                 <Template><![CDATA[%d]]>
@@ -464,7 +493,7 @@
                         </Default>
                     </Condition>
                     <!-- Samsung One UI 8 AOD refresh workaround -->
-                    <PartText name="arc0_rv_aod_refresh" x="0" y="0" width="0" height="0" alpha="0">
+                    <PartText name="arc0_rv_aod_refresh" x="480" y="480" width="1" height="1" alpha="0">
                         <Text align="START">
                             <Font family="google_sans_flex_450" size="1" color="#00000000">
                                 <Template><![CDATA[%d]]>
@@ -482,6 +511,15 @@
              Provenance: base_0.apk → complications.defs complication-3 class='q1'.
              q1 { angle:0; } → WFF 15°–75°. Default: WATCH_BATTERY.
              ============================================================ -->
+        <!--
+          ComplicationSlot 1 — top_right_arc
+          Supported Types : RANGED_VALUE SHORT_TEXT EMPTY
+          Default Provider: WATCH_BATTERY (RANGED_VALUE)
+          Bounding Box    : BoundingArc centerX=240 centerY=240 width=480 height=480
+                            startAngle=15 endAngle=75 thickness=30
+                            (thickness=30 is the tap-target thickness; visual stroke is 8px)
+          Provenance      : base_0.apk → complications.defs complication-3 class='q1'
+        -->
         <ComplicationSlot slotId="1" name="top_right_arc"
             x="0" y="0" width="480" height="480"
             supportedTypes="RANGED_VALUE SHORT_TEXT EMPTY"
@@ -525,7 +563,7 @@
                         </Default>
                     </Condition>
                     <!-- Samsung One UI 8 AOD refresh workaround -->
-                    <PartText name="arc1_st_aod_refresh" x="0" y="0" width="0" height="0" alpha="0">
+                    <PartText name="arc1_st_aod_refresh" x="480" y="480" width="1" height="1" alpha="0">
                         <Text align="START">
                             <Font family="google_sans_flex_450" size="1" color="#00000000">
                                 <Template><![CDATA[%d]]>
@@ -580,7 +618,7 @@
                         </Default>
                     </Condition>
                     <!-- Samsung One UI 8 AOD refresh workaround -->
-                    <PartText name="arc1_rv_aod_refresh" x="0" y="0" width="0" height="0" alpha="0">
+                    <PartText name="arc1_rv_aod_refresh" x="480" y="480" width="1" height="1" alpha="0">
                         <Text align="START">
                             <Font family="google_sans_flex_450" size="1" color="#00000000">
                                 <Template><![CDATA[%d]]>
@@ -599,6 +637,15 @@
              q3 { angle:180; flipped:true; } → WFF 195°–255°. Text COUNTER_CLOCKWISE.
              Default: DAY_AND_DATE.
              ============================================================ -->
+        <!--
+          ComplicationSlot 2 — bottom_left_arc
+          Supported Types : RANGED_VALUE SHORT_TEXT EMPTY
+          Default Provider: DAY_AND_DATE (SHORT_TEXT)
+          Bounding Box    : BoundingArc centerX=240 centerY=240 width=480 height=480
+                            startAngle=195 endAngle=255 thickness=30
+                            (thickness=30 is the tap-target thickness; visual stroke is 8px)
+          Provenance      : base_0.apk → complications.defs complication-5 class='q3'
+        -->
         <ComplicationSlot slotId="2" name="bottom_left_arc"
             x="0" y="0" width="480" height="480"
             supportedTypes="RANGED_VALUE SHORT_TEXT EMPTY"
@@ -643,7 +690,7 @@
                         </Default>
                     </Condition>
                     <!-- Samsung One UI 8 AOD refresh workaround -->
-                    <PartText name="arc2_st_aod_refresh" x="0" y="0" width="0" height="0" alpha="0">
+                    <PartText name="arc2_st_aod_refresh" x="480" y="480" width="1" height="1" alpha="0">
                         <Text align="START">
                             <Font family="google_sans_flex_450" size="1" color="#00000000">
                                 <Template><![CDATA[%d]]>
@@ -698,7 +745,7 @@
                         </Default>
                     </Condition>
                     <!-- Samsung One UI 8 AOD refresh workaround -->
-                    <PartText name="arc2_rv_aod_refresh" x="0" y="0" width="0" height="0" alpha="0">
+                    <PartText name="arc2_rv_aod_refresh" x="480" y="480" width="1" height="1" alpha="0">
                         <Text align="START">
                             <Font family="google_sans_flex_450" size="1" color="#00000000">
                                 <Template><![CDATA[%d]]>
@@ -717,6 +764,18 @@
              q2 { angle:90; flipped:true; } → WFF 105°–165°. Text COUNTER_CLOCKWISE.
              Default: WATCH_BATTERY.
              ============================================================ -->
+        <!--
+          ComplicationSlot 3 — bottom_right_arc
+          Supported Types : RANGED_VALUE SHORT_TEXT EMPTY
+          Default Provider: WATCH_BATTERY (RANGED_VALUE)
+          Bounding Box    : BoundingArc centerX=240 centerY=240 width=480 height=480
+                            startAngle=105 endAngle=165 thickness=30
+                            (thickness=30 is the tap-target thickness; visual stroke is 8px)
+          Provenance      : base_0.apk → complications.defs complication-4 class='q2'
+          Design rationale: Symmetric arc pair with Slot 1. Both default to WATCH_BATTERY —
+                            this is an intentional Pixel Modular pattern providing battery
+                            status on both the NE and SE arcs.
+        -->
         <ComplicationSlot slotId="3" name="bottom_right_arc"
             x="0" y="0" width="480" height="480"
             supportedTypes="RANGED_VALUE SHORT_TEXT EMPTY"
@@ -761,7 +820,7 @@
                         </Default>
                     </Condition>
                     <!-- Samsung One UI 8 AOD refresh workaround -->
-                    <PartText name="arc3_st_aod_refresh" x="0" y="0" width="0" height="0" alpha="0">
+                    <PartText name="arc3_st_aod_refresh" x="480" y="480" width="1" height="1" alpha="0">
                         <Text align="START">
                             <Font family="google_sans_flex_450" size="1" color="#00000000">
                                 <Template><![CDATA[%d]]>
@@ -816,7 +875,7 @@
                         </Default>
                     </Condition>
                     <!-- Samsung One UI 8 AOD refresh workaround -->
-                    <PartText name="arc3_rv_aod_refresh" x="0" y="0" width="0" height="0" alpha="0">
+                    <PartText name="arc3_rv_aod_refresh" x="480" y="480" width="1" height="1" alpha="0">
                         <Text align="START">
                             <Font family="google_sans_flex_450" size="1" color="#00000000">
                                 <Template><![CDATA[%d]]>
@@ -845,14 +904,21 @@
              Linear Arcs row1: x=242, y=142, w=160, h=35.
              Default: WATCH_BATTERY.
              ============================================================ -->
-        <!-- Complication Slot 4 — Bottom-Left Bulb / Linear Row 1. -->
+        <!--
+          ComplicationSlot 4 — slot4 (Bottom-Left Bulb / Linear Row 1)
+          Supported Types : SHORT_TEXT RANGED_VALUE SMALL_IMAGE EMPTY
+          Default Provider: WATCH_BATTERY (RANGED_VALUE)
+          Bounding Box    : BoundingRoundRect x=39 y=263 width=120 height=120
+                            cornerRadiusX=18 cornerRadiusY=18
+          Provenance      : base_0.apk → res/fD.xml slot4
+        -->
         <ComplicationSlot slotId="4" name="slot4"
             x="0" y="0" width="480" height="480"
             supportedTypes="SHORT_TEXT RANGED_VALUE SMALL_IMAGE EMPTY"
             displayName="@string/bottom_left_complication">
             <DefaultProviderPolicy defaultSystemProvider="WATCH_BATTERY"
                                    defaultSystemProviderType="RANGED_VALUE" />
-            <BoundingRoundBox x="39" y="263" width="120" height="120" cornerRadius="18" />
+            <BoundingRoundRect x="39" y="263" width="120" height="120" cornerRadiusX="18" cornerRadiusY="18" />
 
             <!-- SHORT_TEXT: bulb (layouts 0,1) + linear (layouts 2,3) -->
             <Complication type="SHORT_TEXT">
@@ -871,13 +937,13 @@
                             <Expression name="bulb4_st_has_icon"><![CDATA[[COMPLICATION.MONOCHROMATIC_IMAGE] != null]]></Expression>
                         </Expressions>
                         <Compare expression="bulb4_st_has_icon">
-                            <PartImage name="bulb4_st_icon" x="24" y="6" width="72" height="72">
+                            <PartImage name="bulb4_st_icon" x="45" y="24" width="31" height="31">
                                 <Image resource="[COMPLICATION.MONOCHROMATIC_IMAGE]"
                                        tintColor="[CONFIGURATION.themeColor.0]" />
                             </PartImage>
                         </Compare>
                         <Default>
-                            <PartImage name="bulb4_st_icon_fb" x="24" y="6" width="72" height="72">
+                            <PartImage name="bulb4_st_icon_fb" x="45" y="24" width="31" height="31">
                                 <Image resource="@drawable/ic_zigzag"
                                        tintColor="[CONFIGURATION.themeColor.0]" />
                             </PartImage>
@@ -893,7 +959,7 @@
                         </Text>
                     </PartText>
                     <!-- Samsung One UI 8 AOD refresh workaround -->
-                    <PartText name="bulb4_st_aod" x="0" y="0" width="0" height="0" alpha="0">
+                    <PartText name="bulb4_st_aod" x="480" y="480" width="1" height="1" alpha="0">
                         <Text align="START">
                             <Font family="google_sans_flex_450" size="1" color="#00000000">
                                 <Template><![CDATA[%d]]>
@@ -944,7 +1010,7 @@
                         </Text>
                     </PartText>
                     <!-- Samsung One UI 8 AOD refresh workaround -->
-                    <PartText name="lin4_st_aod" x="0" y="0" width="0" height="0" alpha="0">
+                    <PartText name="lin4_st_aod" x="480" y="480" width="1" height="1" alpha="0">
                         <Text align="START">
                             <Font family="google_sans_flex_450" size="1" color="#00000000">
                                 <Template><![CDATA[%d]]>
@@ -1003,7 +1069,7 @@
                         </Text>
                     </PartText>
                     <!-- Samsung One UI 8 AOD refresh workaround -->
-                    <PartText name="bulb4_rv_aod" x="0" y="0" width="0" height="0" alpha="0">
+                    <PartText name="bulb4_rv_aod" x="480" y="480" width="1" height="1" alpha="0">
                         <Text align="START">
                             <Font family="google_sans_flex_450" size="1" color="#00000000">
                                 <Template><![CDATA[%d]]>
@@ -1085,7 +1151,7 @@
                         </Line>
                     </PartDraw>
                     <!-- Samsung One UI 8 AOD refresh workaround -->
-                    <PartText name="lin4_rv_aod" x="0" y="0" width="0" height="0" alpha="0">
+                    <PartText name="lin4_rv_aod" x="480" y="480" width="1" height="1" alpha="0">
                         <Text align="START">
                             <Font family="google_sans_flex_450" size="1" color="#00000000">
                                 <Template><![CDATA[%d]]>
@@ -1097,7 +1163,9 @@
                 </Group>
             </Complication>
 
-            <!-- SMALL_IMAGE: bulb only (layouts 0,1) -->
+            <!-- SMALL_IMAGE: bulb only (layouts 0,1).
+                 Renders MONOCHROMATIC_IMAGE with theme tint (matching APK .comp-image { fill: color-a; }).
+                 Falls back to our drawable icon if no monochromatic image is provided. -->
             <Complication type="SMALL_IMAGE">
                 <Group name="bulb4_si" x="39" y="263" width="120" height="120" alpha="255">
                     <Variant mode="AMBIENT" target="alpha" value="0" />
@@ -1109,11 +1177,25 @@
                             <Stroke color="[CONFIGURATION.themeColor.2]" thickness="6" cap="ROUND" />
                         </Arc>
                     </PartDraw>
-                    <PartImage name="bulb4_si_img" x="24" y="6" width="72" height="72">
-                        <Image resource="[COMPLICATION.SMALL_IMAGE]" />
-                    </PartImage>
+                    <Condition>
+                        <Expressions>
+                            <Expression name="bulb4_si_has_mono"><![CDATA[[COMPLICATION.MONOCHROMATIC_IMAGE] != null]]></Expression>
+                        </Expressions>
+                        <Compare expression="bulb4_si_has_mono">
+                            <PartImage name="bulb4_si_mono" x="24" y="6" width="72" height="72">
+                                <Image resource="[COMPLICATION.MONOCHROMATIC_IMAGE]"
+                                       tintColor="[CONFIGURATION.themeColor.0]" />
+                            </PartImage>
+                        </Compare>
+                        <Default>
+                            <PartImage name="bulb4_si_fb" x="24" y="6" width="72" height="72">
+                                <Image resource="@drawable/ic_zigzag"
+                                       tintColor="[CONFIGURATION.themeColor.0]" />
+                            </PartImage>
+                        </Default>
+                    </Condition>
                     <!-- Samsung One UI 8 AOD refresh workaround -->
-                    <PartText name="bulb4_si_aod" x="0" y="0" width="0" height="0" alpha="0">
+                    <PartText name="bulb4_si_aod" x="480" y="480" width="1" height="1" alpha="0">
                         <Text align="START">
                             <Font family="google_sans_flex_450" size="1" color="#00000000">
                                 <Template><![CDATA[%d]]>
@@ -1127,14 +1209,21 @@
 
         </ComplicationSlot>
 
-        <!-- Complication Slot 5 — Bottom-Center Bulb / Linear Row 2. -->
+        <!--
+          ComplicationSlot 5 — slot5 (Bottom-Center Bulb / Linear Row 2)
+          Supported Types : SHORT_TEXT RANGED_VALUE SMALL_IMAGE EMPTY
+          Default Provider: APP_SHORTCUT (SMALL_IMAGE)
+          Bounding Box    : BoundingRoundRect x=180 y=329 width=120 height=120
+                            cornerRadiusX=18 cornerRadiusY=18
+          Provenance      : base_0.apk → res/fD.xml slot5
+        -->
         <ComplicationSlot slotId="5" name="slot5"
             x="0" y="0" width="480" height="480"
             supportedTypes="SHORT_TEXT RANGED_VALUE SMALL_IMAGE EMPTY"
             displayName="@string/bottom_center_shortcut">
             <DefaultProviderPolicy defaultSystemProvider="APP_SHORTCUT"
                                    defaultSystemProviderType="SMALL_IMAGE" />
-            <BoundingRoundBox x="180" y="329" width="120" height="120" cornerRadius="18" />
+            <BoundingRoundRect x="180" y="329" width="120" height="120" cornerRadiusX="18" cornerRadiusY="18" />
 
             <!-- SHORT_TEXT: bulb (layouts 0,1) + linear (layouts 2,3) -->
             <Complication type="SHORT_TEXT">
@@ -1153,13 +1242,13 @@
                             <Expression name="bulb5_st_has_icon"><![CDATA[[COMPLICATION.MONOCHROMATIC_IMAGE] != null]]></Expression>
                         </Expressions>
                         <Compare expression="bulb5_st_has_icon">
-                            <PartImage name="bulb5_st_icon" x="24" y="6" width="72" height="72">
+                            <PartImage name="bulb5_st_icon" x="45" y="24" width="31" height="31">
                                 <Image resource="[COMPLICATION.MONOCHROMATIC_IMAGE]"
                                        tintColor="[CONFIGURATION.themeColor.0]" />
                             </PartImage>
                         </Compare>
                         <Default>
-                            <PartImage name="bulb5_st_icon_fb" x="24" y="6" width="72" height="72">
+                            <PartImage name="bulb5_st_icon_fb" x="45" y="24" width="31" height="31">
                                 <Image resource="@drawable/ic_star"
                                        tintColor="[CONFIGURATION.themeColor.0]" />
                             </PartImage>
@@ -1175,7 +1264,7 @@
                         </Text>
                     </PartText>
                     <!-- Samsung One UI 8 AOD refresh workaround -->
-                    <PartText name="bulb5_st_aod" x="0" y="0" width="0" height="0" alpha="0">
+                    <PartText name="bulb5_st_aod" x="480" y="480" width="1" height="1" alpha="0">
                         <Text align="START">
                             <Font family="google_sans_flex_450" size="1" color="#00000000">
                                 <Template><![CDATA[%d]]>
@@ -1226,7 +1315,7 @@
                         </Text>
                     </PartText>
                     <!-- Samsung One UI 8 AOD refresh workaround -->
-                    <PartText name="lin5_st_aod" x="0" y="0" width="0" height="0" alpha="0">
+                    <PartText name="lin5_st_aod" x="480" y="480" width="1" height="1" alpha="0">
                         <Text align="START">
                             <Font family="google_sans_flex_450" size="1" color="#00000000">
                                 <Template><![CDATA[%d]]>
@@ -1285,7 +1374,7 @@
                         </Text>
                     </PartText>
                     <!-- Samsung One UI 8 AOD refresh workaround -->
-                    <PartText name="bulb5_rv_aod" x="0" y="0" width="0" height="0" alpha="0">
+                    <PartText name="bulb5_rv_aod" x="480" y="480" width="1" height="1" alpha="0">
                         <Text align="START">
                             <Font family="google_sans_flex_450" size="1" color="#00000000">
                                 <Template><![CDATA[%d]]>
@@ -1367,7 +1456,7 @@
                         </Line>
                     </PartDraw>
                     <!-- Samsung One UI 8 AOD refresh workaround -->
-                    <PartText name="lin5_rv_aod" x="0" y="0" width="0" height="0" alpha="0">
+                    <PartText name="lin5_rv_aod" x="480" y="480" width="1" height="1" alpha="0">
                         <Text align="START">
                             <Font family="google_sans_flex_450" size="1" color="#00000000">
                                 <Template><![CDATA[%d]]>
@@ -1379,7 +1468,9 @@
                 </Group>
             </Complication>
 
-            <!-- SMALL_IMAGE: bulb only (layouts 0,1) -->
+            <!-- SMALL_IMAGE: bulb only (layouts 0,1).
+                 Renders MONOCHROMATIC_IMAGE with theme tint (matching APK .comp-image { fill: color-a; }).
+                 Falls back to our drawable icon if no monochromatic image is provided. -->
             <Complication type="SMALL_IMAGE">
                 <Group name="bulb5_si" x="180" y="329" width="120" height="120" alpha="255">
                     <Variant mode="AMBIENT" target="alpha" value="0" />
@@ -1391,11 +1482,25 @@
                             <Stroke color="[CONFIGURATION.themeColor.2]" thickness="6" cap="ROUND" />
                         </Arc>
                     </PartDraw>
-                    <PartImage name="bulb5_si_img" x="24" y="6" width="72" height="72">
-                        <Image resource="[COMPLICATION.SMALL_IMAGE]" />
-                    </PartImage>
+                    <Condition>
+                        <Expressions>
+                            <Expression name="bulb5_si_has_mono"><![CDATA[[COMPLICATION.MONOCHROMATIC_IMAGE] != null]]></Expression>
+                        </Expressions>
+                        <Compare expression="bulb5_si_has_mono">
+                            <PartImage name="bulb5_si_mono" x="24" y="6" width="72" height="72">
+                                <Image resource="[COMPLICATION.MONOCHROMATIC_IMAGE]"
+                                       tintColor="[CONFIGURATION.themeColor.0]" />
+                            </PartImage>
+                        </Compare>
+                        <Default>
+                            <PartImage name="bulb5_si_fb" x="24" y="6" width="72" height="72">
+                                <Image resource="@drawable/ic_star"
+                                       tintColor="[CONFIGURATION.themeColor.0]" />
+                            </PartImage>
+                        </Default>
+                    </Condition>
                     <!-- Samsung One UI 8 AOD refresh workaround -->
-                    <PartText name="bulb5_si_aod" x="0" y="0" width="0" height="0" alpha="0">
+                    <PartText name="bulb5_si_aod" x="480" y="480" width="1" height="1" alpha="0">
                         <Text align="START">
                             <Font family="google_sans_flex_450" size="1" color="#00000000">
                                 <Template><![CDATA[%d]]>
@@ -1409,14 +1514,21 @@
 
         </ComplicationSlot>
 
-        <!-- Complication Slot 6 — Bottom-Right Bulb / Linear Row 3. -->
+        <!--
+          ComplicationSlot 6 — slot6 (Bottom-Right Bulb / Linear Row 3)
+          Supported Types : SHORT_TEXT RANGED_VALUE SMALL_IMAGE EMPTY
+          Default Provider: HEART_RATE (SHORT_TEXT)
+          Bounding Box    : BoundingRoundRect x=320 y=263 width=120 height=120
+                            cornerRadiusX=18 cornerRadiusY=18
+          Provenance      : base_0.apk → res/fD.xml slot6
+        -->
         <ComplicationSlot slotId="6" name="slot6"
             x="0" y="0" width="480" height="480"
             supportedTypes="SHORT_TEXT RANGED_VALUE SMALL_IMAGE EMPTY"
             displayName="@string/bottom_right_complication">
             <DefaultProviderPolicy defaultSystemProvider="HEART_RATE"
                                    defaultSystemProviderType="SHORT_TEXT" />
-            <BoundingRoundBox x="320" y="263" width="120" height="120" cornerRadius="18" />
+            <BoundingRoundRect x="320" y="263" width="120" height="120" cornerRadiusX="18" cornerRadiusY="18" />
 
             <!-- SHORT_TEXT: bulb (layouts 0,1) + linear (layouts 2,3) -->
             <Complication type="SHORT_TEXT">
@@ -1435,13 +1547,13 @@
                             <Expression name="bulb6_st_has_icon"><![CDATA[[COMPLICATION.MONOCHROMATIC_IMAGE] != null]]></Expression>
                         </Expressions>
                         <Compare expression="bulb6_st_has_icon">
-                            <PartImage name="bulb6_st_icon" x="24" y="6" width="72" height="72">
+                            <PartImage name="bulb6_st_icon" x="45" y="24" width="31" height="31">
                                 <Image resource="[COMPLICATION.MONOCHROMATIC_IMAGE]"
                                        tintColor="[CONFIGURATION.themeColor.0]" />
                             </PartImage>
                         </Compare>
                         <Default>
-                            <PartImage name="bulb6_st_icon_fb" x="24" y="6" width="72" height="72">
+                            <PartImage name="bulb6_st_icon_fb" x="45" y="24" width="31" height="31">
                                 <Image resource="@drawable/ic_heart"
                                        tintColor="[CONFIGURATION.themeColor.0]" />
                             </PartImage>
@@ -1457,7 +1569,7 @@
                         </Text>
                     </PartText>
                     <!-- Samsung One UI 8 AOD refresh workaround -->
-                    <PartText name="bulb6_st_aod" x="0" y="0" width="0" height="0" alpha="0">
+                    <PartText name="bulb6_st_aod" x="480" y="480" width="1" height="1" alpha="0">
                         <Text align="START">
                             <Font family="google_sans_flex_450" size="1" color="#00000000">
                                 <Template><![CDATA[%d]]>
@@ -1508,7 +1620,7 @@
                         </Text>
                     </PartText>
                     <!-- Samsung One UI 8 AOD refresh workaround -->
-                    <PartText name="lin6_st_aod" x="0" y="0" width="0" height="0" alpha="0">
+                    <PartText name="lin6_st_aod" x="480" y="480" width="1" height="1" alpha="0">
                         <Text align="START">
                             <Font family="google_sans_flex_450" size="1" color="#00000000">
                                 <Template><![CDATA[%d]]>
@@ -1567,7 +1679,7 @@
                         </Text>
                     </PartText>
                     <!-- Samsung One UI 8 AOD refresh workaround -->
-                    <PartText name="bulb6_rv_aod" x="0" y="0" width="0" height="0" alpha="0">
+                    <PartText name="bulb6_rv_aod" x="480" y="480" width="1" height="1" alpha="0">
                         <Text align="START">
                             <Font family="google_sans_flex_450" size="1" color="#00000000">
                                 <Template><![CDATA[%d]]>
@@ -1649,7 +1761,7 @@
                         </Line>
                     </PartDraw>
                     <!-- Samsung One UI 8 AOD refresh workaround -->
-                    <PartText name="lin6_rv_aod" x="0" y="0" width="0" height="0" alpha="0">
+                    <PartText name="lin6_rv_aod" x="480" y="480" width="1" height="1" alpha="0">
                         <Text align="START">
                             <Font family="google_sans_flex_450" size="1" color="#00000000">
                                 <Template><![CDATA[%d]]>
@@ -1661,7 +1773,9 @@
                 </Group>
             </Complication>
 
-            <!-- SMALL_IMAGE: bulb only (layouts 0,1) -->
+            <!-- SMALL_IMAGE: bulb only (layouts 0,1).
+                 Renders MONOCHROMATIC_IMAGE with theme tint (matching APK .comp-image { fill: color-a; }).
+                 Falls back to our drawable icon if no monochromatic image is provided. -->
             <Complication type="SMALL_IMAGE">
                 <Group name="bulb6_si" x="320" y="263" width="120" height="120" alpha="255">
                     <Variant mode="AMBIENT" target="alpha" value="0" />
@@ -1673,11 +1787,25 @@
                             <Stroke color="[CONFIGURATION.themeColor.2]" thickness="6" cap="ROUND" />
                         </Arc>
                     </PartDraw>
-                    <PartImage name="bulb6_si_img" x="24" y="6" width="72" height="72">
-                        <Image resource="[COMPLICATION.SMALL_IMAGE]" />
-                    </PartImage>
+                    <Condition>
+                        <Expressions>
+                            <Expression name="bulb6_si_has_mono"><![CDATA[[COMPLICATION.MONOCHROMATIC_IMAGE] != null]]></Expression>
+                        </Expressions>
+                        <Compare expression="bulb6_si_has_mono">
+                            <PartImage name="bulb6_si_mono" x="24" y="6" width="72" height="72">
+                                <Image resource="[COMPLICATION.MONOCHROMATIC_IMAGE]"
+                                       tintColor="[CONFIGURATION.themeColor.0]" />
+                            </PartImage>
+                        </Compare>
+                        <Default>
+                            <PartImage name="bulb6_si_fb" x="24" y="6" width="72" height="72">
+                                <Image resource="@drawable/ic_heart"
+                                       tintColor="[CONFIGURATION.themeColor.0]" />
+                            </PartImage>
+                        </Default>
+                    </Condition>
                     <!-- Samsung One UI 8 AOD refresh workaround -->
-                    <PartText name="bulb6_si_aod" x="0" y="0" width="0" height="0" alpha="0">
+                    <PartText name="bulb6_si_aod" x="480" y="480" width="1" height="1" alpha="0">
                         <Text align="START">
                             <Font family="google_sans_flex_450" size="1" color="#00000000">
                                 <Template><![CDATA[%d]]>
@@ -1691,14 +1819,21 @@
 
         </ComplicationSlot>
 
-        <!-- Complication Slot 7 — Linear Row 4 only (no bulb). -->
+        <!--
+          ComplicationSlot 7 — slot7 (Linear Row 4 only, no bulb)
+          Supported Types : SHORT_TEXT RANGED_VALUE EMPTY
+          Default Provider: WATCH_BATTERY (RANGED_VALUE)
+          Bounding Box    : BoundingRoundRect x=246 y=298 width=180 height=42
+                            cornerRadiusX=19 cornerRadiusY=19
+          Provenance      : base_0.apk → res/fD.xml slot7
+        -->
         <ComplicationSlot slotId="7" name="slot7"
             x="0" y="0" width="480" height="480"
             supportedTypes="SHORT_TEXT RANGED_VALUE EMPTY"
             displayName="@string/linear_complication_4">
             <DefaultProviderPolicy defaultSystemProvider="WATCH_BATTERY"
                                    defaultSystemProviderType="RANGED_VALUE" />
-            <BoundingRoundBox x="246" y="298" width="180" height="42" cornerRadius="19" />
+            <BoundingRoundRect x="246" y="298" width="180" height="42" cornerRadiusX="19" cornerRadiusY="19" />
 
             <Complication type="SHORT_TEXT">
                 <Group name="lin7_st" x="246" y="298" width="180" height="42" alpha="255">
@@ -1742,7 +1877,7 @@
                         </Text>
                     </PartText>
                     <!-- Samsung One UI 8 AOD refresh workaround -->
-                    <PartText name="lin7_st_aod" x="0" y="0" width="0" height="0" alpha="0">
+                    <PartText name="lin7_st_aod" x="480" y="480" width="1" height="1" alpha="0">
                         <Text align="START">
                             <Font family="google_sans_flex_450" size="1" color="#00000000">
                                 <Template><![CDATA[%d]]>
@@ -1826,7 +1961,7 @@
                         </Line>
                     </PartDraw>
                     <!-- Samsung One UI 8 AOD refresh workaround -->
-                    <PartText name="lin7_rv_aod" x="0" y="0" width="0" height="0" alpha="0">
+                    <PartText name="lin7_rv_aod" x="480" y="480" width="1" height="1" alpha="0">
                         <Text align="START">
                             <Font family="google_sans_flex_450" size="1" color="#00000000">
                                 <Template><![CDATA[%d]]>

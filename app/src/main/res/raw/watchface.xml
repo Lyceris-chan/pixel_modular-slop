@@ -783,6 +783,13 @@
 
 
         <!-- ============================================================
+             COMPLICATION SLOTS 4–7 — Bulb / Linear complications.
+             Each slot has one Complication per type. Bulb and linear
+             rendering are separate Groups inside the same Complication,
+             switched by layout-based Transform target="alpha".
+             ============================================================ -->
+
+        <!-- ============================================================
              COMPLICATION SLOT 4 — Bottom-Left Bulb / Linear Row 1.
              Provenance: base_0.apk → res/fD.xml slot4.
              Bulb (Default/Arcs): x=39, y=263, w=120, h=120.
@@ -790,28 +797,27 @@
              Linear Arcs row1: x=242, y=142, w=160, h=35.
              Default: WATCH_BATTERY.
              ============================================================ -->
-        <ComplicationSlot slotId="4" name="bottom_left_bulb"
+        <!-- Complication Slot 4 — Bottom-Left Bulb / Linear Row 1. -->
+        <ComplicationSlot slotId="4" name="slot4"
             x="39" y="263" width="120" height="120"
-            supportedTypes="RANGED_VALUE SHORT_TEXT SMALL_IMAGE EMPTY"
+            supportedTypes="SHORT_TEXT RANGED_VALUE SMALL_IMAGE EMPTY"
             displayName="@string/bottom_left_complication">
             <DefaultProviderPolicy defaultSystemProvider="WATCH_BATTERY"
                                    defaultSystemProviderType="RANGED_VALUE" />
+            <BoundingRoundBox x="0" y="0" width="120" height="120" cornerRadius="18" />
 
-            <!-- BULB layout: SHORT_TEXT -->
+            <!-- SHORT_TEXT: bulb (layouts 0,1) + linear (layouts 2,3) -->
             <Complication type="SHORT_TEXT">
-                <Group name="bulb4_short_text" x="39" y="263" width="120" height="120" alpha="255">
+                <Group name="bulb4_st" x="39" y="263" width="120" height="120" alpha="255">
                     <Variant mode="AMBIENT" target="alpha" value="0" />
-                    <!-- Visible only in bulb layouts (0,1) -->
                     <Transform target="alpha"
                         value="[CONFIGURATION.layoutStyle] == 0 || [CONFIGURATION.layoutStyle] == 1 ? 255 : 0" />
-                    <!-- Bulb ring. Provenance: base_0.apk → .bulb-ring { thickness:6; cap:ROUND; } -->
                     <PartDraw name="bulb4_st_ring" x="0" y="0" width="120" height="120">
                         <Arc centerX="60" centerY="60" width="120" height="120"
                              startAngle="0" endAngle="360" direction="CLOCKWISE">
                             <Stroke color="[CONFIGURATION.themeColor.2]" thickness="6" cap="ROUND" />
                         </Arc>
                     </PartDraw>
-                    <!-- Bulb icon. Provenance: base_0.apk → .bulb-icon { x:24; y:6; w:72; h:72; } -->
                     <Condition>
                         <Expressions>
                             <Expression name="bulb4_st_has_icon"><![CDATA[[COMPLICATION.MONOCHROMATIC_IMAGE] != null]]></Expression>
@@ -823,7 +829,6 @@
                             </PartImage>
                         </Compare>
                     </Condition>
-                    <!-- Bulb text. Provenance: base_0.apk → .bulb-text { y:78; size:36; } -->
                     <PartText name="bulb4_st_label" x="0" y="78" width="120" height="36">
                         <Text align="CENTER">
                             <Font family="google_sans_flex_700" size="36" color="#ffffffff">
@@ -834,7 +839,7 @@
                         </Text>
                     </PartText>
                     <!-- Samsung One UI 8 AOD refresh workaround -->
-                    <PartText name="bulb4_st_aod_refresh" x="0" y="0" width="1" height="1" alpha="0">
+                    <PartText name="bulb4_st_aod" x="0" y="0" width="1" height="1" alpha="0">
                         <Text align="START">
                             <Font family="google_sans_flex_450" size="1" color="#00000000">
                                 <Template><![CDATA[%d]]>
@@ -844,97 +849,7 @@
                         </Text>
                     </PartText>
                 </Group>
-            </Complication>
-
-            <!-- BULB layout: RANGED_VALUE -->
-            <Complication type="RANGED_VALUE">
-                <Group name="bulb4_ranged" x="39" y="263" width="120" height="120" alpha="255">
-                    <Variant mode="AMBIENT" target="alpha" value="0" />
-                    <Transform target="alpha"
-                        value="[CONFIGURATION.layoutStyle] == 0 || [CONFIGURATION.layoutStyle] == 1 ? 255 : 0" />
-                    <!-- Bulb ring track -->
-                    <PartDraw name="bulb4_rv_ring_track" x="0" y="0" width="120" height="120">
-                        <Arc centerX="60" centerY="60" width="120" height="120"
-                             startAngle="0" endAngle="360" direction="CLOCKWISE">
-                            <Stroke color="[CONFIGURATION.themeColor.2]" thickness="6" cap="ROUND" />
-                        </Arc>
-                    </PartDraw>
-                    <!-- Bulb ring fill -->
-                    <PartDraw name="bulb4_rv_ring_fill" x="0" y="0" width="120" height="120">
-                        <Arc centerX="60" centerY="60" width="120" height="120"
-                             startAngle="270" endAngle="270" direction="CLOCKWISE">
-                            <Transform target="endAngle"
-                                value="[COMPLICATION.RANGED_VALUE_MAX] &gt; 0 ? (270 + 360 * ([COMPLICATION.RANGED_VALUE_VALUE] / [COMPLICATION.RANGED_VALUE_MAX])) : 270" />
-                            <Stroke color="[CONFIGURATION.themeColor.0]" thickness="6" cap="ROUND" />
-                        </Arc>
-                    </PartDraw>
-                    <!-- Bulb icon -->
-                    <Condition>
-                        <Expressions>
-                            <Expression name="bulb4_rv_has_icon"><![CDATA[[COMPLICATION.MONOCHROMATIC_IMAGE] != null]]></Expression>
-                        </Expressions>
-                        <Compare expression="bulb4_rv_has_icon">
-                            <PartImage name="bulb4_rv_icon" x="24" y="6" width="72" height="72">
-                                <Image resource="[COMPLICATION.MONOCHROMATIC_IMAGE]"
-                                       tintColor="[CONFIGURATION.themeColor.0]" />
-                            </PartImage>
-                        </Compare>
-                    </Condition>
-                    <!-- Bulb text -->
-                    <PartText name="bulb4_rv_label" x="0" y="78" width="120" height="36">
-                        <Text align="CENTER">
-                            <Font family="google_sans_flex_700" size="36" color="#ffffffff">
-                                <Template><![CDATA[%s]]>
-                                    <Parameter expression="[COMPLICATION.TEXT]" />
-                                </Template>
-                            </Font>
-                        </Text>
-                    </PartText>
-                    <!-- Samsung One UI 8 AOD refresh workaround -->
-                    <PartText name="bulb4_rv_aod_refresh" x="0" y="0" width="1" height="1" alpha="0">
-                        <Text align="START">
-                            <Font family="google_sans_flex_450" size="1" color="#00000000">
-                                <Template><![CDATA[%d]]>
-                                    <Parameter expression="[COMPLICATION.LAST_UPDATE_TIME]" />
-                                </Template>
-                            </Font>
-                        </Text>
-                    </PartText>
-                </Group>
-            </Complication>
-
-            <!-- BULB layout: SMALL_IMAGE -->
-            <Complication type="SMALL_IMAGE">
-                <Group name="bulb4_small_image" x="39" y="263" width="120" height="120" alpha="255">
-                    <Variant mode="AMBIENT" target="alpha" value="0" />
-                    <Transform target="alpha"
-                        value="[CONFIGURATION.layoutStyle] == 0 || [CONFIGURATION.layoutStyle] == 1 ? 255 : 0" />
-                    <PartDraw name="bulb4_si_ring" x="0" y="0" width="120" height="120">
-                        <Arc centerX="60" centerY="60" width="120" height="120"
-                             startAngle="0" endAngle="360" direction="CLOCKWISE">
-                            <Stroke color="[CONFIGURATION.themeColor.2]" thickness="6" cap="ROUND" />
-                        </Arc>
-                    </PartDraw>
-                    <PartImage name="bulb4_si_img" x="24" y="6" width="72" height="72">
-                        <Image resource="[COMPLICATION.SMALL_IMAGE]" />
-                    </PartImage>
-                    <!-- Samsung One UI 8 AOD refresh workaround -->
-                    <PartText name="bulb4_si_aod_refresh" x="0" y="0" width="1" height="1" alpha="0">
-                        <Text align="START">
-                            <Font family="google_sans_flex_450" size="1" color="#00000000">
-                                <Template><![CDATA[%d]]>
-                                    <Parameter expression="[COMPLICATION.LAST_UPDATE_TIME]" />
-                                </Template>
-                            </Font>
-                        </Text>
-                    </PartText>
-                </Group>
-            </Complication>
-
-            <!-- LINEAR layout: SHORT_TEXT
-                 Provenance: base_0.apk → linear row1 x=246,y=127,w=180,h=42 (linear) / x=242,y=142,w=160,h=35 (linear arcs) -->
-            <Complication type="SHORT_TEXT">
-                <Group name="linear4_short_text" x="246" y="127" width="180" height="42" alpha="255">
+                <Group name="lin4_st" x="246" y="127" width="180" height="42" alpha="255">
                     <Variant mode="AMBIENT" target="alpha" value="0" />
                     <Transform target="alpha"
                         value="[CONFIGURATION.layoutStyle] == 2 || [CONFIGURATION.layoutStyle] == 3 ? 255 : 0" />
@@ -946,7 +861,6 @@
                         value="[CONFIGURATION.layoutStyle] == 3 ? 160 : 180" />
                     <Transform target="height"
                         value="[CONFIGURATION.layoutStyle] == 3 ? 35 : 42" />
-                    <!-- Linear icon. Provenance: base_0.apk → .linear-icon { x:0; y:4; w:28; h:28; } -->
                     <Condition>
                         <Expressions>
                             <Expression name="lin4_st_has_icon"><![CDATA[[COMPLICATION.MONOCHROMATIC_IMAGE] != null]]></Expression>
@@ -958,7 +872,6 @@
                             </PartImage>
                         </Compare>
                     </Condition>
-                    <!-- Linear text. Provenance: base_0.apk → .linear-text { x:35; y:4; w:140; h:30; size:32(linear)/28(arcs) } -->
                     <PartText name="lin4_st_label" x="35" y="4" width="140" height="30">
                         <Text align="START">
                             <Font family="google_sans_flex_700" size="32" color="#ffffffff">
@@ -971,7 +884,7 @@
                         </Text>
                     </PartText>
                     <!-- Samsung One UI 8 AOD refresh workaround -->
-                    <PartText name="lin4_st_aod_refresh" x="0" y="0" width="1" height="1" alpha="0">
+                    <PartText name="lin4_st_aod" x="0" y="0" width="1" height="1" alpha="0">
                         <Text align="START">
                             <Font family="google_sans_flex_450" size="1" color="#00000000">
                                 <Template><![CDATA[%d]]>
@@ -983,9 +896,58 @@
                 </Group>
             </Complication>
 
-            <!-- LINEAR layout: RANGED_VALUE -->
+            <!-- RANGED_VALUE: bulb (layouts 0,1) + linear (layouts 2,3) -->
             <Complication type="RANGED_VALUE">
-                <Group name="linear4_ranged" x="246" y="127" width="180" height="42" alpha="255">
+                <Group name="bulb4_rv" x="39" y="263" width="120" height="120" alpha="255">
+                    <Variant mode="AMBIENT" target="alpha" value="0" />
+                    <Transform target="alpha"
+                        value="[CONFIGURATION.layoutStyle] == 0 || [CONFIGURATION.layoutStyle] == 1 ? 255 : 0" />
+                    <PartDraw name="bulb4_rv_track" x="0" y="0" width="120" height="120">
+                        <Arc centerX="60" centerY="60" width="120" height="120"
+                             startAngle="0" endAngle="360" direction="CLOCKWISE">
+                            <Stroke color="[CONFIGURATION.themeColor.2]" thickness="6" cap="ROUND" />
+                        </Arc>
+                    </PartDraw>
+                    <PartDraw name="bulb4_rv_fill" x="0" y="0" width="120" height="120">
+                        <Arc centerX="60" centerY="60" width="120" height="120"
+                             startAngle="270" endAngle="270" direction="CLOCKWISE">
+                            <Transform target="endAngle"
+                                value="[COMPLICATION.RANGED_VALUE_MAX] &gt; 0 ? (270 + 360 * ([COMPLICATION.RANGED_VALUE_VALUE] / [COMPLICATION.RANGED_VALUE_MAX])) : 270" />
+                            <Stroke color="[CONFIGURATION.themeColor.0]" thickness="6" cap="ROUND" />
+                        </Arc>
+                    </PartDraw>
+                    <Condition>
+                        <Expressions>
+                            <Expression name="bulb4_rv_has_icon"><![CDATA[[COMPLICATION.MONOCHROMATIC_IMAGE] != null]]></Expression>
+                        </Expressions>
+                        <Compare expression="bulb4_rv_has_icon">
+                            <PartImage name="bulb4_rv_icon" x="24" y="6" width="72" height="72">
+                                <Image resource="[COMPLICATION.MONOCHROMATIC_IMAGE]"
+                                       tintColor="[CONFIGURATION.themeColor.0]" />
+                            </PartImage>
+                        </Compare>
+                    </Condition>
+                    <PartText name="bulb4_rv_label" x="0" y="78" width="120" height="36">
+                        <Text align="CENTER">
+                            <Font family="google_sans_flex_700" size="36" color="#ffffffff">
+                                <Template><![CDATA[%s]]>
+                                    <Parameter expression="[COMPLICATION.TEXT]" />
+                                </Template>
+                            </Font>
+                        </Text>
+                    </PartText>
+                    <!-- Samsung One UI 8 AOD refresh workaround -->
+                    <PartText name="bulb4_rv_aod" x="0" y="0" width="1" height="1" alpha="0">
+                        <Text align="START">
+                            <Font family="google_sans_flex_450" size="1" color="#00000000">
+                                <Template><![CDATA[%d]]>
+                                    <Parameter expression="[COMPLICATION.LAST_UPDATE_TIME]" />
+                                </Template>
+                            </Font>
+                        </Text>
+                    </PartText>
+                </Group>
+                <Group name="lin4_rv" x="246" y="127" width="180" height="42" alpha="255">
                     <Variant mode="AMBIENT" target="alpha" value="0" />
                     <Transform target="alpha"
                         value="[CONFIGURATION.layoutStyle] == 2 || [CONFIGURATION.layoutStyle] == 3 ? 255 : 0" />
@@ -1019,8 +981,8 @@
                             </Font>
                         </Text>
                     </PartText>
-                    <!-- Linear progress line. Provenance: base_0.apk → .linear-progress { startX:35; startY:40; thickness:4; cap:ROUND; } -->
-                    <PartDraw name="lin4_rv_progress_track" x="0" y="0" width="180" height="42">
+                    <!-- Linear progress line. Provenance: base_0.apk → .linear-progress -->
+                    <PartDraw name="lin4_rv_track" x="0" y="0" width="180" height="42">
                         <Transform target="width"
                             value="[CONFIGURATION.layoutStyle] == 3 ? 160 : 180" />
                         <Transform target="height"
@@ -1035,7 +997,7 @@
                             <Stroke color="[CONFIGURATION.themeColor.2]" thickness="4" cap="ROUND" />
                         </Line>
                     </PartDraw>
-                    <PartDraw name="lin4_rv_progress_fill" x="0" y="0" width="180" height="42">
+                    <PartDraw name="lin4_rv_fill" x="0" y="0" width="180" height="42">
                         <Transform target="width"
                             value="[CONFIGURATION.layoutStyle] == 3 ? 160 : 180" />
                         <Transform target="height"
@@ -1051,7 +1013,7 @@
                         </Line>
                     </PartDraw>
                     <!-- Samsung One UI 8 AOD refresh workaround -->
-                    <PartText name="lin4_rv_aod_refresh" x="0" y="0" width="1" height="1" alpha="0">
+                    <PartText name="lin4_rv_aod" x="0" y="0" width="1" height="1" alpha="0">
                         <Text align="START">
                             <Font family="google_sans_flex_450" size="1" color="#00000000">
                                 <Template><![CDATA[%d]]>
@@ -1062,27 +1024,49 @@
                     </PartText>
                 </Group>
             </Complication>
+
+            <!-- SMALL_IMAGE: bulb only (layouts 0,1) -->
+            <Complication type="SMALL_IMAGE">
+                <Group name="bulb4_si" x="39" y="263" width="120" height="120" alpha="255">
+                    <Variant mode="AMBIENT" target="alpha" value="0" />
+                    <Transform target="alpha"
+                        value="[CONFIGURATION.layoutStyle] == 0 || [CONFIGURATION.layoutStyle] == 1 ? 255 : 0" />
+                    <PartDraw name="bulb4_si_ring" x="0" y="0" width="120" height="120">
+                        <Arc centerX="60" centerY="60" width="120" height="120"
+                             startAngle="0" endAngle="360" direction="CLOCKWISE">
+                            <Stroke color="[CONFIGURATION.themeColor.2]" thickness="6" cap="ROUND" />
+                        </Arc>
+                    </PartDraw>
+                    <PartImage name="bulb4_si_img" x="24" y="6" width="72" height="72">
+                        <Image resource="[COMPLICATION.SMALL_IMAGE]" />
+                    </PartImage>
+                    <!-- Samsung One UI 8 AOD refresh workaround -->
+                    <PartText name="bulb4_si_aod" x="0" y="0" width="1" height="1" alpha="0">
+                        <Text align="START">
+                            <Font family="google_sans_flex_450" size="1" color="#00000000">
+                                <Template><![CDATA[%d]]>
+                                    <Parameter expression="[COMPLICATION.LAST_UPDATE_TIME]" />
+                                </Template>
+                            </Font>
+                        </Text>
+                    </PartText>
+                </Group>
+            </Complication>
+
         </ComplicationSlot>
 
-
-        <!-- ============================================================
-             COMPLICATION SLOT 5 — Bottom-Center Bulb / Linear Row 2.
-             Provenance: base_0.apk → res/fD.xml slot5.
-             Bulb (Default/Arcs): x=180, y=329, w=120, h=120.
-             Linear row2: x=246, y=184, w=180, h=42.
-             Linear Arcs row2: x=242, y=193, w=160, h=35.
-             Default: APP_SHORTCUT.
-             ============================================================ -->
-        <ComplicationSlot slotId="5" name="bottom_center_shortcut"
+        <!-- Complication Slot 5 — Bottom-Center Bulb / Linear Row 2. -->
+        <ComplicationSlot slotId="5" name="slot5"
             x="180" y="329" width="120" height="120"
             supportedTypes="SHORT_TEXT RANGED_VALUE SMALL_IMAGE EMPTY"
             displayName="@string/bottom_center_shortcut">
             <DefaultProviderPolicy defaultSystemProvider="APP_SHORTCUT"
                                    defaultSystemProviderType="SMALL_IMAGE" />
+            <BoundingRoundBox x="0" y="0" width="120" height="120" cornerRadius="18" />
 
-            <!-- BULB: SHORT_TEXT -->
+            <!-- SHORT_TEXT: bulb (layouts 0,1) + linear (layouts 2,3) -->
             <Complication type="SHORT_TEXT">
-                <Group name="bulb5_short_text" x="180" y="329" width="120" height="120" alpha="255">
+                <Group name="bulb5_st" x="180" y="329" width="120" height="120" alpha="255">
                     <Variant mode="AMBIENT" target="alpha" value="0" />
                     <Transform target="alpha"
                         value="[CONFIGURATION.layoutStyle] == 0 || [CONFIGURATION.layoutStyle] == 1 ? 255 : 0" />
@@ -1113,7 +1097,7 @@
                         </Text>
                     </PartText>
                     <!-- Samsung One UI 8 AOD refresh workaround -->
-                    <PartText name="bulb5_st_aod_refresh" x="0" y="0" width="1" height="1" alpha="0">
+                    <PartText name="bulb5_st_aod" x="0" y="0" width="1" height="1" alpha="0">
                         <Text align="START">
                             <Font family="google_sans_flex_450" size="1" color="#00000000">
                                 <Template><![CDATA[%d]]>
@@ -1123,92 +1107,7 @@
                         </Text>
                     </PartText>
                 </Group>
-            </Complication>
-
-            <!-- BULB: RANGED_VALUE -->
-            <Complication type="RANGED_VALUE">
-                <Group name="bulb5_ranged" x="180" y="329" width="120" height="120" alpha="255">
-                    <Variant mode="AMBIENT" target="alpha" value="0" />
-                    <Transform target="alpha"
-                        value="[CONFIGURATION.layoutStyle] == 0 || [CONFIGURATION.layoutStyle] == 1 ? 255 : 0" />
-                    <PartDraw name="bulb5_rv_ring_track" x="0" y="0" width="120" height="120">
-                        <Arc centerX="60" centerY="60" width="120" height="120"
-                             startAngle="0" endAngle="360" direction="CLOCKWISE">
-                            <Stroke color="[CONFIGURATION.themeColor.2]" thickness="6" cap="ROUND" />
-                        </Arc>
-                    </PartDraw>
-                    <PartDraw name="bulb5_rv_ring_fill" x="0" y="0" width="120" height="120">
-                        <Arc centerX="60" centerY="60" width="120" height="120"
-                             startAngle="270" endAngle="270" direction="CLOCKWISE">
-                            <Transform target="endAngle"
-                                value="[COMPLICATION.RANGED_VALUE_MAX] &gt; 0 ? (270 + 360 * ([COMPLICATION.RANGED_VALUE_VALUE] / [COMPLICATION.RANGED_VALUE_MAX])) : 270" />
-                            <Stroke color="[CONFIGURATION.themeColor.0]" thickness="6" cap="ROUND" />
-                        </Arc>
-                    </PartDraw>
-                    <Condition>
-                        <Expressions>
-                            <Expression name="bulb5_rv_has_icon"><![CDATA[[COMPLICATION.MONOCHROMATIC_IMAGE] != null]]></Expression>
-                        </Expressions>
-                        <Compare expression="bulb5_rv_has_icon">
-                            <PartImage name="bulb5_rv_icon" x="24" y="6" width="72" height="72">
-                                <Image resource="[COMPLICATION.MONOCHROMATIC_IMAGE]"
-                                       tintColor="[CONFIGURATION.themeColor.0]" />
-                            </PartImage>
-                        </Compare>
-                    </Condition>
-                    <PartText name="bulb5_rv_label" x="0" y="78" width="120" height="36">
-                        <Text align="CENTER">
-                            <Font family="google_sans_flex_700" size="36" color="#ffffffff">
-                                <Template><![CDATA[%s]]>
-                                    <Parameter expression="[COMPLICATION.TEXT]" />
-                                </Template>
-                            </Font>
-                        </Text>
-                    </PartText>
-                    <!-- Samsung One UI 8 AOD refresh workaround -->
-                    <PartText name="bulb5_rv_aod_refresh" x="0" y="0" width="1" height="1" alpha="0">
-                        <Text align="START">
-                            <Font family="google_sans_flex_450" size="1" color="#00000000">
-                                <Template><![CDATA[%d]]>
-                                    <Parameter expression="[COMPLICATION.LAST_UPDATE_TIME]" />
-                                </Template>
-                            </Font>
-                        </Text>
-                    </PartText>
-                </Group>
-            </Complication>
-
-            <!-- BULB: SMALL_IMAGE -->
-            <Complication type="SMALL_IMAGE">
-                <Group name="bulb5_small_image" x="180" y="329" width="120" height="120" alpha="255">
-                    <Variant mode="AMBIENT" target="alpha" value="0" />
-                    <Transform target="alpha"
-                        value="[CONFIGURATION.layoutStyle] == 0 || [CONFIGURATION.layoutStyle] == 1 ? 255 : 0" />
-                    <PartDraw name="bulb5_si_ring" x="0" y="0" width="120" height="120">
-                        <Arc centerX="60" centerY="60" width="120" height="120"
-                             startAngle="0" endAngle="360" direction="CLOCKWISE">
-                            <Stroke color="[CONFIGURATION.themeColor.2]" thickness="6" cap="ROUND" />
-                        </Arc>
-                    </PartDraw>
-                    <PartImage name="bulb5_si_img" x="24" y="6" width="72" height="72">
-                        <Image resource="[COMPLICATION.SMALL_IMAGE]" />
-                    </PartImage>
-                    <!-- Samsung One UI 8 AOD refresh workaround -->
-                    <PartText name="bulb5_si_aod_refresh" x="0" y="0" width="1" height="1" alpha="0">
-                        <Text align="START">
-                            <Font family="google_sans_flex_450" size="1" color="#00000000">
-                                <Template><![CDATA[%d]]>
-                                    <Parameter expression="[COMPLICATION.LAST_UPDATE_TIME]" />
-                                </Template>
-                            </Font>
-                        </Text>
-                    </PartText>
-                </Group>
-            </Complication>
-
-            <!-- LINEAR: SHORT_TEXT row2 -->
-            <Complication type="SHORT_TEXT">
-                <Group name="linear5_short_text" x="246" y="184" width="180" height="42" alpha="255">
+                <Group name="lin5_st" x="246" y="184" width="180" height="42" alpha="255">
                     <Variant mode="AMBIENT" target="alpha" value="0" />
                     <Transform target="alpha"
                         value="[CONFIGURATION.layoutStyle] == 2 || [CONFIGURATION.layoutStyle] == 3 ? 255 : 0" />
@@ -1243,7 +1142,7 @@
                         </Text>
                     </PartText>
                     <!-- Samsung One UI 8 AOD refresh workaround -->
-                    <PartText name="lin5_st_aod_refresh" x="0" y="0" width="1" height="1" alpha="0">
+                    <PartText name="lin5_st_aod" x="0" y="0" width="1" height="1" alpha="0">
                         <Text align="START">
                             <Font family="google_sans_flex_450" size="1" color="#00000000">
                                 <Template><![CDATA[%d]]>
@@ -1255,9 +1154,58 @@
                 </Group>
             </Complication>
 
-            <!-- LINEAR: RANGED_VALUE row2 -->
+            <!-- RANGED_VALUE: bulb (layouts 0,1) + linear (layouts 2,3) -->
             <Complication type="RANGED_VALUE">
-                <Group name="linear5_ranged" x="246" y="184" width="180" height="42" alpha="255">
+                <Group name="bulb5_rv" x="180" y="329" width="120" height="120" alpha="255">
+                    <Variant mode="AMBIENT" target="alpha" value="0" />
+                    <Transform target="alpha"
+                        value="[CONFIGURATION.layoutStyle] == 0 || [CONFIGURATION.layoutStyle] == 1 ? 255 : 0" />
+                    <PartDraw name="bulb5_rv_track" x="0" y="0" width="120" height="120">
+                        <Arc centerX="60" centerY="60" width="120" height="120"
+                             startAngle="0" endAngle="360" direction="CLOCKWISE">
+                            <Stroke color="[CONFIGURATION.themeColor.2]" thickness="6" cap="ROUND" />
+                        </Arc>
+                    </PartDraw>
+                    <PartDraw name="bulb5_rv_fill" x="0" y="0" width="120" height="120">
+                        <Arc centerX="60" centerY="60" width="120" height="120"
+                             startAngle="270" endAngle="270" direction="CLOCKWISE">
+                            <Transform target="endAngle"
+                                value="[COMPLICATION.RANGED_VALUE_MAX] &gt; 0 ? (270 + 360 * ([COMPLICATION.RANGED_VALUE_VALUE] / [COMPLICATION.RANGED_VALUE_MAX])) : 270" />
+                            <Stroke color="[CONFIGURATION.themeColor.0]" thickness="6" cap="ROUND" />
+                        </Arc>
+                    </PartDraw>
+                    <Condition>
+                        <Expressions>
+                            <Expression name="bulb5_rv_has_icon"><![CDATA[[COMPLICATION.MONOCHROMATIC_IMAGE] != null]]></Expression>
+                        </Expressions>
+                        <Compare expression="bulb5_rv_has_icon">
+                            <PartImage name="bulb5_rv_icon" x="24" y="6" width="72" height="72">
+                                <Image resource="[COMPLICATION.MONOCHROMATIC_IMAGE]"
+                                       tintColor="[CONFIGURATION.themeColor.0]" />
+                            </PartImage>
+                        </Compare>
+                    </Condition>
+                    <PartText name="bulb5_rv_label" x="0" y="78" width="120" height="36">
+                        <Text align="CENTER">
+                            <Font family="google_sans_flex_700" size="36" color="#ffffffff">
+                                <Template><![CDATA[%s]]>
+                                    <Parameter expression="[COMPLICATION.TEXT]" />
+                                </Template>
+                            </Font>
+                        </Text>
+                    </PartText>
+                    <!-- Samsung One UI 8 AOD refresh workaround -->
+                    <PartText name="bulb5_rv_aod" x="0" y="0" width="1" height="1" alpha="0">
+                        <Text align="START">
+                            <Font family="google_sans_flex_450" size="1" color="#00000000">
+                                <Template><![CDATA[%d]]>
+                                    <Parameter expression="[COMPLICATION.LAST_UPDATE_TIME]" />
+                                </Template>
+                            </Font>
+                        </Text>
+                    </PartText>
+                </Group>
+                <Group name="lin5_rv" x="246" y="184" width="180" height="42" alpha="255">
                     <Variant mode="AMBIENT" target="alpha" value="0" />
                     <Transform target="alpha"
                         value="[CONFIGURATION.layoutStyle] == 2 || [CONFIGURATION.layoutStyle] == 3 ? 255 : 0" />
@@ -1291,7 +1239,8 @@
                             </Font>
                         </Text>
                     </PartText>
-                    <PartDraw name="lin5_rv_progress_track" x="0" y="0" width="180" height="42">
+                    <!-- Linear progress line. Provenance: base_0.apk → .linear-progress -->
+                    <PartDraw name="lin5_rv_track" x="0" y="0" width="180" height="42">
                         <Transform target="width"
                             value="[CONFIGURATION.layoutStyle] == 3 ? 160 : 180" />
                         <Transform target="height"
@@ -1306,7 +1255,7 @@
                             <Stroke color="[CONFIGURATION.themeColor.2]" thickness="4" cap="ROUND" />
                         </Line>
                     </PartDraw>
-                    <PartDraw name="lin5_rv_progress_fill" x="0" y="0" width="180" height="42">
+                    <PartDraw name="lin5_rv_fill" x="0" y="0" width="180" height="42">
                         <Transform target="width"
                             value="[CONFIGURATION.layoutStyle] == 3 ? 160 : 180" />
                         <Transform target="height"
@@ -1322,7 +1271,7 @@
                         </Line>
                     </PartDraw>
                     <!-- Samsung One UI 8 AOD refresh workaround -->
-                    <PartText name="lin5_rv_aod_refresh" x="0" y="0" width="1" height="1" alpha="0">
+                    <PartText name="lin5_rv_aod" x="0" y="0" width="1" height="1" alpha="0">
                         <Text align="START">
                             <Font family="google_sans_flex_450" size="1" color="#00000000">
                                 <Template><![CDATA[%d]]>
@@ -1334,36 +1283,23 @@
                 </Group>
             </Complication>
 
-            <!-- LINEAR: SMALL_IMAGE row2 -->
+            <!-- SMALL_IMAGE: bulb only (layouts 0,1) -->
             <Complication type="SMALL_IMAGE">
-                <Group name="linear5_small_image" x="246" y="184" width="180" height="42" alpha="255">
+                <Group name="bulb5_si" x="180" y="329" width="120" height="120" alpha="255">
                     <Variant mode="AMBIENT" target="alpha" value="0" />
                     <Transform target="alpha"
-                        value="[CONFIGURATION.layoutStyle] == 2 || [CONFIGURATION.layoutStyle] == 3 ? 255 : 0" />
-                    <Transform target="x"
-                        value="[CONFIGURATION.layoutStyle] == 3 ? 242 : 246" />
-                    <Transform target="y"
-                        value="[CONFIGURATION.layoutStyle] == 3 ? 193 : 184" />
-                    <Transform target="width"
-                        value="[CONFIGURATION.layoutStyle] == 3 ? 160 : 180" />
-                    <Transform target="height"
-                        value="[CONFIGURATION.layoutStyle] == 3 ? 35 : 42" />
-                    <PartImage name="lin5_si_img" x="0" y="4" width="28" height="28">
+                        value="[CONFIGURATION.layoutStyle] == 0 || [CONFIGURATION.layoutStyle] == 1 ? 255 : 0" />
+                    <PartDraw name="bulb5_si_ring" x="0" y="0" width="120" height="120">
+                        <Arc centerX="60" centerY="60" width="120" height="120"
+                             startAngle="0" endAngle="360" direction="CLOCKWISE">
+                            <Stroke color="[CONFIGURATION.themeColor.2]" thickness="6" cap="ROUND" />
+                        </Arc>
+                    </PartDraw>
+                    <PartImage name="bulb5_si_img" x="24" y="6" width="72" height="72">
                         <Image resource="[COMPLICATION.SMALL_IMAGE]" />
                     </PartImage>
-                    <PartText name="lin5_si_label" x="35" y="4" width="140" height="30">
-                        <Text align="START">
-                            <Font family="google_sans_flex_700" size="32" color="#ffffffff">
-                                <Transform target="size"
-                                    value="[CONFIGURATION.layoutStyle] == 3 ? 28 : 32" />
-                                <Template><![CDATA[%s]]>
-                                    <Parameter expression="[COMPLICATION.TITLE]" />
-                                </Template>
-                            </Font>
-                        </Text>
-                    </PartText>
                     <!-- Samsung One UI 8 AOD refresh workaround -->
-                    <PartText name="lin5_si_aod_refresh" x="0" y="0" width="1" height="1" alpha="0">
+                    <PartText name="bulb5_si_aod" x="0" y="0" width="1" height="1" alpha="0">
                         <Text align="START">
                             <Font family="google_sans_flex_450" size="1" color="#00000000">
                                 <Template><![CDATA[%d]]>
@@ -1374,27 +1310,21 @@
                     </PartText>
                 </Group>
             </Complication>
+
         </ComplicationSlot>
 
-
-        <!-- ============================================================
-             COMPLICATION SLOT 6 — Bottom-Right Bulb / Linear Row 3.
-             Provenance: base_0.apk → res/fD.xml slot6.
-             Bulb (Default/Arcs): x=320, y=263, w=120, h=120.
-             Linear row3: x=246, y=241, w=180, h=42.
-             Linear Arcs row3: x=242, y=244, w=160, h=35.
-             Default: HEART_RATE.
-             ============================================================ -->
-        <ComplicationSlot slotId="6" name="bottom_right_complication"
+        <!-- Complication Slot 6 — Bottom-Right Bulb / Linear Row 3. -->
+        <ComplicationSlot slotId="6" name="slot6"
             x="320" y="263" width="120" height="120"
             supportedTypes="SHORT_TEXT RANGED_VALUE SMALL_IMAGE EMPTY"
             displayName="@string/bottom_right_complication">
             <DefaultProviderPolicy defaultSystemProvider="HEART_RATE"
                                    defaultSystemProviderType="SHORT_TEXT" />
+            <BoundingRoundBox x="0" y="0" width="120" height="120" cornerRadius="18" />
 
-            <!-- BULB: SHORT_TEXT -->
+            <!-- SHORT_TEXT: bulb (layouts 0,1) + linear (layouts 2,3) -->
             <Complication type="SHORT_TEXT">
-                <Group name="bulb6_short_text" x="320" y="263" width="120" height="120" alpha="255">
+                <Group name="bulb6_st" x="320" y="263" width="120" height="120" alpha="255">
                     <Variant mode="AMBIENT" target="alpha" value="0" />
                     <Transform target="alpha"
                         value="[CONFIGURATION.layoutStyle] == 0 || [CONFIGURATION.layoutStyle] == 1 ? 255 : 0" />
@@ -1425,7 +1355,7 @@
                         </Text>
                     </PartText>
                     <!-- Samsung One UI 8 AOD refresh workaround -->
-                    <PartText name="bulb6_st_aod_refresh" x="0" y="0" width="1" height="1" alpha="0">
+                    <PartText name="bulb6_st_aod" x="0" y="0" width="1" height="1" alpha="0">
                         <Text align="START">
                             <Font family="google_sans_flex_450" size="1" color="#00000000">
                                 <Template><![CDATA[%d]]>
@@ -1435,92 +1365,7 @@
                         </Text>
                     </PartText>
                 </Group>
-            </Complication>
-
-            <!-- BULB: RANGED_VALUE -->
-            <Complication type="RANGED_VALUE">
-                <Group name="bulb6_ranged" x="320" y="263" width="120" height="120" alpha="255">
-                    <Variant mode="AMBIENT" target="alpha" value="0" />
-                    <Transform target="alpha"
-                        value="[CONFIGURATION.layoutStyle] == 0 || [CONFIGURATION.layoutStyle] == 1 ? 255 : 0" />
-                    <PartDraw name="bulb6_rv_ring_track" x="0" y="0" width="120" height="120">
-                        <Arc centerX="60" centerY="60" width="120" height="120"
-                             startAngle="0" endAngle="360" direction="CLOCKWISE">
-                            <Stroke color="[CONFIGURATION.themeColor.2]" thickness="6" cap="ROUND" />
-                        </Arc>
-                    </PartDraw>
-                    <PartDraw name="bulb6_rv_ring_fill" x="0" y="0" width="120" height="120">
-                        <Arc centerX="60" centerY="60" width="120" height="120"
-                             startAngle="270" endAngle="270" direction="CLOCKWISE">
-                            <Transform target="endAngle"
-                                value="[COMPLICATION.RANGED_VALUE_MAX] &gt; 0 ? (270 + 360 * ([COMPLICATION.RANGED_VALUE_VALUE] / [COMPLICATION.RANGED_VALUE_MAX])) : 270" />
-                            <Stroke color="[CONFIGURATION.themeColor.0]" thickness="6" cap="ROUND" />
-                        </Arc>
-                    </PartDraw>
-                    <Condition>
-                        <Expressions>
-                            <Expression name="bulb6_rv_has_icon"><![CDATA[[COMPLICATION.MONOCHROMATIC_IMAGE] != null]]></Expression>
-                        </Expressions>
-                        <Compare expression="bulb6_rv_has_icon">
-                            <PartImage name="bulb6_rv_icon" x="24" y="6" width="72" height="72">
-                                <Image resource="[COMPLICATION.MONOCHROMATIC_IMAGE]"
-                                       tintColor="[CONFIGURATION.themeColor.0]" />
-                            </PartImage>
-                        </Compare>
-                    </Condition>
-                    <PartText name="bulb6_rv_label" x="0" y="78" width="120" height="36">
-                        <Text align="CENTER">
-                            <Font family="google_sans_flex_700" size="36" color="#ffffffff">
-                                <Template><![CDATA[%s]]>
-                                    <Parameter expression="[COMPLICATION.TEXT]" />
-                                </Template>
-                            </Font>
-                        </Text>
-                    </PartText>
-                    <!-- Samsung One UI 8 AOD refresh workaround -->
-                    <PartText name="bulb6_rv_aod_refresh" x="0" y="0" width="1" height="1" alpha="0">
-                        <Text align="START">
-                            <Font family="google_sans_flex_450" size="1" color="#00000000">
-                                <Template><![CDATA[%d]]>
-                                    <Parameter expression="[COMPLICATION.LAST_UPDATE_TIME]" />
-                                </Template>
-                            </Font>
-                        </Text>
-                    </PartText>
-                </Group>
-            </Complication>
-
-            <!-- BULB: SMALL_IMAGE -->
-            <Complication type="SMALL_IMAGE">
-                <Group name="bulb6_small_image" x="320" y="263" width="120" height="120" alpha="255">
-                    <Variant mode="AMBIENT" target="alpha" value="0" />
-                    <Transform target="alpha"
-                        value="[CONFIGURATION.layoutStyle] == 0 || [CONFIGURATION.layoutStyle] == 1 ? 255 : 0" />
-                    <PartDraw name="bulb6_si_ring" x="0" y="0" width="120" height="120">
-                        <Arc centerX="60" centerY="60" width="120" height="120"
-                             startAngle="0" endAngle="360" direction="CLOCKWISE">
-                            <Stroke color="[CONFIGURATION.themeColor.2]" thickness="6" cap="ROUND" />
-                        </Arc>
-                    </PartDraw>
-                    <PartImage name="bulb6_si_img" x="24" y="6" width="72" height="72">
-                        <Image resource="[COMPLICATION.SMALL_IMAGE]" />
-                    </PartImage>
-                    <!-- Samsung One UI 8 AOD refresh workaround -->
-                    <PartText name="bulb6_si_aod_refresh" x="0" y="0" width="1" height="1" alpha="0">
-                        <Text align="START">
-                            <Font family="google_sans_flex_450" size="1" color="#00000000">
-                                <Template><![CDATA[%d]]>
-                                    <Parameter expression="[COMPLICATION.LAST_UPDATE_TIME]" />
-                                </Template>
-                            </Font>
-                        </Text>
-                    </PartText>
-                </Group>
-            </Complication>
-
-            <!-- LINEAR: SHORT_TEXT row3 -->
-            <Complication type="SHORT_TEXT">
-                <Group name="linear6_short_text" x="246" y="241" width="180" height="42" alpha="255">
+                <Group name="lin6_st" x="246" y="241" width="180" height="42" alpha="255">
                     <Variant mode="AMBIENT" target="alpha" value="0" />
                     <Transform target="alpha"
                         value="[CONFIGURATION.layoutStyle] == 2 || [CONFIGURATION.layoutStyle] == 3 ? 255 : 0" />
@@ -1555,7 +1400,7 @@
                         </Text>
                     </PartText>
                     <!-- Samsung One UI 8 AOD refresh workaround -->
-                    <PartText name="lin6_st_aod_refresh" x="0" y="0" width="1" height="1" alpha="0">
+                    <PartText name="lin6_st_aod" x="0" y="0" width="1" height="1" alpha="0">
                         <Text align="START">
                             <Font family="google_sans_flex_450" size="1" color="#00000000">
                                 <Template><![CDATA[%d]]>
@@ -1567,9 +1412,58 @@
                 </Group>
             </Complication>
 
-            <!-- LINEAR: RANGED_VALUE row3 -->
+            <!-- RANGED_VALUE: bulb (layouts 0,1) + linear (layouts 2,3) -->
             <Complication type="RANGED_VALUE">
-                <Group name="linear6_ranged" x="246" y="241" width="180" height="42" alpha="255">
+                <Group name="bulb6_rv" x="320" y="263" width="120" height="120" alpha="255">
+                    <Variant mode="AMBIENT" target="alpha" value="0" />
+                    <Transform target="alpha"
+                        value="[CONFIGURATION.layoutStyle] == 0 || [CONFIGURATION.layoutStyle] == 1 ? 255 : 0" />
+                    <PartDraw name="bulb6_rv_track" x="0" y="0" width="120" height="120">
+                        <Arc centerX="60" centerY="60" width="120" height="120"
+                             startAngle="0" endAngle="360" direction="CLOCKWISE">
+                            <Stroke color="[CONFIGURATION.themeColor.2]" thickness="6" cap="ROUND" />
+                        </Arc>
+                    </PartDraw>
+                    <PartDraw name="bulb6_rv_fill" x="0" y="0" width="120" height="120">
+                        <Arc centerX="60" centerY="60" width="120" height="120"
+                             startAngle="270" endAngle="270" direction="CLOCKWISE">
+                            <Transform target="endAngle"
+                                value="[COMPLICATION.RANGED_VALUE_MAX] &gt; 0 ? (270 + 360 * ([COMPLICATION.RANGED_VALUE_VALUE] / [COMPLICATION.RANGED_VALUE_MAX])) : 270" />
+                            <Stroke color="[CONFIGURATION.themeColor.0]" thickness="6" cap="ROUND" />
+                        </Arc>
+                    </PartDraw>
+                    <Condition>
+                        <Expressions>
+                            <Expression name="bulb6_rv_has_icon"><![CDATA[[COMPLICATION.MONOCHROMATIC_IMAGE] != null]]></Expression>
+                        </Expressions>
+                        <Compare expression="bulb6_rv_has_icon">
+                            <PartImage name="bulb6_rv_icon" x="24" y="6" width="72" height="72">
+                                <Image resource="[COMPLICATION.MONOCHROMATIC_IMAGE]"
+                                       tintColor="[CONFIGURATION.themeColor.0]" />
+                            </PartImage>
+                        </Compare>
+                    </Condition>
+                    <PartText name="bulb6_rv_label" x="0" y="78" width="120" height="36">
+                        <Text align="CENTER">
+                            <Font family="google_sans_flex_700" size="36" color="#ffffffff">
+                                <Template><![CDATA[%s]]>
+                                    <Parameter expression="[COMPLICATION.TEXT]" />
+                                </Template>
+                            </Font>
+                        </Text>
+                    </PartText>
+                    <!-- Samsung One UI 8 AOD refresh workaround -->
+                    <PartText name="bulb6_rv_aod" x="0" y="0" width="1" height="1" alpha="0">
+                        <Text align="START">
+                            <Font family="google_sans_flex_450" size="1" color="#00000000">
+                                <Template><![CDATA[%d]]>
+                                    <Parameter expression="[COMPLICATION.LAST_UPDATE_TIME]" />
+                                </Template>
+                            </Font>
+                        </Text>
+                    </PartText>
+                </Group>
+                <Group name="lin6_rv" x="246" y="241" width="180" height="42" alpha="255">
                     <Variant mode="AMBIENT" target="alpha" value="0" />
                     <Transform target="alpha"
                         value="[CONFIGURATION.layoutStyle] == 2 || [CONFIGURATION.layoutStyle] == 3 ? 255 : 0" />
@@ -1603,7 +1497,8 @@
                             </Font>
                         </Text>
                     </PartText>
-                    <PartDraw name="lin6_rv_progress_track" x="0" y="0" width="180" height="42">
+                    <!-- Linear progress line. Provenance: base_0.apk → .linear-progress -->
+                    <PartDraw name="lin6_rv_track" x="0" y="0" width="180" height="42">
                         <Transform target="width"
                             value="[CONFIGURATION.layoutStyle] == 3 ? 160 : 180" />
                         <Transform target="height"
@@ -1618,7 +1513,7 @@
                             <Stroke color="[CONFIGURATION.themeColor.2]" thickness="4" cap="ROUND" />
                         </Line>
                     </PartDraw>
-                    <PartDraw name="lin6_rv_progress_fill" x="0" y="0" width="180" height="42">
+                    <PartDraw name="lin6_rv_fill" x="0" y="0" width="180" height="42">
                         <Transform target="width"
                             value="[CONFIGURATION.layoutStyle] == 3 ? 160 : 180" />
                         <Transform target="height"
@@ -1634,7 +1529,7 @@
                         </Line>
                     </PartDraw>
                     <!-- Samsung One UI 8 AOD refresh workaround -->
-                    <PartText name="lin6_rv_aod_refresh" x="0" y="0" width="1" height="1" alpha="0">
+                    <PartText name="lin6_rv_aod" x="0" y="0" width="1" height="1" alpha="0">
                         <Text align="START">
                             <Font family="google_sans_flex_450" size="1" color="#00000000">
                                 <Template><![CDATA[%d]]>
@@ -1645,27 +1540,49 @@
                     </PartText>
                 </Group>
             </Complication>
+
+            <!-- SMALL_IMAGE: bulb only (layouts 0,1) -->
+            <Complication type="SMALL_IMAGE">
+                <Group name="bulb6_si" x="320" y="263" width="120" height="120" alpha="255">
+                    <Variant mode="AMBIENT" target="alpha" value="0" />
+                    <Transform target="alpha"
+                        value="[CONFIGURATION.layoutStyle] == 0 || [CONFIGURATION.layoutStyle] == 1 ? 255 : 0" />
+                    <PartDraw name="bulb6_si_ring" x="0" y="0" width="120" height="120">
+                        <Arc centerX="60" centerY="60" width="120" height="120"
+                             startAngle="0" endAngle="360" direction="CLOCKWISE">
+                            <Stroke color="[CONFIGURATION.themeColor.2]" thickness="6" cap="ROUND" />
+                        </Arc>
+                    </PartDraw>
+                    <PartImage name="bulb6_si_img" x="24" y="6" width="72" height="72">
+                        <Image resource="[COMPLICATION.SMALL_IMAGE]" />
+                    </PartImage>
+                    <!-- Samsung One UI 8 AOD refresh workaround -->
+                    <PartText name="bulb6_si_aod" x="0" y="0" width="1" height="1" alpha="0">
+                        <Text align="START">
+                            <Font family="google_sans_flex_450" size="1" color="#00000000">
+                                <Template><![CDATA[%d]]>
+                                    <Parameter expression="[COMPLICATION.LAST_UPDATE_TIME]" />
+                                </Template>
+                            </Font>
+                        </Text>
+                    </PartText>
+                </Group>
+            </Complication>
+
         </ComplicationSlot>
 
-        <!-- ============================================================
-             COMPLICATION SLOT 7 — Linear Row 4 only.
-             Provenance: base_0.apk → res/fD.xml slot7.
-             Linear row4: x=246, y=298, w=180, h=42.
-             Linear Arcs row4: x=242, y=295, w=160, h=35.
-             Default: WATCH_BATTERY. Not shown in bulb layouts.
-             ============================================================ -->
-        <ComplicationSlot slotId="7" name="linear_complication_4"
+        <!-- Complication Slot 7 — Linear Row 4 only (no bulb). -->
+        <ComplicationSlot slotId="7" name="slot7"
             x="246" y="298" width="180" height="42"
             supportedTypes="SHORT_TEXT RANGED_VALUE EMPTY"
             displayName="@string/linear_complication_4">
             <DefaultProviderPolicy defaultSystemProvider="WATCH_BATTERY"
                                    defaultSystemProviderType="RANGED_VALUE" />
+            <BoundingRoundBox x="0" y="0" width="180" height="42" cornerRadius="19" />
 
-            <!-- LINEAR: SHORT_TEXT row4 -->
             <Complication type="SHORT_TEXT">
-                <Group name="linear7_short_text" x="246" y="298" width="180" height="42" alpha="255">
+                <Group name="lin7_st" x="246" y="298" width="180" height="42" alpha="255">
                     <Variant mode="AMBIENT" target="alpha" value="0" />
-                    <!-- Only visible in linear layouts (2,3) -->
                     <Transform target="alpha"
                         value="[CONFIGURATION.layoutStyle] == 2 || [CONFIGURATION.layoutStyle] == 3 ? 255 : 0" />
                     <Transform target="x"
@@ -1699,7 +1616,7 @@
                         </Text>
                     </PartText>
                     <!-- Samsung One UI 8 AOD refresh workaround -->
-                    <PartText name="lin7_st_aod_refresh" x="0" y="0" width="1" height="1" alpha="0">
+                    <PartText name="lin7_st_aod" x="0" y="0" width="1" height="1" alpha="0">
                         <Text align="START">
                             <Font family="google_sans_flex_450" size="1" color="#00000000">
                                 <Template><![CDATA[%d]]>
@@ -1711,9 +1628,8 @@
                 </Group>
             </Complication>
 
-            <!-- LINEAR: RANGED_VALUE row4 -->
             <Complication type="RANGED_VALUE">
-                <Group name="linear7_ranged" x="246" y="298" width="180" height="42" alpha="255">
+                <Group name="lin7_rv" x="246" y="298" width="180" height="42" alpha="255">
                     <Variant mode="AMBIENT" target="alpha" value="0" />
                     <Transform target="alpha"
                         value="[CONFIGURATION.layoutStyle] == 2 || [CONFIGURATION.layoutStyle] == 3 ? 255 : 0" />
@@ -1747,7 +1663,7 @@
                             </Font>
                         </Text>
                     </PartText>
-                    <PartDraw name="lin7_rv_progress_track" x="0" y="0" width="180" height="42">
+                    <PartDraw name="lin7_rv_track" x="0" y="0" width="180" height="42">
                         <Transform target="width"
                             value="[CONFIGURATION.layoutStyle] == 3 ? 160 : 180" />
                         <Transform target="height"
@@ -1762,7 +1678,7 @@
                             <Stroke color="[CONFIGURATION.themeColor.2]" thickness="4" cap="ROUND" />
                         </Line>
                     </PartDraw>
-                    <PartDraw name="lin7_rv_progress_fill" x="0" y="0" width="180" height="42">
+                    <PartDraw name="lin7_rv_fill" x="0" y="0" width="180" height="42">
                         <Transform target="width"
                             value="[CONFIGURATION.layoutStyle] == 3 ? 160 : 180" />
                         <Transform target="height"
@@ -1778,7 +1694,7 @@
                         </Line>
                     </PartDraw>
                     <!-- Samsung One UI 8 AOD refresh workaround -->
-                    <PartText name="lin7_rv_aod_refresh" x="0" y="0" width="1" height="1" alpha="0">
+                    <PartText name="lin7_rv_aod" x="0" y="0" width="1" height="1" alpha="0">
                         <Text align="START">
                             <Font family="google_sans_flex_450" size="1" color="#00000000">
                                 <Template><![CDATA[%d]]>
@@ -1790,6 +1706,7 @@
                 </Group>
             </Complication>
         </ComplicationSlot>
+
 
     </Scene>
 

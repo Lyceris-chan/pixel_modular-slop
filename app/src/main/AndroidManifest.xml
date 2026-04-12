@@ -3,8 +3,23 @@
 
     <uses-feature android:name="android.hardware.type.watch" />
 
-        <uses-permission android:name="android.permission.BODY_SENSORS" />
+    <!-- WAKE_LOCK: Required by the Wear OS watch face service to keep the CPU awake
+         during complication data updates. Provenance: base_0.apk → uses-permission. -->
     <uses-permission android:name="android.permission.WAKE_LOCK" />
+
+    <!-- RECEIVE_COMPLICATION_DATA: Required for WFF 4 ComplicationSlot data binding.
+         Provenance: WFF 4 spec — mandatory for any watch face using ComplicationSlot.
+         Reference: https://developer.android.com/training/wearables/wff/complication -->
+    <uses-permission android:name="com.google.android.wearable.permission.RECEIVE_COMPLICATION_DATA" />
+
+    <!-- BODY_SENSORS: Required for heart-rate complication (Slot 6 default=HEART_RATE)
+         and step-count complication (Slot 0 default=STEP_COUNT).
+         Provenance: base_0.apk → uses-permission. -->
+    <uses-permission android:name="android.permission.BODY_SENSORS" />
+
+    <!-- ACTIVITY_RECOGNITION: Required for step-count data provider on Android 10+.
+         Provenance: base_0.apk → uses-permission. -->
+    <uses-permission android:name="android.permission.ACTIVITY_RECOGNITION" />
 
     <application
         android:label="@string/app_name"
